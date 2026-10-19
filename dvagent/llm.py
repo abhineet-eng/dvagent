@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 import time
 import urllib.error
 import urllib.request
@@ -21,7 +22,7 @@ PROVIDERS = {
     "gemini": {
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
         "key_env": "GEMINI_API_KEY",
-        "model": "gemini-3.8-flash",
+        "model": "gemini-3.5-flash-lite",   # the Flash-Lite free tier allows far more requests per day
         "rpm": 8,
     },
     "groq": {
@@ -59,6 +60,18 @@ PROVIDERS = {
 
 class LLMError(RuntimeError):
     pass
+
+
+def quota_details(detail: str) -> str:
+    """The useful part of a provider's quota error (Gemini puts it deep inside the JSON)."""
+    found = []
+    for key in ("quotaId", "quotaValue", "quotaMetric", "model", "retryDelay"):
+        m = re.search(rf'"{key}"\s*:\s*"([^"]+)"', detail)
+        if m:
+            found.append(f"{key}={m.group(1)}")
+    m = re.search(r'"message"\s*:\s*"([^"]{0,200})', detail)
+    head = m.group(1) if m else detail[:200]
+    return head + (" [" + ", ".join(found) + "]" if found else "")
 
 
 class QuotaExhausted(LLMError):
@@ -102,6 +115,7 @@ class LLM:
     reasoning_effort: str | None = None
     max_tokens: int | None = None
     timeout: float = 300.0
+    retry_budget: float = 900.0     # seconds of retrying (rate limits, overload) before giving up
     transcript: Path | None = None
     usage: Usage = field(default_factory=Usage)
     _last_call: float = 0.0
@@ -165,7 +179,10 @@ class LLM:
             body["max_tokens"] = self.max_tokens
         delay = 10.0
         last_err = ""
-        for attempt in range(8):
+        start = time.time()
+        attempt = 0
+        while True:
+            attempt += 1
             self._throttle()
             t0 = time.time()
             try:
@@ -173,37 +190,49 @@ class LLM:
             except urllib.error.HTTPError as e:
                 detail = e.read().decode(errors="replace")[:1500]
                 last_err = f"HTTP {e.code}: {detail}"
+                if e.code == 429 and re.search(r'limit:\s*0\b|"quotaValue"\s*:\s*"0"', detail):
+                    raise LLMError(f"Model '{self.model}' has no free quota on this account "
+                                   f"({quota_details(detail)}). Choose another model with --model.") from None
                 if e.code == 429 and re.search(r"per ?day|PerDay|daily|quota exceeded for metric.*day", detail, re.I):
-                    raise QuotaExhausted(last_err) from None
+                    raise QuotaExhausted(f"daily quota of model '{self.model}' used up: "
+                                         f"{quota_details(detail)}") from None
                 if e.code in (429, 500, 502, 503, 504, 529):
                     retry_after = e.headers.get("Retry-After") if e.headers else None
                     m = re.search(r'"retryDelay":\s*"(\d+)', detail)
                     wait = float(retry_after) if retry_after and retry_after.isdigit() else (
                         float(m.group(1)) + 1 if m else delay)
-                    time.sleep(min(wait, 120))
-                    delay = min(delay * 2, 120)
-                    continue
-                if e.code == 404 and "model" in detail.lower():
+                elif e.code == 404 and "model" in detail.lower():
+                    try:
+                        names = ", ".join(n for n in self.list_models() if "gemini" in n or "gpt" in n
+                                          or "claude" in n or "/" in n)[:900]
+                    except Exception:   # noqa: BLE001 - only used to improve the message
+                        names = "(could not list them)"
                     raise LLMError(f"Model '{self.model}' not found at {self.base_url}. "
-                                   f"Run `dvagent models` to list available models. ({detail[:300]})") from None
-                raise LLMError(last_err) from None
-            except (urllib.error.URLError, TimeoutError, ConnectionError, json.JSONDecodeError) as e:
+                                   f"Available models: {names}") from None
+                else:
+                    raise LLMError(last_err) from None
+            except (urllib.error.URLError, TimeoutError, ConnectionError, OSError, json.JSONDecodeError) as e:
                 last_err = f"{type(e).__name__}: {e}"
-                time.sleep(delay)
-                delay = min(delay * 2, 120)
-                continue
-            choice = (data.get("choices") or [{}])[0]
-            text = (choice.get("message") or {}).get("content") or ""
-            if isinstance(text, list):   # some providers return content parts
-                text = "".join(p.get("text", "") for p in text if isinstance(p, dict))
-            if not text.strip():
+                wait = delay
+            else:
+                choice = (data.get("choices") or [{}])[0]
+                text = (choice.get("message") or {}).get("content") or ""
+                if isinstance(text, list):   # some providers return content parts
+                    text = "".join(p.get("text", "") for p in text if isinstance(p, dict))
+                if text.strip():
+                    u = data.get("usage") or {}
+                    return text, Usage(1, int(u.get("prompt_tokens") or 0), int(u.get("completion_tokens") or 0),
+                                       time.time() - t0)
                 last_err = f"empty response (finish_reason={choice.get('finish_reason')})"
-                time.sleep(delay)
-                continue
-            u = data.get("usage") or {}
-            return text, Usage(1, int(u.get("prompt_tokens") or 0), int(u.get("completion_tokens") or 0),
-                               time.time() - t0)
-        raise LLMError(f"LLM request failed after retries: {last_err}")
+                wait = delay
+            wait = min(max(wait, 1.0), 120.0)
+            if time.time() - start + wait > self.retry_budget:
+                raise LLMError(f"no answer from {self.provider} after {attempt} attempts in "
+                               f"{(time.time() - start) / 60:.0f} min; last error: {last_err[:700]}")
+            print(f"[llm] attempt {attempt} failed: {last_err[:300]} -- retrying in {wait:.0f} s",
+                  file=sys.stderr, flush=True)
+            time.sleep(wait)
+            delay = min(delay * 2, 120.0)
 
     # ---------------------------------------------------------------- public
     def complete(self, messages: list[dict], tag: str = "") -> Reply:

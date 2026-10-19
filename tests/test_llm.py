@@ -94,3 +94,31 @@ def test_missing_key_message(monkeypatch):
     monkeypatch.delenv("DVAGENT_API_KEY", raising=False)
     with pytest.raises(LLMError, match="GEMINI_API_KEY"):
         LLM(provider="gemini")
+
+
+def test_gives_up_after_retry_budget(server, monkeypatch):
+    clock = {"t": 0.0}
+    monkeypatch.setattr("time.sleep", lambda s: clock.__setitem__("t", clock["t"] + s))
+    monkeypatch.setattr("time.time", lambda: clock["t"])
+    Fake.script = [(503, {"error": "model overloaded"})] * 50
+    llm = LLM(provider="custom", base_url=server, api_key="k", model="m", retry_budget=300)
+    with pytest.raises(LLMError, match="overloaded"):
+        llm.complete([{"role": "user", "content": "hi"}])
+    assert 3 <= len(Fake.seen) < 50
+
+
+def test_zero_free_quota_is_reported(server):
+    Fake.script = [(429, {"error": {"message": "Quota exceeded for metric: free_tier_requests, limit: 0"}})]
+    llm = LLM(provider="custom", base_url=server, api_key="k", model="m")
+    with pytest.raises(LLMError, match="no free quota"):
+        llm.complete([{"role": "user", "content": "hi"}])
+
+
+def test_quota_message_is_readable():
+    from dvagent.llm import quota_details
+    detail = ('[{"error": {"code": 429, "message": "You exceeded your current quota, please check your plan.", '
+              '"details": [{"violations": [{"quotaMetric": "generativelanguage.googleapis.com/'
+              'generate_content_free_tier_requests", "quotaId": "GenerateRequestsPerDayPerProjectPerModel-FreeTier", '
+              '"quotaDimensions": {"model": "gemini-x-flash"}, "quotaValue": "20"}]}, {"retryDelay": "35s"}]}}]')
+    text = quota_details(detail)
+    assert "PerDay" in text and "quotaValue=20" in text and "model=gemini-x-flash" in text

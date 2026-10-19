@@ -23,7 +23,7 @@ from typing import Callable
 
 from .agent import AgentConfig, DebugAgent, VerifyAgent, VerifyResult
 from .design import Design, bench_designs
-from .llm import LLM, QuotaExhausted
+from .llm import LLM, LLMError, QuotaExhausted
 from .mutants import load_mutants, write_variant
 from .sim import failure_report, run_cocotb
 
@@ -143,6 +143,11 @@ def run_bench(bench_dir: Path, out_dir: Path, llm: LLM, cfg: AgentConfig, design
     out_dir.mkdir(parents=True, exist_ok=True)
     cfg.trust_rtl = True
     meta_file = out_dir / "run.json"
+    if meta_file.exists():
+        old = json.loads(meta_file.read_text())
+        if old.get("model") != llm.model:
+            raise SystemExit(f"{out_dir} holds results of model '{old.get('model')}', not '{llm.model}'. "
+                             "Use a new results folder (run_name) for a different model.")
     meta = json.loads(meta_file.read_text()) if meta_file.exists() else {
         "provider": llm.provider, "model": llm.model, "started": time.strftime("%Y-%m-%d %H:%M:%S"),
         "config": cfg.__dict__, "debug_per_design": debug_per_design}
@@ -168,7 +173,11 @@ def run_bench(bench_dir: Path, out_dir: Path, llm: LLM, cfg: AgentConfig, design
             dbg = debug_cases(d, ddir, bench_dir, ev, llm, cfg, debug_per_design, log)
             (ddir / "debug.json").write_text(json.dumps(dbg, indent=1))
         except QuotaExhausted as e:
-            stopped = f"LLM quota exhausted while working on {d.name}: {str(e)[:300]}"
+            stopped = f"LLM quota exhausted while working on {d.name}: {str(e)[:400]}"
+            log("STOPPED: " + stopped + "\nRun the same command again later to resume.")
+            break
+        except LLMError as e:
+            stopped = f"LLM error while working on {d.name}: {str(e)[:600]}"
             log("STOPPED: " + stopped + "\nRun the same command again later to resume.")
             break
         shutil.rmtree(ddir / "variants", ignore_errors=True)

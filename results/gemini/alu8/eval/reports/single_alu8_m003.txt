@@ -1,0 +1,30 @@
+fail: 5 passed, 2 failed (1.0 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_add_corners_and_random
+  INFO cocotb.regression                  Found test test_tb_00.test_sub_corners_and_random
+  INFO cocotb.regression                  Found test test_tb_00.test_logic_operations
+  INFO cocotb.regression                  Found test test_tb_00.test_shift_left
+  INFO cocotb.regression                  Found test test_tb_00.test_shift_right
+  INFO cocotb.regression                  Found test test_tb_00.test_set_less_than
+  INFO cocotb.regression                  Found test test_tb_00.test_random_exhaustive_coverage
+FAILED test_sub_corners_and_random
+  testbench log before the failure:
+    Test SUB operation corner cases (borrow/carry, signed overflow) and random pairs.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 186, in test_sub_corners_and_random
+  await check_alu(dut, a, b, 1)
+  File "test_tb_00.py", line 131, in check_alu
+  assert act_overflow == exp_overflow, f"{msg} overflow expected {exp_overflow}, got {act_overflow}"
+  AssertionError: Failed on a=0x00, b=0x01, op=1: overflow expected 0, got 1
+FAILED test_random_exhaustive_coverage
+  testbench log before the failure:
+    Test randomly generated operations across all 8 ops with fixed seed.
+  assert act_overflow == exp_overflow, f"{msg} overflow expected {exp_overflow}, got {act_overflow}"
+  AssertionError: Failed on a=0xfe, b=0xf2, op=1: overflow expected 0, got 1
+passed: test_add_corners_and_random, test_logic_operations, test_shift_left, test_shift_right, test_set_less_than

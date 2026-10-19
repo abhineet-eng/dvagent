@@ -16,7 +16,29 @@ It comes with **DVBench**, a benchmark of 10 designs with 120 injected bugs that
 ## Results
 
 <!-- results:start -->
-_The benchmark run is pending. The benchmark workflow fills in this section automatically._
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="results/gemini/chart_dark.png">
+  <img alt="Share of injected bugs caught at each agent stage, per design" src="results/gemini/chart_light.png">
+</picture>
+
+Model: `gemini-3.8-flash` via gemini, run 2026-10-19 17:42:35. 1 designs, 12 injected bugs, 1 LLM calls.
+
+
+| Stage | Testbenches passing on the correct design | Bugs caught | Mean line/branch coverage |
+|---|---|---|---|
+| One-shot LLM | 1/1 | 12/12 (100.0%) | 100.0% |
+| + simulation feedback | 1/1 | 12/12 (100.0%) | 100.0% |
+| + coverage closure | 1/1 | 12/12 (100.0%) | 100.0% |
+
+False design-bug reports on correct designs: 0.
+
+### Per design
+
+| Design | Level | Passes (1-shot / final) | Coverage (1-shot / final) | Bugs caught: 1-shot / +feedback / final | Debug: line found / fixed | LLM calls |
+|---|---|---|---|---|---|---|
+| alu8 | easy | yes (7/7) / yes (7/7) | 100.0% / 100.0% | 12 / 12 / 12 of 12 | 0/0 / 0/0 | 1 |
+
+Full data: [`results/gemini/`](results/gemini) (per-step agent log, every testbench it wrote, every debug attempt, and the complete LLM transcript). The workflow run's artifact holds `report.html`, a browsable report of every step.
 <!-- results:end -->
 
 ## The benchmark (DVBench)

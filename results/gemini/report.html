@@ -1,0 +1,298 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>DVAgent report</title><style>
+:root{--bg:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#e1e0d9;
+--accent:#2a78d6;--good:#006300;--bad:#d03b3b;--code:#f3f2ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--surface:#1a1a19;
+--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#2c2c2a;--accent:#3987e5;--good:#0ca30c;--bad:#e66767;--code:#232321}}
+:root[data-theme="dark"]{--bg:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;
+--line:#2c2c2a;--accent:#3987e5;--good:#0ca30c;--bad:#e66767;--code:#232321}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:36px 0 10px}h3{font-size:16px;margin:20px 0 6px}
+.sub{color:var(--ink2);margin:0 0 20px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.tile b{display:block;font-size:26px;font-weight:600}.tile span{color:var(--ink2);font-size:13px}
+table{border-collapse:collapse;width:100%;background:var(--surface);font-size:13.5px;
+font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600}.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.ok{color:var(--good);font-weight:600}.no{color:var(--bad);font-weight:600}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:10px 0;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+pre{background:var(--code);padding:10px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.45}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+img{max-width:100%;border-radius:10px;border:1px solid var(--line)}
+.muted{color:var(--muted)}
+</style></head><body><main><h1>DVAgent benchmark report</h1><p class='sub'>Model <code>gemini-3.8-flash</code> via gemini · started 2026-10-19 17:42:35 · 1 designs · 12 injected bugs</p>
+<div class='tiles'><div class='tile'><b>100% → 100%</b><span>bugs caught: one-shot LLM → full agent</span></div><div class='tile'><b>1/1 → 1/1</b><span>testbenches that run clean on the correct design</span></div><div class='tile'><b>n/a</b><span>of 0 caught bugs fixed (verified by hidden tests)</span></div><div class='tile'><b>1</b><span>LLM calls in total (gemini-3.8-flash)</span></div></div>
+<picture><source media='(prefers-color-scheme: dark)' srcset='chart_dark.png'><img src='chart_light.png' alt='Bugs caught per design at each agent stage'></picture>
+<h2>Per design</h2><div class='wrap'><table><tr><th>Design</th><th>Level</th><th>Passes on correct RTL<br>1-shot / final</th><th>Coverage<br>1-shot / final</th><th>Bugs caught<br>1-shot / +feedback / final</th><th>Debug<br>line found / fixed</th><th>LLM calls</th><th>False alarms</th></tr>
+<tr><td><a href='#alu8'>alu8</a></td><td>easy</td><td><span class='ok'>yes</span> 7/7 / <span class='ok'>yes</span> 7/7</td><td>100.0% / 100.0%</td><td>12 / 12 / 12 of 12</td><td>0/0 / 0/0</td><td>1</td><td>0</td></tr>
+</table></div>
+<h2 id='alu8'>alu8</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>pass (7/7 tests)</td><td>100.0%</td><td></td></tr>
+</table></div>
+<details><summary>Final testbench (tb_00.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for alu8 (8-bit Combinational ALU)
+
+Features and Corner Cases Tested:
+1. ADD (op=0):
+   - Basic additions, zero operands (0+0, 0+b, a+0).
+   - Carry generation: sums exceeding 255 (unsigned carry-out).
+   - Carry boundary: 255+1, 255+255, 128+128 (carry=1, y=0 -&gt; zero=1).
+   - Overflow detection:
+     * positive + positive -&gt; negative result (overflow = 1).
+     * negative + negative -&gt; positive result (overflow = 1).
+     * positive + negative / negative + positive (overflow = 0).
+     * boundary cases: 127 + 1 = -128 (overflow=1), -128 + -128 = 0 (overflow=1).
+   - Zero and negative flag correctness across all results.
+
+2. SUB (op=1):
+   - Identity: a - a = 0 (zero=1, carry=0, overflow=0).
+   - Unsigned borrow: a &lt; b (carry = 1), a &gt;= b (carry = 0).
+   - Overflow detection:
+     * positive - negative -&gt; negative result (overflow = 1).
+     * negative - positive -&gt; positive result (overflow = 1).
+     * same signs (overflow = 0).
+     * boundary: 0 - 1 (borrow=1), -128 - 1 = 127 (overflow=1), 127 - (-1) = -128 (overflow=1).
+
+3. Bitwise Logic Ops (AND op=2, OR op=3, XOR op=4):
+   - Basic logic operations with bit patterns (0x00, 0xFF, 0x55, 0xAA).
+   - Flag invariant check: carry=0 and overflow=0 for all logical operations.
+   - Zero and negative flags derived correctly from result y.
+
+4. Shift Left (SHL op=5):
+   - Shift amounts s in 0..7.
+   - Carry check: if s == 0, carry = 0; else carry = a[8 - s] (last bit shifted out).
+   - Upper bits of b (b[7:3]) ignored.
+   - Overflow is always 0.
+
+5. Shift Right (SHR op=6):
+   - Shift amounts s in 0..7 with zero fill.
+   - Carry check: if s == 0, carry = 0; else carry = a[s - 1] (last bit shifted out).
+   - Upper bits of b (b[7:3]) ignored.
+   - Overflow is always 0.
+
+6. Set on Less Than (SLT op=7):
+   - Signed comparisons: pos vs pos, neg vs neg, pos vs neg, neg vs pos.
+   - Strict inequality: equal values yield y = 0.
+   - Carry and overflow are 0.
+   - Extreme values: -128, -1, 0, 1, 127.
+
+7. Constrained-Random Testing:
+   - Fixed-seed pseudo-random vectors across all operations and full operand space.
+&quot;&quot;&quot;
+
+import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+
+
+def to_signed8(v: int) -&gt; int:
+    &quot;&quot;&quot;Convert an 8-bit unsigned integer to signed two&#x27;s complement.&quot;&quot;&quot;
+    v = v &amp; 0xFF
+    return v - 256 if v &gt;= 128 else v
+
+
+def alu8_ref(a: int, b: int, op: int):
+    &quot;&quot;&quot;Reference model for alu8 based on specification.&quot;&quot;&quot;
+    a = a &amp; 0xFF
+    b = b &amp; 0xFF
+    s = b &amp; 0x7  # b[2:0]
+    carry = 0
+    overflow = 0
+
+    if op == 0:  # ADD
+        res = a + b
+        y = res &amp; 0xFF
+        carry = 1 if res &gt; 255 else 0
+        a7 = (a &gt;&gt; 7) &amp; 1
+        b7 = (b &gt;&gt; 7) &amp; 1
+        y7 = (y &gt;&gt; 7) &amp; 1
+        overflow = 1 if (a7 == b7 and y7 != a7) else 0
+    elif op == 1:  # SUB
+        res = (a - b) &amp; 0xFF
+        y = res
+        carry = 1 if a &lt; b else 0
+        a7 = (a &gt;&gt; 7) &amp; 1
+        b7 = (b &gt;&gt; 7) &amp; 1
+        y7 = (y &gt;&gt; 7) &amp; 1
+        overflow = 1 if (a7 != b7 and y7 != a7) else 0
+    elif op == 2:  # AND
+        y = a &amp; b
+    elif op == 3:  # OR
+        y = a | b
+    elif op == 4:  # XOR
+        y = a ^ b
+    elif op == 5:  # SHL
+        y = (a &lt;&lt; s) &amp; 0xFF
+        carry = 0 if s == 0 else ((a &gt;&gt; (8 - s)) &amp; 1)
+    elif op == 6:  # SHR
+        y = (a &gt;&gt; s) &amp; 0xFF
+        carry = 0 if s == 0 else ((a &gt;&gt; (s - 1)) &amp; 1)
+    elif op == 7:  # SLT
+        sa = to_signed8(a)
+        sb = to_signed8(b)
+        y = 1 if sa &lt; sb else 0
+    else:
+        raise ValueError(f&quot;Invalid op: {op}&quot;)
+
+    zero = 1 if y == 0 else 0
+    negative = (y &gt;&gt; 7) &amp; 1
+    return y, carry, overflow, zero, negative
+
+
+async def check_alu(dut, a: int, b: int, op: int):
+    &quot;&quot;&quot;Drive combinational inputs, wait for propagation, and assert all outputs.&quot;&quot;&quot;
+    dut.a.value = a &amp; 0xFF
+    dut.b.value = b &amp; 0xFF
+    dut.op.value = op &amp; 0x7
+
+    await Timer(1, &quot;ns&quot;)
+
+    exp_y, exp_carry, exp_overflow, exp_zero, exp_neg = alu8_ref(a, b, op)
+
+    act_y = int(dut.y.value)
+    act_carry = int(dut.carry.value)
+    act_overflow = int(dut.overflow.value)
+    act_zero = int(dut.zero.value)
+    act_neg = int(dut.negative.value)
+
+    msg = f&quot;Failed on a={a:#04x}, b={b:#04x}, op={op}:&quot;
+    assert act_y == exp_y, f&quot;{msg} y expected {exp_y:#04x}, got {act_y:#04x}&quot;
+    assert act_carry == exp_carry, f&quot;{msg} carry expected {exp_carry}, got {act_carry}&quot;
+    assert act_overflow == exp_overflow, f&quot;{msg} overflow expected {exp_overflow}, got {act_overflow}&quot;
+    assert act_zero == exp_zero, f&quot;{msg} zero expected {exp_zero}, got {act_zero}&quot;
+    assert act_neg == exp_neg, f&quot;{msg} negative expected {exp_neg}, got {act_neg}&quot;
+
+
+@cocotb.test()
+async def test_add_corners_and_random(dut):
+    &quot;&quot;&quot;Test ADD operation corner cases (carry, overflow, zero, negative) and random pairs.&quot;&quot;&quot;
+    # Corner cases
+    corner_pairs = [
+        (0, 0),
+        (0, 255),
+        (255, 0),
+        (255, 1),       # Carry out, y=0, zero=1
+        (255, 255),     # Carry out, y=254
+        (127, 1),       # Overflow: +127 + +1 = -128
+        (127, 127),     # Overflow: +127 + +127 = -2
+        (128, 128),     # -128 + -128 = -256 -&gt; y=0, carry=1, overflow=1, zero=1
+        (128, 255),     # -128 + -1 = -129 -&gt; y=127, carry=1, overflow=1
+        (64, 63),       # 64 + 63 = 127 (no overflow)
+        (64, 64),       # 64 + 64 = 128 (overflow)
+        (0x80, 0x7F),   # -128 + 127 = -1 (no overflow, negative=1)
+        (0xFF, 0x01),   # -1 + 1 = 0 (carry=1, zero=1)
+    ]
+
+    for a, b in corner_pairs:
+        await check_alu(dut, a, b, 0)
+
+    # Random pairs
+    rng = random.Random(101)
+    for _ in range(1000):
+        a = rng.randint(0, 255)
+        b = rng.randint(0, 255)
+        await check_alu(dut, a, b, 0)
+
+
+@cocotb.test()
+async def test_sub_corners_and_random(dut):
+    &quot;&quot;&quot;Test SUB operation corner cases (borrow/carry, signed overflow) and random pairs.&quot;&quot;&quot;
+    corner_pairs = [
+        (0, 0),         # 0 - 0 = 0 (zero=1, carry=0)
+        (5, 5),         # a == b -&gt; y=0, carry=0
+        (0, 1),         # 0 - 1 = 255 (carry/borrow=1, neg=1)
+        (1, 0),         # carry=0
+        (0, 255),       # borrow=1
+        (255, 0),       # borrow=0
+        (127, 255),     # +127 - (-1) = 128 -&gt; overflow=1
+        (128, 1),       # -128 - (+1) = -129 -&gt; overflow=1
+        (128, 127),     # -128 - 127 = -255 -&gt; overflow=1
+        (127, 128),     # 127 - (-128) = 255 -&gt; overflow=1
+        (128, 128),     # -128 - (-128) = 0
+        (127, 127),     # 127 - 127 = 0
+    ]
+
+    for a, b in corner_pairs:
+        await check_alu(dut, a, b, 1)
+
+    # Random pairs
+    rng = random.Random(102)
+    for _ in range(1000):
+        a = rng.randint(0, 255)
+        b = rng.randint(0, 255)
+        await check_alu(dut, a, b, 1)
+
+
+@cocotb.test()
+async def test_logic_operations(dut):
+    &quot;&quot;&quot;Test AND, OR, XOR operations: values, zero/negative flags, carry=0, overflow=0.&quot;&quot;&quot;
+    patterns = [0x00, 0xFF, 0x55, 0xAA, 0x0F, 0xF0, 0x80, 0x01]
+
+    for op in [2, 3, 4]:  # AND, OR, XOR
+        for a in patterns:
+            for b in patterns:
+                await check_alu(dut, a, b, op)
+
+    rng = random.Random(103)
+    for op in [2, 3, 4]:
+        for _ in range(500):
+            a = rng.randint(0, 255)
+            b = rng.randint(0, 255)
+            await check_alu(dut, a, b, op)
+
+
+@cocotb.test()
+async def test_shift_left(dut):
+    &quot;&quot;&quot;Test SHL operation: shift amounts 0..7, carry output, upper bits of b ignored.&quot;&quot;&quot;
+    # Test all 256 &#x27;a&#x27; values across shift amounts 0..7 with clean and dirty upper b bits
+    for s in range(8):
+        for upper in [0x00, 0x80, 0xF8, 0x28]:
+            b = upper | s
+            for a in range(256):
+                await check_alu(dut, a, b, 5)
+
+
+@cocotb.test()
+async def test_shift_right(dut):
+    &quot;&quot;&quot;Test SHR operation: shift amounts 0..7, carry output, upper bits of b ignored.&quot;&quot;&quot;
+    # Test all 256 &#x27;a&#x27; values across shift amounts 0..7 with clean and dirty upper b bits
+    for s in range(8):
+        for upper in [0x00, 0x80, 0xF8, 0x50]:
+            b = upper | s
+            for a in range(256):
+                await check_alu(dut, a, b, 6)
+
+
+@cocotb.test()
+async def test_set_less_than(dut):
+    &quot;&quot;&quot;Test SLT operation: signed comparisons, boundary cases, flags.&quot;&quot;&quot;
+    test_vals = [0x80, 0x81, 0xFF, 0x00, 0x01, 0x7E, 0x7F]  # -128, -127, -1, 0, 1, 126, 127
+
+    for a in test_vals:
+        for b in test_vals:
+            await check_alu(dut, a, b, 7)
+
+    rng = random.Random(104)
+    for _ in range(1000):
+        a = rng.randint(0, 255)
+        b = rng.randint(0, 255)
+        await check_alu(dut, a, b, 7)
+
+
+@cocotb.test()
+async def test_random_exhaustive_coverage(dut):
+    &quot;&quot;&quot;Test randomly generated operations across all 8 ops with fixed seed.&quot;&quot;&quot;
+    rng = random.Random(1)
+    for _ in range(5000):
+        a = rng.randint(0, 255)
+        b = rng.randint(0, 255)
+        op = rng.randint(0, 7)
+        await check_alu(dut, a, b, op)
+</code></pre></details>
+<p class='muted'>Generated by DVAgent.</p></main></body></html>

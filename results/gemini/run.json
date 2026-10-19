@@ -1,0 +1,16 @@
+{
+ "provider": "gemini",
+ "model": "gemini-3.8-flash",
+ "started": "2026-10-19 17:42:35",
+ "config": {
+  "max_llm_calls": 8,
+  "coverage": true,
+  "coverage_target": 100.0,
+  "max_coverage_rounds": 3,
+  "show_rtl": false,
+  "trust_rtl": true,
+  "sim_timeout": 240.0,
+  "debug_attempts": 3
+ },
+ "debug_per_design": 4
+}

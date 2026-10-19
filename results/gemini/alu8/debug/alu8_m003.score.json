@@ -1,0 +1,25 @@
+{
+ "mutant": "alu8_m003",
+ "bug_line": 30,
+ "operator": "logical",
+ "description": "'&&' replaced by '||'",
+ "original": "overflow = (a[7] != b[7]) && (diff[7] != a[7]);",
+ "mutated": "overflow = (a[7] != b[7]) || (diff[7] != a[7]);",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  30
+ ],
+ "fixes": [
+  [
+   "overflow = (a[7] != b[7]) && (diff[7] != a[7]);"
+  ]
+ ],
+ "explanations": [
+  "For SUB, signed overflow occurs when a and b have different sign bits AND the result sign bit differs from a's sign bit. Line 30 incorrectly used the logical OR operator (||) instead of logical AND (&&)."
+ ]
+}

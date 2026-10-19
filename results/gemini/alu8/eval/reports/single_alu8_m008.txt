@@ -1,0 +1,35 @@
+fail: 4 passed, 3 failed (0.9 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_add_corners_and_random
+  INFO cocotb.regression                  Found test test_tb_00.test_sub_corners_and_random
+  INFO cocotb.regression                  Found test test_tb_00.test_logic_operations
+  INFO cocotb.regression                  Found test test_tb_00.test_shift_left
+  INFO cocotb.regression                  Found test test_tb_00.test_shift_right
+  INFO cocotb.regression                  Found test test_tb_00.test_set_less_than
+  INFO cocotb.regression                  Found test test_tb_00.test_random_exhaustive_coverage
+FAILED test_logic_operations
+  testbench log before the failure:
+    Test AND, OR, XOR operations: values, zero/negative flags, carry=0, overflow=0.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 204, in test_logic_operations
+  await check_alu(dut, a, b, op)
+  File "test_tb_00.py", line 130, in check_alu
+  assert act_carry == exp_carry, f"{msg} carry expected {exp_carry}, got {act_carry}"
+  AssertionError: Failed on a=0x00, b=0x00, op=2: carry expected 0, got 1
+FAILED test_set_less_than
+  testbench log before the failure:
+    Test SLT operation: signed comparisons, boundary cases, flags.
+  assert act_carry == exp_carry, f"{msg} carry expected {exp_carry}, got {act_carry}"
+  AssertionError: Failed on a=0x80, b=0x80, op=7: carry expected 0, got 1
+FAILED test_random_exhaustive_coverage
+  testbench log before the failure:
+    Test randomly generated operations across all 8 ops with fixed seed.
+  assert act_carry == exp_carry, f"{msg} carry expected {exp_carry}, got {act_carry}"
+  AssertionError: Failed on a=0x44, b=0x20, op=4: carry expected 0, got 1
+passed: test_add_corners_and_random, test_sub_corners_and_random, test_shift_left, test_shift_right

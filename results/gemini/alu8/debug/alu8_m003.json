@@ -1,0 +1,29 @@
+{
+ "case": "alu8_m003",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 30,
+   "explanation": "For SUB, signed overflow occurs when a and b have different sign bits AND the result sign bit differs from a's sign bit. Line 30 incorrectly used the logical OR operator (||) instead of logical AND (&&).",
+   "edits": [
+    {
+     "line": 30,
+     "old_text": "                overflow = (a[7] != b[7]) || (diff[7] != a[7]);",
+     "new_text": "                overflow = (a[7] != b[7]) && (diff[7] != a[7]);"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/gemini/alu8/debug/alu8_m003_fix1/alu8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5800,
+    "completion_tokens": 163,
+    "seconds": 8.7
+   },
+   "edited_lines": [
+    30
+   ]
+  }
+ ]
+}

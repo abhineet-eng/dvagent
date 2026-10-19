@@ -1,0 +1,119 @@
+{
+ "mutants": [
+  "alu8_m000",
+  "alu8_m001",
+  "alu8_m003",
+  "alu8_m004",
+  "alu8_m005",
+  "alu8_m006",
+  "alu8_m007",
+  "alu8_m008",
+  "alu8_m009",
+  "alu8_m010",
+  "alu8_m011",
+  "alu8_m012"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 7,
+   "tests_passing": 7,
+   "passing_tests": [
+    "test_add_corners_and_random",
+    "test_logic_operations",
+    "test_random_exhaustive_coverage",
+    "test_set_less_than",
+    "test_shift_left",
+    "test_shift_right",
+    "test_sub_corners_and_random"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "alu8_m000": "fail",
+    "alu8_m001": "fail",
+    "alu8_m003": "fail",
+    "alu8_m004": "fail",
+    "alu8_m005": "fail",
+    "alu8_m006": "fail",
+    "alu8_m007": "fail",
+    "alu8_m008": "fail",
+    "alu8_m009": "fail",
+    "alu8_m010": "fail",
+    "alu8_m011": "fail",
+    "alu8_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 21.1
+  },
+  "feedback": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 7,
+   "tests_passing": 7,
+   "passing_tests": [
+    "test_add_corners_and_random",
+    "test_logic_operations",
+    "test_random_exhaustive_coverage",
+    "test_set_less_than",
+    "test_shift_left",
+    "test_shift_right",
+    "test_sub_corners_and_random"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "alu8_m000": "fail",
+    "alu8_m001": "fail",
+    "alu8_m003": "fail",
+    "alu8_m004": "fail",
+    "alu8_m005": "fail",
+    "alu8_m006": "fail",
+    "alu8_m007": "fail",
+    "alu8_m008": "fail",
+    "alu8_m009": "fail",
+    "alu8_m010": "fail",
+    "alu8_m011": "fail",
+    "alu8_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 21.1,
+   "same_as": "single"
+  },
+  "final": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 7,
+   "tests_passing": 7,
+   "passing_tests": [
+    "test_add_corners_and_random",
+    "test_logic_operations",
+    "test_random_exhaustive_coverage",
+    "test_set_less_than",
+    "test_shift_left",
+    "test_shift_right",
+    "test_sub_corners_and_random"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "alu8_m000": "fail",
+    "alu8_m001": "fail",
+    "alu8_m003": "fail",
+    "alu8_m004": "fail",
+    "alu8_m005": "fail",
+    "alu8_m006": "fail",
+    "alu8_m007": "fail",
+    "alu8_m008": "fail",
+    "alu8_m009": "fail",
+    "alu8_m010": "fail",
+    "alu8_m011": "fail",
+    "alu8_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 21.1,
+   "same_as": "single"
+  }
+ }
+}

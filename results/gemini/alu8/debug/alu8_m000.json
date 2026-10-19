@@ -1,0 +1,29 @@
+{
+ "case": "alu8_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 13,
+   "explanation": "The sum wire is defined using subtraction ('-') instead of addition ('+'), causing the ADD operation to compute a - b instead of a + b.",
+   "edits": [
+    {
+     "line": 13,
+     "old_text": "    wire [8:0] sum  = {1'b0, a} - {1'b0, b};",
+     "new_text": "    wire [8:0] sum  = {1'b0, a} + {1'b0, b};"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/gemini/alu8/debug/alu8_m000_fix1/alu8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5826,
+    "completion_tokens": 152,
+    "seconds": 8.6
+   },
+   "edited_lines": [
+    13
+   ]
+  }
+ ]
+}

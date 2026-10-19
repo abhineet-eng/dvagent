@@ -1,0 +1,25 @@
+{
+ "mutant": "alu8_m000",
+ "bug_line": 13,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "wire [8:0] sum  = {1'b0, a} + {1'b0, b};",
+ "mutated": "wire [8:0] sum  = {1'b0, a} - {1'b0, b};",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  13
+ ],
+ "fixes": [
+  [
+   "wire [8:0] sum  = {1'b0, a} + {1'b0, b};"
+  ]
+ ],
+ "explanations": [
+  "The sum wire is defined using subtraction ('-') instead of addition ('+'), causing the ADD operation to compute a - b instead of a + b."
+ ]
+}

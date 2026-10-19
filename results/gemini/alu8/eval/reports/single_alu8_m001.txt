@@ -1,0 +1,30 @@
+fail: 5 passed, 2 failed (0.9 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_add_corners_and_random
+  INFO cocotb.regression                  Found test test_tb_00.test_sub_corners_and_random
+  INFO cocotb.regression                  Found test test_tb_00.test_logic_operations
+  INFO cocotb.regression                  Found test test_tb_00.test_shift_left
+  INFO cocotb.regression                  Found test test_tb_00.test_shift_right
+  INFO cocotb.regression                  Found test test_tb_00.test_set_less_than
+  INFO cocotb.regression                  Found test test_tb_00.test_random_exhaustive_coverage
+FAILED test_logic_operations
+  testbench log before the failure:
+    Test AND, OR, XOR operations: values, zero/negative flags, carry=0, overflow=0.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 204, in test_logic_operations
+  await check_alu(dut, a, b, op)
+  File "test_tb_00.py", line 129, in check_alu
+  assert act_y == exp_y, f"{msg} y expected {exp_y:#04x}, got {act_y:#04x}"
+  AssertionError: Failed on a=0x00, b=0xff, op=3: y expected 0xff, got 0x00
+FAILED test_random_exhaustive_coverage
+  testbench log before the failure:
+    Test randomly generated operations across all 8 ops with fixed seed.
+  assert act_y == exp_y, f"{msg} y expected {exp_y:#04x}, got {act_y:#04x}"
+  AssertionError: Failed on a=0xf1, b=0xc2, op=3: y expected 0xf3, got 0xc0
+passed: test_add_corners_and_random, test_sub_corners_and_random, test_shift_left, test_shift_right, test_set_less_than

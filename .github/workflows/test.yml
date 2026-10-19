@@ -1,0 +1,29 @@
+name: tests
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: agent, benchmark and simulator tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Icarus Verilog, Verilator and Python packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog verilator
+          pip install cocotb==1.9.2 matplotlib pytest
+
+      - name: Environment check
+        run: python -m dvagent check --provider ollama
+
+      - name: Unit, benchmark-soundness and end-to-end tests
+        run: python -m pytest -v tests

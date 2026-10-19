@@ -1,0 +1,29 @@
+{
+ "case": "alu8_m004",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 37,
+   "explanation": "SLT is set-on-less-than (strict inequality a < b), but line 37 uses '<=', which incorrectly yields 1 when a and b are equal.",
+   "edits": [
+    {
+     "line": 37,
+     "old_text": "            default: y = {7'd0, $signed(a) <= $signed(b)}; // SLT (signed)",
+     "new_text": "            default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/gemini/alu8/debug/alu8_m004_fix1/alu8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5824,
+    "completion_tokens": 158,
+    "seconds": 6.9
+   },
+   "edited_lines": [
+    37
+   ]
+  }
+ ]
+}

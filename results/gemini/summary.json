@@ -13,12 +13,14 @@
    "sim_timeout": 240.0,
    "debug_attempts": 3
   },
-  "debug_per_design": 4
+  "debug_per_design": 4,
+  "finished": "2026-10-19 18:06:38",
+  "stopped": "LLM quota exhausted while working on updown_counter: HTTP 429: [{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\"
  },
  "overall": {
   "designs": 1,
   "mutants": 12,
-  "llm_calls": 1,
+  "llm_calls": 5,
   "tokens": 4913,
   "false_alarms": 0,
   "single_pass": 1,
@@ -33,13 +35,13 @@
   "final_killed": 12,
   "final_score": 100.0,
   "final_cov": 100.0,
-  "debug_n": 0,
-  "debug_loc1": 0,
-  "debug_loc1_pct": null,
-  "debug_fix1": 0,
-  "debug_fix1_pct": null,
-  "debug_fix": 0,
-  "debug_fix_pct": null
+  "debug_n": 4,
+  "debug_loc1": 4,
+  "debug_loc1_pct": 100.0,
+  "debug_fix1": 4,
+  "debug_fix1_pct": 100.0,
+  "debug_fix": 4,
+  "debug_fix_pct": 100.0
  },
  "rows": [
   {
@@ -65,11 +67,11 @@
    "final_cov": 100.0,
    "final_killed": 12,
    "final_score": 100.0,
-   "debug_n": 0,
-   "debug_loc1": 0,
-   "debug_fix1": 0,
-   "debug_fix": 0,
-   "debug_calls": 0
+   "debug_n": 4,
+   "debug_loc1": 4,
+   "debug_fix1": 4,
+   "debug_fix": 4,
+   "debug_calls": 4
   }
  ]
 }

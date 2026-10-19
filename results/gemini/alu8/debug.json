@@ -1,0 +1,102 @@
+[
+ {
+  "mutant": "alu8_m000",
+  "bug_line": 13,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "wire [8:0] sum  = {1'b0, a} + {1'b0, b};",
+  "mutated": "wire [8:0] sum  = {1'b0, a} - {1'b0, b};",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   13
+  ],
+  "fixes": [
+   [
+    "wire [8:0] sum  = {1'b0, a} + {1'b0, b};"
+   ]
+  ],
+  "explanations": [
+   "The sum wire is defined using subtraction ('-') instead of addition ('+'), causing the ADD operation to compute a - b instead of a + b."
+  ]
+ },
+ {
+  "mutant": "alu8_m001",
+  "bug_line": 33,
+  "operator": "bitwise",
+  "description": "'|' replaced by '&'",
+  "original": "3'd3: y = a | b;                              // OR",
+  "mutated": "3'd3: y = a & b;                              // OR",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   33
+  ],
+  "fixes": [
+   [
+    "3'd3: y = a | b;                              // OR"
+   ]
+  ],
+  "explanations": [
+   "Op 3 is the bitwise OR operation, but the RTL incorrectly computes bitwise AND ('a & b') instead of bitwise OR ('a | b')."
+  ]
+ },
+ {
+  "mutant": "alu8_m003",
+  "bug_line": 30,
+  "operator": "logical",
+  "description": "'&&' replaced by '||'",
+  "original": "overflow = (a[7] != b[7]) && (diff[7] != a[7]);",
+  "mutated": "overflow = (a[7] != b[7]) || (diff[7] != a[7]);",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   30
+  ],
+  "fixes": [
+   [
+    "overflow = (a[7] != b[7]) && (diff[7] != a[7]);"
+   ]
+  ],
+  "explanations": [
+   "For SUB, signed overflow occurs when a and b have different sign bits AND the result sign bit differs from a's sign bit. Line 30 incorrectly used the logical OR operator (||) instead of logical AND (&&)."
+  ]
+ },
+ {
+  "mutant": "alu8_m004",
+  "bug_line": 37,
+  "operator": "relational",
+  "description": "'<' replaced by '<='",
+  "original": "default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)",
+  "mutated": "default: y = {7'd0, $signed(a) <= $signed(b)}; // SLT (signed)",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   37
+  ],
+  "fixes": [
+   [
+    "default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)"
+   ]
+  ],
+  "explanations": [
+   "SLT is set-on-less-than (strict inequality a < b), but line 37 uses '<=', which incorrectly yields 1 when a and b are equal."
+  ]
+ }
+]

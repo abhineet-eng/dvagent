@@ -1,0 +1,25 @@
+{
+ "mutant": "alu8_m004",
+ "bug_line": 37,
+ "operator": "relational",
+ "description": "'<' replaced by '<='",
+ "original": "default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)",
+ "mutated": "default: y = {7'd0, $signed(a) <= $signed(b)}; // SLT (signed)",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  37
+ ],
+ "fixes": [
+  [
+   "default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)"
+  ]
+ ],
+ "explanations": [
+  "SLT is set-on-less-than (strict inequality a < b), but line 37 uses '<=', which incorrectly yields 1 when a and b are equal."
+ ]
+}

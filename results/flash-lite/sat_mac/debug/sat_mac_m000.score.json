@@ -1,0 +1,25 @@
+{
+ "mutant": "sat_mac_m000",
+ "bug_line": 15,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "wire signed [16:0] sum  = base + {prod[15], prod};",
+ "mutated": "wire signed [16:0] sum  = base - {prod[15], prod};",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  15
+ ],
+ "fixes": [
+  [
+   "wire signed [16:0] sum  = base + {prod[15], prod};"
+  ]
+ ],
+ "explanations": [
+  "Line 15 computes `sum = base - {prod[15], prod};` instead of adding the product `base + {prod[15], prod}`, which violates the MAC operation requirement `s = base + p`."
+ ]
+}

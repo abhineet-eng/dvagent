@@ -1,0 +1,37 @@
+fail: 4 passed, 1 failed (1.0 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset
+  INFO cocotb.regression                  Found test test_tb_00.test_idle_and_clear
+  INFO cocotb.regression                  Found test test_tb_00.test_basic_mac_and_restart
+  INFO cocotb.regression                  Found test test_tb_00.test_positive_and_negative_saturation
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+test test_constrained_random did not finish; last testbench output:
+  Constrained-random test comparing DUT against reference model.
+  ** TEST                                              STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  **********************************************************************************************************
+  ** test_tb_00.test_reset                              PASS          30.00           0.00      24567.22  **
+  ** test_tb_00.test_idle_and_clear                     PASS          40.00           0.00      43442.87  **
+  ** test_tb_00.test_basic_mac_and_restart              PASS          40.00           0.00      45865.60  **
+  ** test_tb_00.test_positive_and_negative_saturation   FAIL          40.00           0.00      46552.82  **
+  ** test_tb_00.test_constrained_random                 PASS       50010.00           0.80      62618.80  **
+  **********************************************************************************************************
+  ** TESTS=5 PASS=4 FAIL=1 SKIP=0                                  50160.00       
+... (truncated) ...
+/builds/icarus_e40a89874726/cmds.f /home/runner/work/dvagent/dvagent/results/flash-lite/sat_mac/variants/sat_mac_m001/sat_mac.v in directory /home/runner/work/dvagent/dvagent/results/flash-lite/sat_mac/eval/builds/icarus_e40a89874726
+  INFO: Running command vvp -M /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runner/work/dvagent/dvagent/results/flash-lite/sat_mac/eval/builds/icarus_e40a89874726/sim.vvp in directory /home/runner/work/dvagent/dvagent/results/flash-lite/sat_mac/eval/runs/run_2434982567_2893
+FAILED test_positive_and_negative_saturation
+  testbench log before the failure:
+    Test positive and negative saturation and sticky sat flag.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 173, in test_positive_and_negative_saturation
+  await check_outputs(ref, dut) # acc = 32767, sat = 1
+  File "test_tb_00.py", line 72, in check_outputs
+  assert got_sat == expected_sat, f"SAT mismatch: expected {expected_sat}, got {got_sat}"
+  AssertionError: SAT mismatch: expected 1, got 0
+passed: test_reset, test_idle_and_clear, test_basic_mac_and_restart, test_constrained_random

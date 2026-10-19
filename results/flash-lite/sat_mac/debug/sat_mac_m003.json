@@ -1,0 +1,29 @@
+{
+ "case": "sat_mac_m003",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 29,
+   "explanation": "Line 29 assigns `sum[14:0]` (which is 15 bits, zero-extended or sign-extended incorrectly into 16 bits `acc`) instead of the full 16-bit lower portion or truncated `sum[15:0]`, causing the accumulator to drop sign bits or wrap incorrectly when not saturating. It violates the exact computation rule (no wrap) when `sum` is within range.",
+   "edits": [
+    {
+     "line": 29,
+     "old_text": "                acc <= sum[14:0];",
+     "new_text": "                acc <= sum[15:0];"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sat_mac/debug/sat_mac_m003_fix1/sat_mac.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5161,
+    "completion_tokens": 179,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    29
+   ]
+  }
+ ]
+}

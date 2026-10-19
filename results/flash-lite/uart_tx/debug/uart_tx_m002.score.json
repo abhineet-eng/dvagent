@@ -1,0 +1,25 @@
+{
+ "mutant": "uart_tx_m002",
+ "bug_line": 97,
+ "operator": "condition",
+ "description": "condition (last_tick) inverted",
+ "original": "if (last_tick) begin",
+ "mutated": "if (!(last_tick)) begin",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  97
+ ],
+ "fixes": [
+  [
+   "if (last_tick) begin"
+  ]
+ ],
+ "explanations": [
+  "Line 97 checks `if (!(last_tick))` instead of `if (last_tick)` for the STOP state, causing the stop bit to last only 1 cycle instead of `CLKS_PER_BIT` cycles and ending the frame prematurely, which violates the requirement that each bit lasts `CLKS_PER_BIT` cycles and breaks `busy` timing."
+ ]
+}

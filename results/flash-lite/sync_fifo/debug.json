@@ -1,0 +1,102 @@
+[
+ {
+  "mutant": "sync_fifo_m000",
+  "bug_line": 47,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "count <= count + 4'd1;",
+  "mutated": "count <= count - 4'd1;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   47
+  ],
+  "fixes": [
+   [
+    "count <= count + 4'd1;"
+   ]
+  ],
+  "explanations": [
+   "Line 47 incorrectly decrements count instead of incrementing it when only a push is accepted, violating the count update specification ('count increases by 1 when only a push is accepted')."
+  ]
+ },
+ {
+  "mutant": "sync_fifo_m001",
+  "bug_line": 50,
+  "operator": "condition",
+  "description": "condition (push && !do_push) inverted",
+  "original": "if (push && !do_push)",
+  "mutated": "if (!(push && !do_push))",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   50
+  ],
+  "fixes": [
+   [
+    "if (push && !do_push)"
+   ]
+  ],
+  "explanations": [
+   "Line 50 uses `!(push && !do_push)` which incorrectly sets `overflow` to 1 whenever `push` is low and `do_push` is false, instead of checking if a push was requested (`push`) but rejected (`!do_push`). This breaks the rule: 'overflow becomes 1 when push = 1 but the push is rejected.'"
+  ]
+ },
+ {
+  "mutant": "sync_fifo_m002",
+  "bug_line": 24,
+  "operator": "constant",
+  "description": "constant 4'd8 changed to 4'd9",
+  "original": "assign full        = (count == 4'd8);",
+  "mutated": "assign full        = (count == 4'd9);",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   24
+  ],
+  "fixes": [
+   [
+    "assign full        = (count == 4'd8);"
+   ]
+  ],
+  "explanations": [
+   "Line 24 checks `count == 4'd9` for the `full` flag, but the FIFO depth is 8 and `count` reaches a maximum value of 8. Therefore `full` never asserts when the FIFO becomes full (count == 8)."
+  ]
+ },
+ {
+  "mutant": "sync_fifo_m003",
+  "bug_line": 40,
+  "operator": "deleted",
+  "description": "assignment 'underflow <= 1'b0;' removed",
+  "original": "underflow <= 1'b0;",
+  "mutated": ";",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   40
+  ],
+  "fixes": [
+   [
+    "underflow <= 1'b0;"
+   ]
+  ],
+  "explanations": [
+   "A stray semicolon on line 40 leaves 'underflow' unassigned during reset, resulting in 'x' during the reset test and failing assertions."
+  ]
+ }
+]

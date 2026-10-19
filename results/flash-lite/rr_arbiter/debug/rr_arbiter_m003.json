@@ -1,0 +1,79 @@
+{
+ "case": "rr_arbiter_m003",
+ "fixed_self_check": false,
+ "attempts": [
+  {
+   "bug_line": 45,
+   "explanation": "When arbitrating and a valid new requester is found (found=1), the RTL leaves the grant signal unassigned or unchanged rather than updating it to the one-hot encoding of the new winner (`1 << pick`), which violates behavior rule 2.",
+   "edits": [
+    {
+     "line": 45,
+     "old_text": "            if (found) {",
+     "new_text": "            if (found) {"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4869,
+    "completion_tokens": 129,
+    "seconds": 0.9
+   },
+   "edited_lines": []
+  },
+  {
+   "bug_line": 45,
+   "explanation": "When arbitrating and a winner is found (`found` is high), the RTL does not update `grant` with the newly picked requester (`1 << pick`), leaving `grant` at 0. This violates behavior rule 2.",
+   "edits": [
+    {
+     "line": 45,
+     "old_text": "            if (found) {",
+     "new_text": "            if (found) {"
+    },
+    {
+     "line": 46,
+     "old_text": "                ;",
+     "new_text": "                grant <= 4'b0001 << pick;"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4908,
+    "completion_tokens": 172,
+    "seconds": 1.1
+   },
+   "edited_lines": []
+  },
+  {
+   "bug_line": 45,
+   "explanation": "When arbitrating and finding a new winner (`found`), the RTL leaves the `grant` register unassigned (executing an empty statement `;`), causing `grant` to become 0 instead of updating to `1 << pick`. This violates the arbitration behavior specification.",
+   "edits": [
+    {
+     "line": 45,
+     "old_text": "            if (found) {",
+     "new_text": "            if (found) {"
+    },
+    {
+     "line": 46,
+     "old_text": "                ;",
+     "new_text": "                grant <= 1 << pick;"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4938,
+    "completion_tokens": 172,
+    "seconds": 1.1
+   },
+   "edited_lines": []
+  }
+ ]
+}

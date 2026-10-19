@@ -1,0 +1,35 @@
+{
+ "mutant": "updown_counter_m007",
+ "bug_line": 20,
+ "operator": "condition",
+ "description": "condition (en) inverted",
+ "original": "end else if (en) begin",
+ "mutated": "end else if (!(en)) begin",
+ "attempts": 3,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": false,
+ "fixed": false,
+ "self_check_pass": false,
+ "predicted_lines": [
+  20,
+  20,
+  20
+ ],
+ "fixes": [
+  [
+   "} else if (en) begin"
+  ],
+  [
+   "} else if (en) begin"
+  ],
+  [
+   "} else if (en) begin"
+  ]
+ ],
+ "explanations": [
+  "Line 20 checks `else if (!(en))` instead of `else if (en)`, which causes the counter to execute up/down counting when `en` is low and hold when `en` is high, violating the count enable (`en`) specification.",
+  "Line 20 checks `else if (!(en))`, which causes the counter to only increment, decrement, or wrap when `en` is 0 (disabled), instead of counting when `en` is 1 (enabled). This violates the requirement that counting occurs when `en` is active.",
+  "Line 20 checks `else if (!(en))`, which causes the counter to only increment, decrement, or wrap when `en` is 0 (disabled), violating the specification that counting occurs when `en` is 1."
+ ]
+}

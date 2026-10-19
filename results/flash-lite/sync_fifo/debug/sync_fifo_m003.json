@@ -1,0 +1,30 @@
+{
+ "case": "sync_fifo_m003",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 40,
+   "explanation": "A stray semicolon on line 40 leaves 'underflow' unassigned during reset, resulting in 'x' during the reset test and failing assertions.",
+   "edits": [
+    {
+     "line": 40,
+     "output": ";",
+     "old_text": "            ;",
+     "new_text": "            underflow <= 1'b0;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sync_fifo/debug/sync_fifo_m003_fix1/sync_fifo.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5920,
+    "completion_tokens": 89,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    40
+   ]
+  }
+ ]
+}

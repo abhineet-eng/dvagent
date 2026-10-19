@@ -1,0 +1,98 @@
+{
+ "mutants": [
+  "seq_detector_m000",
+  "seq_detector_m001",
+  "seq_detector_m002",
+  "seq_detector_m004",
+  "seq_detector_m005",
+  "seq_detector_m006",
+  "seq_detector_m007",
+  "seq_detector_m008",
+  "seq_detector_m009",
+  "seq_detector_m010",
+  "seq_detector_m011",
+  "seq_detector_m012"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "fail",
+   "tests_total": 5,
+   "tests_passing": 1,
+   "passing_tests": [
+    "test_reset"
+   ],
+   "coverage": 33.333333333333336,
+   "killed": {
+    "seq_detector_m001": "fail",
+    "seq_detector_m012": "fail"
+   },
+   "mutation_score": 16.67,
+   "seconds": 13.1
+  },
+  "feedback": {
+   "snapshot": "feedback",
+   "tb": "tb_01.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_basic_and_overlapping",
+    "test_constrained_random",
+    "test_count_saturation",
+    "test_din_valid_gating",
+    "test_reset"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "seq_detector_m000": "fail",
+    "seq_detector_m001": "fail",
+    "seq_detector_m002": "fail",
+    "seq_detector_m004": "fail",
+    "seq_detector_m005": "fail",
+    "seq_detector_m006": "fail",
+    "seq_detector_m007": "fail",
+    "seq_detector_m008": "fail",
+    "seq_detector_m009": "fail",
+    "seq_detector_m010": "fail",
+    "seq_detector_m011": "fail",
+    "seq_detector_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 6.8
+  },
+  "final": {
+   "snapshot": "feedback",
+   "tb": "tb_01.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_basic_and_overlapping",
+    "test_constrained_random",
+    "test_count_saturation",
+    "test_din_valid_gating",
+    "test_reset"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "seq_detector_m000": "fail",
+    "seq_detector_m001": "fail",
+    "seq_detector_m002": "fail",
+    "seq_detector_m004": "fail",
+    "seq_detector_m005": "fail",
+    "seq_detector_m006": "fail",
+    "seq_detector_m007": "fail",
+    "seq_detector_m008": "fail",
+    "seq_detector_m009": "fail",
+    "seq_detector_m010": "fail",
+    "seq_detector_m011": "fail",
+    "seq_detector_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 6.8,
+   "same_as": "feedback"
+  }
+ }
+}

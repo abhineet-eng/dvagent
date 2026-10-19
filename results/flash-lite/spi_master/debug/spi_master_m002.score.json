@@ -1,0 +1,25 @@
+{
+ "mutant": "spi_master_m002",
+ "bug_line": 36,
+ "operator": "constant",
+ "description": "constant 1'b1 changed to 1'b0",
+ "original": "cs_n    <= 1'b1;",
+ "mutated": "cs_n    <= 1'b0;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  36
+ ],
+ "fixes": [
+  [
+   "cs_n    <= 1'b1;"
+  ]
+ ],
+ "explanations": [
+  "After reset, cs_n should be 1 according to the specification ('After reset: cs_n = 1'), but line 36 sets cs_n <= 1'b0."
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "mutant": "sync_fifo_m001",
+ "bug_line": 50,
+ "operator": "condition",
+ "description": "condition (push && !do_push) inverted",
+ "original": "if (push && !do_push)",
+ "mutated": "if (!(push && !do_push))",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  50
+ ],
+ "fixes": [
+  [
+   "if (push && !do_push)"
+  ]
+ ],
+ "explanations": [
+  "Line 50 uses `!(push && !do_push)` which incorrectly sets `overflow` to 1 whenever `push` is low and `do_push` is false, instead of checking if a push was requested (`push`) but rejected (`!do_push`). This breaks the rule: 'overflow becomes 1 when push = 1 but the push is rejected.'"
+ ]
+}

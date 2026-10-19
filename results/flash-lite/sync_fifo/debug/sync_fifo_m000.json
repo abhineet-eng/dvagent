@@ -1,0 +1,29 @@
+{
+ "case": "sync_fifo_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 47,
+   "explanation": "Line 47 incorrectly decrements count instead of incrementing it when only a push is accepted, violating the count update specification ('count increases by 1 when only a push is accepted').",
+   "edits": [
+    {
+     "line": 47,
+     "old_text": "                count <= count - 4'd1;",
+     "new_text": "                count <= count + 4'd1;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sync_fifo/debug/sync_fifo_m000_fix1/sync_fifo.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5857,
+    "completion_tokens": 102,
+    "seconds": 1.1
+   },
+   "edited_lines": [
+    47
+   ]
+  }
+ ]
+}

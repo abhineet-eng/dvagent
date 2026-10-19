@@ -1,0 +1,25 @@
+{
+ "mutant": "seq_detector_m002",
+ "bug_line": 38,
+ "operator": "constant",
+ "description": "constant 8'hFF changed to 8'hFE",
+ "original": "if (hit && count != 8'hFF)",
+ "mutated": "if (hit && count != 8'hFE)",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  38
+ ],
+ "fixes": [
+  [
+   "if (hit && count != 8'hFF)"
+  ]
+ ],
+ "explanations": [
+  "Line 38 checks `count != 8'hFE` (which is 254) instead of `count != 8'hFF` (255), causing the count to stop incrementing at 254 instead of saturating at 255 as specified."
+ ]
+}

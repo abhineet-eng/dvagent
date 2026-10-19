@@ -1,0 +1,34 @@
+fail: 4 passed, 1 failed (0.3 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_02.test_reset
+  INFO cocotb.regression                  Found test test_tb_02.test_basic_push_pop
+  INFO cocotb.regression                  Found test test_tb_02.test_overflow_underflow
+  INFO cocotb.regression                  Found test test_tb_02.test_simultaneous_push_pop
+  INFO cocotb.regression                  Found test test_tb_02.test_almost_full_and_random
+FAILED test_almost_full_and_random
+  testbench log before the failure:
+    Constrained-random test checking almost_full flag and overall state tracking.
+  Traceback (most recent call last):
+  File "test_tb_02.py", line 295, in test_almost_full_and_random
+  assert int(dut.overflow.value) == ref.overflow, f"[Cycle {cycle}] Overflow mismatch: got {int(dut.overflow.value)}, expected {ref.overflow}"
+  AssertionError: [Cycle 0] Overflow mismatch: got 1, expected 0
+  INFO cocotb.regression                  ************************************************************************************************
+  ** TEST                                    STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  ************************************************************************************************
+  ** test_tb_02.test_reset                    PASS          10.00           0.00       9716.76  **
+  ** test_tb_02.test_basic_push_pop           PASS         100.00           0.00      52032.58  **
+  ** test_tb_02.test_overflow_underflow       PASS         120.00           0.00      63128.14  **
+
+... (truncated) ...
+*********************************************
+  ** TESTS=5 PASS=4 FAIL=1 SKIP=0                          370.00           0.02      22752.33  **
+  ************************************************************************************************
+  INFO: Running command iverilog -o /home/runner/work/dvagent/dvagent/results/flash-lite/sync_fifo/eval/builds/icarus_6635df18d7ab/sim.vvp -D COCOTB_SIM=1 -s sync_fifo -g2012 -f /home/runner/work/dvagent/dvagent/results/flash-lite/sync_fifo/eval/builds/icarus_6635df18d7ab/cmds.f /home/runner/work/dvagent/dvagent/results/flash-lite/sync_fifo/variants/sync_fifo_m010/sync_fifo.v in directory /home/runner/work/dvagent/dvagent/results/flash-lite/sync_fifo/eval/builds/icarus_6635df18d7ab
+  INFO: Running command vvp -M /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runner/work/dvagent/dvagent/results/flash-lite/sync_fifo/eval/builds/icarus_6635df18d7ab/sim.vvp in directory /home/runner/work/dvagent/dvagent/results/flash-lite/sync_fifo/eval/runs/run_2434776568_2893
+passed: test_reset, test_basic_push_pop, test_overflow_underflow, test_simultaneous_push_pop

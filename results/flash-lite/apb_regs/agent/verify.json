@@ -1,0 +1,356 @@
+{
+ "design": "apb_regs",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1702,
+    "completion_tokens": 3307,
+    "seconds": 8.1
+   }
+  },
+  {
+   "index": 1,
+   "kind": "fix",
+   "tb_file": "tb_01.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench checked `pready` during the SETUP cycle or incorrectly timed the ACCESS phase for DATA transfers, whereas `pready` is defined as being low only during the *first ACCESS cycle* of a transfer to address 0x04.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6814,
+    "completion_tokens": 3423,
+    "seconds": 7.1
+   }
+  },
+  {
+   "index": 2,
+   "kind": "fix",
+   "tb_file": "tb_02.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench scheduled signal updates during the ReadOnly phase and incorrectly assumed the timing of pready during DATA register access (checking pready before the rising edge of the first access cycle).",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7022,
+    "completion_tokens": 3400,
+    "seconds": 7.1
+   }
+  },
+  {
+   "index": 3,
+   "kind": "fix",
+   "tb_file": "tb_03.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench checked `pready` before the rising edge of the first access cycle instead of after the rising edge combined with `ReadOnly()` when `pready` actually registers its wait state.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7014,
+    "completion_tokens": 3405,
+    "seconds": 6.9
+   }
+  },
+  {
+   "index": 4,
+   "kind": "fix",
+   "tb_file": "tb_04.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench sequence for `run_apb_transaction` drove `penable=1` and `paddr/pwdata` simultaneously on a falling edge right after the setup cycle without meeting the APB3 timing where the ACCESS cycle starts at the rising edge with `penable=1` already held or driven correctly, causing the DUT to mi",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7094,
+    "completion_tokens": 3439,
+    "seconds": 6.9
+   }
+  },
+  {
+   "index": 5,
+   "kind": "fix",
+   "tb_file": "tb_05.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.22,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench misinterprets APB3 transaction timing and drives penable=1 too late or fails to keep inputs stable across multiple cycles of a wait-state transfer, causing the DUT's pready logic to miss the access phase detection.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7185,
+    "completion_tokens": 3277,
+    "seconds": 10.3
+   }
+  },
+  {
+   "index": 6,
+   "kind": "fix",
+   "tb_file": "tb_06.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench misinterprets the timing of APB3 SETUP and ACCESS phases for DATA wait-state transfers, attempting to assert `penable=1` on the falling edge between SETUP and the first ACCESS cycle while expecting `pready=0` on that same first ACCESS cycle. In APB3, the SETUP cycle is maintained until",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7089,
+    "completion_tokens": 3252,
+    "seconds": 6.8
+   }
+  },
+  {
+   "index": 7,
+   "kind": "fix",
+   "tb_file": "tb_07.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_registers",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_error_responses",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_randomized_transactions",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The testbench incorrectly drives `penable` high on the falling edge *after* the SETUP cycle, but according to the APB3 protocol and DUT design, `penable` must be asserted *during* the SETUP cycle (or driven on the rising edge / setup phase) so that when the rising edge enters the ACCESS cycle, both ",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7094,
+    "completion_tokens": 3518,
+    "seconds": 7.6
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "final": "tb_07.py"
+ },
+ "passed": false,
+ "coverage": null,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 8,
+  "prompt_tokens": 51014,
+  "completion_tokens": 27021,
+  "seconds": 60.8
+ },
+ "seconds": 69.3
+}

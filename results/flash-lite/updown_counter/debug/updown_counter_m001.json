@@ -1,0 +1,29 @@
+{
+ "case": "updown_counter_m001",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 16,
+   "explanation": "The asynchronous reset condition uses a double negation (!(!rst_n)) which evaluates to rst_n instead of !rst_n, causing the reset to be active-high instead of active-low, breaking the asynchronous reset specification.",
+   "edits": [
+    {
+     "line": 16,
+     "old_text": "        if (!(!rst_n)) begin",
+     "new_text": "        if (!rst_n) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/updown_counter/debug/updown_counter_m001_fix1/updown_counter.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5666,
+    "completion_tokens": 108,
+    "seconds": 4.5
+   },
+   "edited_lines": [
+    16
+   ]
+  }
+ ]
+}

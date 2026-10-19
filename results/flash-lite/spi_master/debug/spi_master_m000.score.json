@@ -1,0 +1,35 @@
+{
+ "mutant": "spi_master_m000",
+ "bug_line": 54,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "div <= div + 8'd1;",
+ "mutated": "div <= div - 8'd1;",
+ "attempts": 3,
+ "localized_first": false,
+ "localized_any": false,
+ "fixed_first": false,
+ "fixed": false,
+ "self_check_pass": false,
+ "predicted_lines": [
+  26,
+  53,
+  53
+ ],
+ "fixes": [
+  [
+   "wire half_done = (div == LAST);"
+  ],
+  [
+   "end else if (half_done) begin"
+  ],
+  [
+   "end else if (!half_done) begin"
+  ]
+ ],
+ "explanations": [
+  "The wire half_done is comparing div (width 8) with LAST[7:0] where LAST is defined as an integer, which causes width or sign mismatch issues in the comparison, leading div to decrement improperly or fail the half-period check.",
+  "Line 53 checks `else if (!half_done)` instead of `else if (half_done)`, which means the divider decrements every cycle except when `half_done` is reached. It should reload the divider (`div <= 8'd0`) and toggle the SPI state only when `half_done` is true, per the timing specification.",
+  "The division counter condition used `!half_done` instead of `half_done` when counting down the SCLK half-period, causing `sclk` to toggle prematurely at `div == 0` instead of waiting for `div == LAST` (i.e. `CLK_DIV` cycles)."
+ ]
+}

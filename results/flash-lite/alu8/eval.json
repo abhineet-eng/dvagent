@@ -1,0 +1,110 @@
+{
+ "mutants": [
+  "alu8_m000",
+  "alu8_m001",
+  "alu8_m003",
+  "alu8_m004",
+  "alu8_m005",
+  "alu8_m006",
+  "alu8_m007",
+  "alu8_m008",
+  "alu8_m009",
+  "alu8_m010",
+  "alu8_m011",
+  "alu8_m012"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 4,
+   "tests_passing": 4,
+   "passing_tests": [
+    "test_alu_directed_corner_cases",
+    "test_alu_random",
+    "test_alu_shift_edge_cases",
+    "test_alu_signed_comparison"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "alu8_m000": "fail",
+    "alu8_m001": "fail",
+    "alu8_m003": "fail",
+    "alu8_m004": "fail",
+    "alu8_m005": "fail",
+    "alu8_m006": "fail",
+    "alu8_m007": "fail",
+    "alu8_m008": "fail",
+    "alu8_m009": "fail",
+    "alu8_m010": "fail",
+    "alu8_m011": "fail",
+    "alu8_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 13.8
+  },
+  "feedback": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 4,
+   "tests_passing": 4,
+   "passing_tests": [
+    "test_alu_directed_corner_cases",
+    "test_alu_random",
+    "test_alu_shift_edge_cases",
+    "test_alu_signed_comparison"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "alu8_m000": "fail",
+    "alu8_m001": "fail",
+    "alu8_m003": "fail",
+    "alu8_m004": "fail",
+    "alu8_m005": "fail",
+    "alu8_m006": "fail",
+    "alu8_m007": "fail",
+    "alu8_m008": "fail",
+    "alu8_m009": "fail",
+    "alu8_m010": "fail",
+    "alu8_m011": "fail",
+    "alu8_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 13.8,
+   "same_as": "single"
+  },
+  "final": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 4,
+   "tests_passing": 4,
+   "passing_tests": [
+    "test_alu_directed_corner_cases",
+    "test_alu_random",
+    "test_alu_shift_edge_cases",
+    "test_alu_signed_comparison"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "alu8_m000": "fail",
+    "alu8_m001": "fail",
+    "alu8_m003": "fail",
+    "alu8_m004": "fail",
+    "alu8_m005": "fail",
+    "alu8_m006": "fail",
+    "alu8_m007": "fail",
+    "alu8_m008": "fail",
+    "alu8_m009": "fail",
+    "alu8_m010": "fail",
+    "alu8_m011": "fail",
+    "alu8_m012": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 13.8,
+   "same_as": "single"
+  }
+ }
+}

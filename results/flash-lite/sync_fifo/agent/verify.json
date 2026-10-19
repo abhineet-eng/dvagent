@@ -1,0 +1,141 @@
+{
+ "design": "sync_fifo",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "tb_error",
+    "tests": [],
+    "seconds": 0.0,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1389,
+    "completion_tokens": 3504,
+    "seconds": 10.4
+   }
+  },
+  {
+   "index": 1,
+   "kind": "fix",
+   "tb_file": "tb_01.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_basic_push_pop",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_overflow_underflow",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_simultaneous_push_pop",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_almost_full_and_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "A syntax error on line 121 ('await apply_res_and_model = None') was introduced accidentally during testbench editing.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6382,
+    "completion_tokens": 3569,
+    "seconds": 7.6
+   }
+  },
+  {
+   "index": 2,
+   "kind": "fix",
+   "tb_file": "tb_02.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_reset",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_push_pop",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_overflow_underflow",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_simultaneous_push_pop",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_almost_full_and_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.48,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 17,
+    "total": 17,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": "testbench",
+   "root_cause": "The testbench attempts to assign a value to `dut.rst` immediately after an `await ReadOnly()` phase in `apply_reset` and across test cases, which violates cocotb's rule that signals cannot be scheduled for write during a read-only phase.",
+   "note": "passes in Icarus but fail in Verilator",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7131,
+    "completion_tokens": 3688,
+    "seconds": 7.4
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_02.py",
+  "final": "tb_02.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 3,
+  "prompt_tokens": 14902,
+  "completion_tokens": 10761,
+  "seconds": 25.4
+ },
+ "seconds": 38.1
+}

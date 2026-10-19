@@ -1,0 +1,30 @@
+{
+ "mutant": "spi_master_m003",
+ "bug_line": 34,
+ "operator": "deleted",
+ "description": "assignment 'sclk    <= 1'b0;' removed",
+ "original": "sclk    <= 1'b0;",
+ "mutated": ";",
+ "attempts": 2,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": false,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  34,
+  34
+ ],
+ "fixes": [
+  [
+   ""
+  ],
+  [
+   "sclk    <= 1'b0;"
+  ]
+ ],
+ "explanations": [
+  "Line 34 contains an extraneous semicolon statement left over from debugging/typo, causing syntax or simulation issues (uninitialized or floating logic affecting reset or registers like sclk).",
+  "Line 34 contains an empty statement semicolon (`;`) instead of initializing `sclk` to `1'b0` upon reset, which leaves `sclk` at 'x' and violates the reset requirements ('sclk = 0')."
+ ]
+}

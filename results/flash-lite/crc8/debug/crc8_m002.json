@@ -1,0 +1,29 @@
+{
+ "case": "crc8_m002",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 31,
+   "explanation": "Line 31 checks `!(valid)` instead of `valid`, causing the CRC engine to update when valid is 0 and hold when valid is 1, which violates the behavior specification where valid=1 processes the byte and otherwise outputs hold.",
+   "edits": [
+    {
+     "line": 31,
+     "old_text": "        end else if (!(valid)) begin",
+     "new_text": "        end else if (valid) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/crc8/debug/crc8_m002_fix1/crc8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4468,
+    "completion_tokens": 133,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    31
+   ]
+  }
+ ]
+}

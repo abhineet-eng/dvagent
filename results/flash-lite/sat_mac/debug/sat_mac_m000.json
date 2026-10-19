@@ -1,0 +1,29 @@
+{
+ "case": "sat_mac_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 15,
+   "explanation": "Line 15 computes `sum = base - {prod[15], prod};` instead of adding the product `base + {prod[15], prod}`, which violates the MAC operation requirement `s = base + p`.",
+   "edits": [
+    {
+     "line": 15,
+     "old_text": "    wire signed [16:0] sum  = base - {prod[15], prod};",
+     "new_text": "    wire signed [16:0] sum  = base + {prod[15], prod};"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sat_mac/debug/sat_mac_m000_fix1/sat_mac.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5223,
+    "completion_tokens": 160,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    15
+   ]
+  }
+ ]
+}

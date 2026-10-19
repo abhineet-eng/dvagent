@@ -1,0 +1,114 @@
+[
+ {
+  "mutant": "rr_arbiter_m000",
+  "bug_line": 28,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "pick = last + 2'd3;",
+  "mutated": "pick = last - 2'd3;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   28
+  ],
+  "fixes": [
+   [
+    "pick = last + 2'd3;"
+   ]
+  ],
+  "explanations": [
+   "Line 28 incorrectly subtracts 3 instead of adding 1 modulo 4 or using the standard offset for rot[2] (which corresponds to last + 3). Subtracting 3 breaks the round-robin priority order search (`last+1, last+2, last+3, last+4`)."
+  ]
+ },
+ {
+  "mutant": "rr_arbiter_m001",
+  "bug_line": 40,
+  "operator": "condition",
+  "description": "condition (rst) inverted",
+  "original": "if (rst) begin",
+  "mutated": "if (!(rst)) begin",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   40
+  ],
+  "fixes": [
+   [
+    "if (rst) begin"
+   ]
+  ],
+  "explanations": [
+   "The active-high reset check uses `!(rst)` instead of `rst`, meaning the reset logic is active when `rst` is low and inactive when `rst` is high, breaking the synchronous active-high reset requirement."
+  ]
+ },
+ {
+  "mutant": "rr_arbiter_m002",
+  "bug_line": 22,
+  "operator": "constant",
+  "description": "constant 1'b1 changed to 1'b0",
+  "original": "found = 1'b1;",
+  "mutated": "found = 1'b0;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   22
+  ],
+  "fixes": [
+   [
+    "found = 1'b1;"
+   ]
+  ],
+  "explanations": [
+   "The 'keep' signal condition uses 'busy && req[owner]', but when 'grant' is non-zero (so 'busy' is 1), the active requester is 'owner'. However, 'req[owner]' correctly checks the owner's request, but if 'grant' is 0, 'busy' is 0, so 'keep' is 0. Wait, looking at line 37: 'wire keep = busy && req[owner];' seems fine at first glance, but the bug is actually that when grant is 0, busy is 0, and therefore keep is 0. Let's check line 44: 'else if (!keep)'. When grant is 0 (idle), keep is 0, so it goes to arbitrate. But wait! Look at the pick logic: if none of rot bits are set, found is set to 1_b0 ("
+  ]
+ },
+ {
+  "mutant": "rr_arbiter_m003",
+  "bug_line": 46,
+  "operator": "deleted",
+  "description": "assignment 'grant <= 4'b0001 << pick;' removed",
+  "original": "grant <= 4'b0001 << pick;",
+  "mutated": ";",
+  "attempts": 3,
+  "localized_first": false,
+  "localized_any": false,
+  "fixed_first": false,
+  "fixed": false,
+  "self_check_pass": false,
+  "predicted_lines": [
+   45,
+   45,
+   45
+  ],
+  "fixes": [
+   [
+    "if (found) {"
+   ],
+   [
+    "if (found) {",
+    "grant <= 4'b0001 << pick;"
+   ],
+   [
+    "if (found) {",
+    "grant <= 1 << pick;"
+   ]
+  ],
+  "explanations": [
+   "When arbitrating and a valid new requester is found (found=1), the RTL leaves the grant signal unassigned or unchanged rather than updating it to the one-hot encoding of the new winner (`1 << pick`), which violates behavior rule 2.",
+   "When arbitrating and a winner is found (`found` is high), the RTL does not update `grant` with the newly picked requester (`1 << pick`), leaving `grant` at 0. This violates behavior rule 2.",
+   "When arbitrating and finding a new winner (`found`), the RTL leaves the `grant` register unassigned (executing an empty statement `;`), causing `grant` to become 0 instead of updating to `1 << pick`. This violates the arbitration behavior specification."
+  ]
+ }
+]

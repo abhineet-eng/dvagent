@@ -1,0 +1,102 @@
+[
+ {
+  "mutant": "crc8_m000",
+  "bug_line": 33,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "nbytes <= nbytes + 8'd1;",
+  "mutated": "nbytes <= nbytes - 8'd1;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   33
+  ],
+  "fixes": [
+   [
+    "nbytes <= nbytes + 8'd1;"
+   ]
+  ],
+  "explanations": [
+   "nbytes decrements instead of increments when valid bytes are accepted, which violates behaviour rule 2 (\"nbytes increments by 1\") and the specification description (\"number of bytes accepted since the last reset/init, wraps from 255 to 0\")."
+  ]
+ },
+ {
+  "mutant": "crc8_m001",
+  "bug_line": 18,
+  "operator": "bitwise",
+  "description": "'^' replaced by '|'",
+  "original": "r = c ^ d;",
+  "mutated": "r = c | d;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   18
+  ],
+  "fixes": [
+   [
+    "r = c ^ d;"
+   ]
+  ],
+  "explanations": [
+   "Line 18 uses bitwise OR (`c | d`) instead of bitwise XOR (`c ^ d`) to combine the current CRC with the incoming data byte, breaking the reference algorithm requirement `r = crc XOR data`."
+  ]
+ },
+ {
+  "mutant": "crc8_m002",
+  "bug_line": 31,
+  "operator": "condition",
+  "description": "condition (valid) inverted",
+  "original": "end else if (valid) begin",
+  "mutated": "end else if (!(valid)) begin",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   31
+  ],
+  "fixes": [
+   [
+    "end else if (valid) begin"
+   ]
+  ],
+  "explanations": [
+   "Line 31 checks `!(valid)` instead of `valid`, causing the CRC engine to update when valid is 0 and hold when valid is 1, which violates the behavior specification where valid=1 processes the byte and otherwise outputs hold."
+  ]
+ },
+ {
+  "mutant": "crc8_m003",
+  "bug_line": 19,
+  "operator": "constant",
+  "description": "constant 8 changed to 9",
+  "original": "for (i = 0; i < 8; i = i + 1)",
+  "mutated": "for (i = 0; i < 9; i = i + 1)",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   19
+  ],
+  "fixes": [
+   [
+    "for (i = 0; i < 8; i = i + 1)"
+   ]
+  ],
+  "explanations": [
+   "The loop inside the crc_byte function iterates 9 times instead of 8, repeating the bit-shift and polynomial XOR logic one time too many per byte, which violates the 8-bit reference algorithm specification."
+  ]
+ }
+]

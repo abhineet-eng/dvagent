@@ -1,0 +1,29 @@
+{
+ "case": "sync_fifo_m002",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 24,
+   "explanation": "Line 24 checks `count == 4'd9` for the `full` flag, but the FIFO depth is 8 and `count` reaches a maximum value of 8. Therefore `full` never asserts when the FIFO becomes full (count == 8).",
+   "edits": [
+    {
+     "line": 24,
+     "old_text": "    assign full        = (count == 4'd9);",
+     "new_text": "    assign full        = (count == 4'd8);"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sync_fifo/debug/sync_fifo_m002_fix1/sync_fifo.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5810,
+    "completion_tokens": 152,
+    "seconds": 1.4
+   },
+   "edited_lines": [
+    24
+   ]
+  }
+ ]
+}

@@ -1,0 +1,40 @@
+fail: 0 passed, 5 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_01.test_reset_and_init
+  INFO cocotb.regression                  Found test test_tb_01.test_hold_behavior
+  INFO cocotb.regression                  Found test test_tb_01.test_ascii_123456789
+  INFO cocotb.regression                  Found test test_tb_01.test_nbytes_wrap
+  INFO cocotb.regression                  Found test test_tb_01.test_constrained_random
+FAILED test_reset_and_init
+  testbench log before the failure:
+    Test synchronous reset and init functionality.
+  Traceback (most recent call last):
+  File "test_tb_01.py", line 64, in test_reset_and_init
+  assert int(dut.nbytes.value) == ref.nbytes, f"Mismatch nbytes: got {int(dut.nbytes.value)}, expected {ref.nbytes}"
+  AssertionError: Mismatch nbytes: got 255, expected 1
+FAILED test_hold_behavior
+  testbench log before the failure:
+    Test that outputs hold when valid=0.
+  assert int(dut.nbytes.value) == expected_nbytes, f"nbytes changed on invalid cycle: got {int(dut.nbytes.value)}, expected {expected_nbytes}"
+  AssertionError: nbytes changed on invalid cycle: got 255, expected 1
+FAILED test_ascii_123456789
+  testbench log before the failure:
+    Test CRC-8 check value 0xF4 for ASCII string '123456789'.
+  assert int(dut.nbytes.value) == ref.nbytes
+  AssertionError
+FAILED test_nbytes_wrap
+  testbench log before the failure:
+    Test nbytes wrapping from 255 to 0.
+  assert int(dut.nbytes.value) == ref.nbytes, f"Cycle {i}: nbytes got {int(dut.nbytes.value)}, expected {ref.nbytes}"
+  AssertionError: Cycle 0: nbytes got 255, expected 1
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained-random test with mixed valid, invalid, init, rst, and data.
+  assert int(dut.nbytes.value) == ref.nbytes, f"Cycle {cycle}: nbytes mismatch. Got {int(dut.nbytes.value)}, Expected {ref.nbytes}"
+  AssertionError: Cycle 0: nbytes mismatch. Got 255, Expected 1

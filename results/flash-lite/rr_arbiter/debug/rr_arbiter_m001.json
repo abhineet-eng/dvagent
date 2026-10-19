@@ -1,0 +1,29 @@
+{
+ "case": "rr_arbiter_m001",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 40,
+   "explanation": "The active-high reset check uses `!(rst)` instead of `rst`, meaning the reset logic is active when `rst` is low and inactive when `rst` is high, breaking the synchronous active-high reset requirement.",
+   "edits": [
+    {
+     "line": 40,
+     "old_text": "        if (!(rst)) begin",
+     "new_text": "        if (rst) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/rr_arbiter/debug/rr_arbiter_m001_fix1/rr_arbiter.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5104,
+    "completion_tokens": 125,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    40
+   ]
+  }
+ ]
+}

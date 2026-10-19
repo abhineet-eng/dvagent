@@ -1,0 +1,29 @@
+{
+ "case": "crc8_m003",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 19,
+   "explanation": "The loop inside the crc_byte function iterates 9 times instead of 8, repeating the bit-shift and polynomial XOR logic one time too many per byte, which violates the 8-bit reference algorithm specification.",
+   "edits": [
+    {
+     "line": 19,
+     "old_text": "            for (i = 0; i < 9; i = i + 1)",
+     "new_text": "            for (i = 0; i < 8; i = i + 1)"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/crc8/debug/crc8_m003_fix1/crc8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4467,
+    "completion_tokens": 149,
+    "seconds": 1.1
+   },
+   "edited_lines": [
+    19
+   ]
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "case": "updown_counter_m003",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 17,
+   "explanation": "The asynchronous reset block leaves count unassigned (empty semicolon) when rst_n is low, resulting in 'x' values on the count register. According to the specification, while rst_n is 0, count must be 0 immediately.",
+   "edits": [
+    {
+     "line": 17,
+     "old_text": "            ;",
+     "new_text": "            count <= 8'd0;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/updown_counter/debug/updown_counter_m003_fix1/updown_counter.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5658,
+    "completion_tokens": 113,
+    "seconds": 6.0
+   },
+   "edited_lines": [
+    17
+   ]
+  }
+ ]
+}

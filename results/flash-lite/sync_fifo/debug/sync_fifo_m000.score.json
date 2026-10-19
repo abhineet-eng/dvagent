@@ -1,0 +1,25 @@
+{
+ "mutant": "sync_fifo_m000",
+ "bug_line": 47,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "count <= count + 4'd1;",
+ "mutated": "count <= count - 4'd1;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  47
+ ],
+ "fixes": [
+  [
+   "count <= count + 4'd1;"
+  ]
+ ],
+ "explanations": [
+  "Line 47 incorrectly decrements count instead of incrementing it when only a push is accepted, violating the count update specification ('count increases by 1 when only a push is accepted')."
+ ]
+}

@@ -1,0 +1,113 @@
+{
+ "mutants": [
+  "uart_tx_m000",
+  "uart_tx_m001",
+  "uart_tx_m002",
+  "uart_tx_m005",
+  "uart_tx_m006",
+  "uart_tx_m007",
+  "uart_tx_m009",
+  "uart_tx_m010",
+  "uart_tx_m011",
+  "uart_tx_m012",
+  "uart_tx_m013",
+  "uart_tx_m014"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 6,
+   "tests_passing": 6,
+   "passing_tests": [
+    "test_back_to_back",
+    "test_constrained_random",
+    "test_reset_and_idle",
+    "test_single_frame_even_parity",
+    "test_single_frame_no_parity",
+    "test_single_frame_odd_parity"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "uart_tx_m000": "fail",
+    "uart_tx_m002": "fail",
+    "uart_tx_m005": "fail",
+    "uart_tx_m006": "fail",
+    "uart_tx_m007": "fail",
+    "uart_tx_m009": "fail",
+    "uart_tx_m010": "fail",
+    "uart_tx_m011": "fail",
+    "uart_tx_m012": "fail",
+    "uart_tx_m013": "fail",
+    "uart_tx_m014": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 13.5
+  },
+  "feedback": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 6,
+   "tests_passing": 6,
+   "passing_tests": [
+    "test_back_to_back",
+    "test_constrained_random",
+    "test_reset_and_idle",
+    "test_single_frame_even_parity",
+    "test_single_frame_no_parity",
+    "test_single_frame_odd_parity"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "uart_tx_m000": "fail",
+    "uart_tx_m002": "fail",
+    "uart_tx_m005": "fail",
+    "uart_tx_m006": "fail",
+    "uart_tx_m007": "fail",
+    "uart_tx_m009": "fail",
+    "uart_tx_m010": "fail",
+    "uart_tx_m011": "fail",
+    "uart_tx_m012": "fail",
+    "uart_tx_m013": "fail",
+    "uart_tx_m014": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 13.5,
+   "same_as": "single"
+  },
+  "final": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 6,
+   "tests_passing": 6,
+   "passing_tests": [
+    "test_back_to_back",
+    "test_constrained_random",
+    "test_reset_and_idle",
+    "test_single_frame_even_parity",
+    "test_single_frame_no_parity",
+    "test_single_frame_odd_parity"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "uart_tx_m000": "fail",
+    "uart_tx_m002": "fail",
+    "uart_tx_m005": "fail",
+    "uart_tx_m006": "fail",
+    "uart_tx_m007": "fail",
+    "uart_tx_m009": "fail",
+    "uart_tx_m010": "fail",
+    "uart_tx_m011": "fail",
+    "uart_tx_m012": "fail",
+    "uart_tx_m013": "fail",
+    "uart_tx_m014": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 13.5,
+   "same_as": "single"
+  }
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "case": "uart_tx_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 80,
+   "explanation": "In the DATA state, bit_idx is decremented using bit_idx - 3'd1 when transmitting LSB first, but bit_idx should be incremented (bit_idx + 3'd1) to iterate from 0 to 7. This causes the wrong bits of shreg to be transmitted and disrupts the timing/state machine.",
+   "edits": [
+    {
+     "line": 80,
+     "old_text": "                            bit_idx <= bit_idx - 3'd1;",
+     "new_text": "                            bit_idx <= bit_idx + 3'd1;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/uart_tx/debug/uart_tx_m000_fix1/uart_tx.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7759,
+    "completion_tokens": 145,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    80
+   ]
+  }
+ ]
+}

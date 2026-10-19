@@ -1,0 +1,73 @@
+{
+ "design": "rr_arbiter",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_reset",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_single_requester",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_round_robin_order",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_retention_and_handover",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.37,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 12,
+    "total": 12,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1250,
+    "completion_tokens": 2536,
+    "seconds": 6.4
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_00.py",
+  "final": "tb_00.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 1,
+  "prompt_tokens": 1250,
+  "completion_tokens": 2536,
+  "seconds": 6.3
+ },
+ "seconds": 21.5
+}

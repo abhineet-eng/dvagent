@@ -1,0 +1,29 @@
+{
+ "case": "spi_master_m001",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 49,
+   "explanation": "Line 49 assigns tx_sh to {tx_data[6:0], 1'b0} when starting a transfer, but the transmission shifts out bits using tx_sh[7] and shifts left on falling edges. For MSB-first transmission, tx_sh should store the remaining bits to transmit starting from bit 6 down to 0, which corresponds to {tx_data[6:0], 1'b0} correctly if bit 7 is already loaded into mosi, but wait\u2014on line 49, tx_sh is assigned {tx_data[6:0], 1'b0} while mosi gets tx_data[7]. However, during the transfer shift on line 70, it does {tx_sh[6:0], 1'b0} while loading mosi from tx_sh[7] on line 69. Wait, look at line 49: tx_sh <= {tx_",
+   "edits": [
+    {
+     "line": 57,
+     "old_text": "                if (!(!sclk)) begin",
+     "new_text": "                if (!sclk) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/spi_master/debug/spi_master_m001_fix1/spi_master.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5814,
+    "completion_tokens": 724,
+    "seconds": 3.2
+   },
+   "edited_lines": [
+    57
+   ]
+  }
+ ]
+}

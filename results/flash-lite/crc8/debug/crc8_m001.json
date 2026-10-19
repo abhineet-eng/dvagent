@@ -1,0 +1,29 @@
+{
+ "case": "crc8_m001",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 18,
+   "explanation": "Line 18 uses bitwise OR (`c | d`) instead of bitwise XOR (`c ^ d`) to combine the current CRC with the incoming data byte, breaking the reference algorithm requirement `r = crc XOR data`.",
+   "edits": [
+    {
+     "line": 18,
+     "old_text": "            r = c | d;",
+     "new_text": "            r = c ^ d;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/crc8/debug/crc8_m001_fix1/crc8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4307,
+    "completion_tokens": 102,
+    "seconds": 0.7
+   },
+   "edited_lines": [
+    18
+   ]
+  }
+ ]
+}

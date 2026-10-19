@@ -1,0 +1,25 @@
+{
+ "mutant": "apb_regs_m010",
+ "bug_line": 28,
+ "operator": "relational",
+ "description": "'==' replaced by '!='",
+ "original": "wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);",
+ "mutated": "wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr != A_ID);",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  28
+ ],
+ "fixes": [
+  [
+   "wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);"
+  ]
+ ],
+ "explanations": [
+  "Line 28 uses 'paddr != A_ID' instead of 'paddr == A_ID', which makes 'known' evaluate incorrectly for address 0x0C (ID) and breaks address validation for valid registers."
+ ]
+}

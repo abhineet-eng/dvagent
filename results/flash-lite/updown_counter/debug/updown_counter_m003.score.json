@@ -1,0 +1,25 @@
+{
+ "mutant": "updown_counter_m003",
+ "bug_line": 17,
+ "operator": "deleted",
+ "description": "assignment 'count <= 8'd0;' removed",
+ "original": "count <= 8'd0;",
+ "mutated": ";",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  17
+ ],
+ "fixes": [
+  [
+   "count <= 8'd0;"
+  ]
+ ],
+ "explanations": [
+  "The asynchronous reset block leaves count unassigned (empty semicolon) when rst_n is low, resulting in 'x' values on the count register. According to the specification, while rst_n is 0, count must be 0 immediately."
+ ]
+}

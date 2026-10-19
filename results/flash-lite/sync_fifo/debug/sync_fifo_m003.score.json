@@ -1,0 +1,25 @@
+{
+ "mutant": "sync_fifo_m003",
+ "bug_line": 40,
+ "operator": "deleted",
+ "description": "assignment 'underflow <= 1'b0;' removed",
+ "original": "underflow <= 1'b0;",
+ "mutated": ";",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  40
+ ],
+ "fixes": [
+  [
+   "underflow <= 1'b0;"
+  ]
+ ],
+ "explanations": [
+  "A stray semicolon on line 40 leaves 'underflow' unassigned during reset, resulting in 'x' during the reset test and failing assertions."
+ ]
+}

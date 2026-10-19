@@ -1,0 +1,25 @@
+{
+ "mutant": "sync_fifo_m002",
+ "bug_line": 24,
+ "operator": "constant",
+ "description": "constant 4'd8 changed to 4'd9",
+ "original": "assign full        = (count == 4'd8);",
+ "mutated": "assign full        = (count == 4'd9);",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  24
+ ],
+ "fixes": [
+  [
+   "assign full        = (count == 4'd8);"
+  ]
+ ],
+ "explanations": [
+  "Line 24 checks `count == 4'd9` for the `full` flag, but the FIFO depth is 8 and `count` reaches a maximum value of 8. Therefore `full` never asserts when the FIFO becomes full (count == 8)."
+ ]
+}

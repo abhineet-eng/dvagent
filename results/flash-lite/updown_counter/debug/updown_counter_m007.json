@@ -1,0 +1,69 @@
+{
+ "case": "updown_counter_m007",
+ "fixed_self_check": false,
+ "attempts": [
+  {
+   "bug_line": 20,
+   "explanation": "Line 20 checks `else if (!(en))` instead of `else if (en)`, which causes the counter to execute up/down counting when `en` is low and hold when `en` is high, violating the count enable (`en`) specification.",
+   "edits": [
+    {
+     "line": 20,
+     "old_text": "        } else if (!(en)) begin",
+     "new_text": "        } else if (en) begin"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5486,
+    "completion_tokens": 136,
+    "seconds": 0.8
+   },
+   "edited_lines": []
+  },
+  {
+   "bug_line": 20,
+   "explanation": "Line 20 checks `else if (!(en))`, which causes the counter to only increment, decrement, or wrap when `en` is 0 (disabled), instead of counting when `en` is 1 (enabled). This violates the requirement that counting occurs when `en` is active.",
+   "edits": [
+    {
+     "line": 20,
+     "old_text": "        } else if (!(en)) begin",
+     "new_text": "        } else if (en) begin"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5527,
+    "completion_tokens": 144,
+    "seconds": 3.1
+   },
+   "edited_lines": []
+  },
+  {
+   "bug_line": 20,
+   "explanation": "Line 20 checks `else if (!(en))`, which causes the counter to only increment, decrement, or wrap when `en` is 0 (disabled), violating the specification that counting occurs when `en` is 1.",
+   "edits": [
+    {
+     "line": 20,
+     "old_text": "        } else if (!(en)) begin",
+     "new_text": "        } else if (en) begin"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5559,
+    "completion_tokens": 131,
+    "seconds": 1.3
+   },
+   "edited_lines": []
+  }
+ ]
+}

@@ -1,0 +1,102 @@
+[
+ {
+  "mutant": "sat_mac_m000",
+  "bug_line": 15,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "wire signed [16:0] sum  = base + {prod[15], prod};",
+  "mutated": "wire signed [16:0] sum  = base - {prod[15], prod};",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   15
+  ],
+  "fixes": [
+   [
+    "wire signed [16:0] sum  = base + {prod[15], prod};"
+   ]
+  ],
+  "explanations": [
+   "Line 15 computes `sum = base - {prod[15], prod};` instead of adding the product `base + {prod[15], prod}`, which violates the MAC operation requirement `s = base + p`."
+  ]
+ },
+ {
+  "mutant": "sat_mac_m001",
+  "bug_line": 30,
+  "operator": "bitwise",
+  "description": "'|' replaced by '&'",
+  "original": "sat <= (clear ? 1'b0 : sat) | hi | lo;",
+  "mutated": "sat <= (clear ? 1'b0 : sat) | hi & lo;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   30
+  ],
+  "fixes": [
+   [
+    "sat <= (clear ? 1'b0 : sat) | hi | lo;"
+   ]
+  ],
+  "explanations": [
+   "Line 30 uses `hi & lo` to determine if saturation occurred, which checks if the sum is simultaneously greater than 32767 and less than -32768 (an impossibility). It should be `hi | lo` to detect either positive or negative saturation."
+  ]
+ },
+ {
+  "mutant": "sat_mac_m002",
+  "bug_line": 24,
+  "operator": "condition",
+  "description": "condition (hi) inverted",
+  "original": "if (hi)",
+  "mutated": "if (!(hi))",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   24
+  ],
+  "fixes": [
+   [
+    "if (hi)"
+   ]
+  ],
+  "explanations": [
+   "Line 24 checks `!(hi)` instead of `hi` to determine positive saturation, which inverts the positive saturation logic and causes normal or non-saturated positive values to incorrectly clamp to 32767."
+  ]
+ },
+ {
+  "mutant": "sat_mac_m003",
+  "bug_line": 29,
+  "operator": "constant",
+  "description": "constant 15 changed to 14",
+  "original": "acc <= sum[15:0];",
+  "mutated": "acc <= sum[14:0];",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   29
+  ],
+  "fixes": [
+   [
+    "acc <= sum[15:0];"
+   ]
+  ],
+  "explanations": [
+   "Line 29 assigns `sum[14:0]` (which is 15 bits, zero-extended or sign-extended incorrectly into 16 bits `acc`) instead of the full 16-bit lower portion or truncated `sum[15:0]`, causing the accumulator to drop sign bits or wrap incorrectly when not saturating. It violates the exact computation rule (no wrap) when `sum` is within range."
+  ]
+ }
+]

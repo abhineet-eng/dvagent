@@ -1,0 +1,35 @@
+{
+ "mutant": "seq_detector_m001",
+ "bug_line": 30,
+ "operator": "condition",
+ "description": "condition (rst) inverted",
+ "original": "if (rst) begin",
+ "mutated": "if (!(rst)) begin",
+ "attempts": 3,
+ "localized_first": false,
+ "localized_any": true,
+ "fixed_first": false,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  25,
+  25,
+  30
+ ],
+ "fixes": [
+  [
+   "default: next = din ? S1 : S0;"
+  ],
+  [
+   "default: next = din ? S1 : S0;"
+  ],
+  [
+   "if (rst) begin"
+  ]
+ ],
+ "explanations": [
+  "The default case in the state transition table incorrectly transitions to S2 (state for '10') when din is 0, instead of returning to S0 when the pattern breaks, or properly handling other states. Specifically, the default case is hit for state S3 (value 2'd3), so when receiving a 0 in state S3 (i.e., failing '101'), it goes to S2 instead of S0.",
+  "The default case in the next-state logic uses `din ? S1 : S2`, which maps the S3 state when `din=0` to S2 (incorrectly transitioning to '10' instead of returning to S0 or S1). This breaks the state machine sequence for '1011' detection, causing state S3 to misbehave and preventing matches from being detected.",
+  "The synchronous reset condition checks `if (!(rst))`, but `rst` is defined as active-high (`rst = 1` asserts reset). Therefore, `!(rst)` evaluates to 0 when reset is asserted, so the design never enters the reset branch, leaving internal signals like `count` uninitialized (`x`) and preventing state machine initialization."
+ ]
+}

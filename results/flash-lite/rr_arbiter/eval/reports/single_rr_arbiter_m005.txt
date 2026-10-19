@@ -1,0 +1,40 @@
+fail: 0 passed, 5 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset
+  INFO cocotb.regression                  Found test test_tb_00.test_single_requester
+  INFO cocotb.regression                  Found test test_tb_00.test_round_robin_order
+  INFO cocotb.regression                  Found test test_tb_00.test_retention_and_handover
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+FAILED test_reset
+  testbench log before the failure:
+    Test reset conditions and initial state.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 82, in test_reset
+  assert int(dut.busy.value) == 0, f"Expected busy=0 after reset, got {int(dut.busy.value)}"
+  AssertionError: Expected busy=0 after reset, got 1
+FAILED test_single_requester
+  testbench log before the failure:
+    Test single requester behavior and bus retention.
+  assert int(dut.busy.value) == ref.busy, f"req={req_val:04b}: expected busy={ref.busy}, got {int(dut.busy.value)}"
+  AssertionError: req=0100: expected busy=1, got 0
+FAILED test_round_robin_order
+  testbench log before the failure:
+    Test round-robin priority order when multiple requesters are active.
+  assert int(dut.grant.value) == ref.grant, f"req={req_val:04b}: expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}"
+  AssertionError: req=1111: expected grant=0001, got 0000
+FAILED test_retention_and_handover
+  testbench log before the failure:
+    Test keep condition vs new higher/lower priority requests.
+  assert int(dut.busy.value) == ref.busy, f"req={req_val:04b}: expected busy={ref.busy}, got {int(dut.busy.value)}"
+  AssertionError: req=0010: expected busy=1, got 0
+FAILED test_constrained_random
+  testbench log before the failure:
+    Run constrained-random testing over 1000 cycles and check against reference model.
+  assert int(dut.grant.value) == ref.grant, f"Random test fail: rst={rst_val}, req={req_val:04b}, expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}"
+  AssertionError: Random test fail: rst=0, req=0011, expected grant=0001, got 0000

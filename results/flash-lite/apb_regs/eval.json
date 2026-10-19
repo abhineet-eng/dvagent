@@ -1,0 +1,72 @@
+{
+ "mutants": [
+  "apb_regs_m000",
+  "apb_regs_m001",
+  "apb_regs_m002",
+  "apb_regs_m003",
+  "apb_regs_m004",
+  "apb_regs_m005",
+  "apb_regs_m006",
+  "apb_regs_m007",
+  "apb_regs_m009",
+  "apb_regs_m010",
+  "apb_regs_m011",
+  "apb_regs_m012"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "fail",
+   "tests_total": 4,
+   "tests_passing": 1,
+   "passing_tests": [
+    "test_error_responses"
+   ],
+   "coverage": 92.3076923076923,
+   "killed": {
+    "apb_regs_m005": "fail",
+    "apb_regs_m010": "fail"
+   },
+   "mutation_score": 16.67,
+   "seconds": 13.0
+  },
+  "feedback": {
+   "snapshot": "feedback",
+   "tb": "tb_07.py",
+   "golden_status": "fail",
+   "tests_total": 4,
+   "tests_passing": 2,
+   "passing_tests": [
+    "test_error_responses",
+    "test_reset_behavior"
+   ],
+   "coverage": 92.3076923076923,
+   "killed": {
+    "apb_regs_m005": "fail",
+    "apb_regs_m010": "fail"
+   },
+   "mutation_score": 16.67,
+   "seconds": 3.2
+  },
+  "final": {
+   "snapshot": "feedback",
+   "tb": "tb_07.py",
+   "golden_status": "fail",
+   "tests_total": 4,
+   "tests_passing": 2,
+   "passing_tests": [
+    "test_error_responses",
+    "test_reset_behavior"
+   ],
+   "coverage": 92.3076923076923,
+   "killed": {
+    "apb_regs_m005": "fail",
+    "apb_regs_m010": "fail"
+   },
+   "mutation_score": 16.67,
+   "seconds": 3.2,
+   "same_as": "feedback"
+  }
+ }
+}

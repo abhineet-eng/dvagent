@@ -1,0 +1,32 @@
+fail: 1 passed, 3 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_07.test_reset_behavior
+  INFO cocotb.regression                  Found test test_tb_07.test_basic_registers
+  INFO cocotb.regression                  Found test test_tb_07.test_error_responses
+  INFO cocotb.regression                  Found test test_tb_07.test_randomized_transactions
+FAILED test_basic_registers
+  testbench log before the failure:
+    Test read/write functionality of CTRL, DATA, STATUS, and ID registers.
+  Traceback (most recent call last):
+  File "test_tb_07.py", line 173, in test_basic_registers
+  prdata, pslverr = await run_apb_transaction(dut, pwrite=1, paddr=0x04, pwdata=0xABCDEF01)
+  File "test_tb_07.py", line 109, in run_apb_transaction
+  assert int(dut.pready.value) == 0, f"Expected pready=0 for DATA transfer first ACCESS cycle at addr {hex(paddr)}"
+  AssertionError: Expected pready=0 for DATA transfer first ACCESS cycle at addr 0x4
+FAILED test_error_responses
+  testbench log before the failure:
+    Test invalid addresses and writes to read-only registers.
+  assert pslverr == 1, "Expected pslverr=1 for invalid read address"
+  AssertionError: Expected pslverr=1 for invalid read address
+FAILED test_randomized_transactions
+  testbench log before the failure:
+    Constrained-random test checking transactions against the reference model.
+  assert int(dut.pready.value) == 0, f"Expected pready=0 for DATA transfer first ACCESS cycle at addr {hex(paddr)}"
+  AssertionError: Expected pready=0 for DATA transfer first ACCESS cycle at addr 0x4
+passed: test_reset_behavior

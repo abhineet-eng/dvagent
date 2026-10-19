@@ -1,0 +1,117 @@
+[
+ {
+  "mutant": "spi_master_m000",
+  "bug_line": 54,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "div <= div + 8'd1;",
+  "mutated": "div <= div - 8'd1;",
+  "attempts": 3,
+  "localized_first": false,
+  "localized_any": false,
+  "fixed_first": false,
+  "fixed": false,
+  "self_check_pass": false,
+  "predicted_lines": [
+   26,
+   53,
+   53
+  ],
+  "fixes": [
+   [
+    "wire half_done = (div == LAST);"
+   ],
+   [
+    "end else if (half_done) begin"
+   ],
+   [
+    "end else if (!half_done) begin"
+   ]
+  ],
+  "explanations": [
+   "The wire half_done is comparing div (width 8) with LAST[7:0] where LAST is defined as an integer, which causes width or sign mismatch issues in the comparison, leading div to decrement improperly or fail the half-period check.",
+   "Line 53 checks `else if (!half_done)` instead of `else if (half_done)`, which means the divider decrements every cycle except when `half_done` is reached. It should reload the divider (`div <= 8'd0`) and toggle the SPI state only when `half_done` is true, per the timing specification.",
+   "The division counter condition used `!half_done` instead of `half_done` when counting down the SCLK half-period, causing `sclk` to toggle prematurely at `div == 0` instead of waiting for `div == LAST` (i.e. `CLK_DIV` cycles)."
+  ]
+ },
+ {
+  "mutant": "spi_master_m001",
+  "bug_line": 57,
+  "operator": "condition",
+  "description": "condition (!sclk) inverted",
+  "original": "if (!sclk) begin",
+  "mutated": "if (!(!sclk)) begin",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   57
+  ],
+  "fixes": [
+   [
+    "if (!sclk) begin"
+   ]
+  ],
+  "explanations": [
+   "Line 49 assigns tx_sh to {tx_data[6:0], 1'b0} when starting a transfer, but the transmission shifts out bits using tx_sh[7] and shifts left on falling edges. For MSB-first transmission, tx_sh should store the remaining bits to transmit starting from bit 6 down to 0, which corresponds to {tx_data[6:0], 1'b0} correctly if bit 7 is already loaded into mosi, but wait\u2014on line 49, tx_sh is assigned {tx_data[6:0], 1'b0} while mosi gets tx_data[7]. However, during the transfer shift on line 70, it does {tx_sh[6:0], 1'b0} while loading mosi from tx_sh[7] on line 69. Wait, look at line 49: tx_sh <= {tx_"
+  ]
+ },
+ {
+  "mutant": "spi_master_m002",
+  "bug_line": 36,
+  "operator": "constant",
+  "description": "constant 1'b1 changed to 1'b0",
+  "original": "cs_n    <= 1'b1;",
+  "mutated": "cs_n    <= 1'b0;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   36
+  ],
+  "fixes": [
+   [
+    "cs_n    <= 1'b1;"
+   ]
+  ],
+  "explanations": [
+   "After reset, cs_n should be 1 according to the specification ('After reset: cs_n = 1'), but line 36 sets cs_n <= 1'b0."
+  ]
+ },
+ {
+  "mutant": "spi_master_m003",
+  "bug_line": 34,
+  "operator": "deleted",
+  "description": "assignment 'sclk    <= 1'b0;' removed",
+  "original": "sclk    <= 1'b0;",
+  "mutated": ";",
+  "attempts": 2,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": false,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   34,
+   34
+  ],
+  "fixes": [
+   [
+    ""
+   ],
+   [
+    "sclk    <= 1'b0;"
+   ]
+  ],
+  "explanations": [
+   "Line 34 contains an extraneous semicolon statement left over from debugging/typo, causing syntax or simulation issues (uninitialized or floating logic affecting reset or registers like sclk).",
+   "Line 34 contains an empty statement semicolon (`;`) instead of initializing `sclk` to `1'b0` upon reset, which leaves `sclk` at 'x' and violates the reset requirements ('sclk = 0')."
+  ]
+ }
+]

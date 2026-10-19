@@ -1,0 +1,25 @@
+{
+ "mutant": "sat_mac_m001",
+ "bug_line": 30,
+ "operator": "bitwise",
+ "description": "'|' replaced by '&'",
+ "original": "sat <= (clear ? 1'b0 : sat) | hi | lo;",
+ "mutated": "sat <= (clear ? 1'b0 : sat) | hi & lo;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  30
+ ],
+ "fixes": [
+  [
+   "sat <= (clear ? 1'b0 : sat) | hi | lo;"
+  ]
+ ],
+ "explanations": [
+  "Line 30 uses `hi & lo` to determine if saturation occurred, which checks if the sum is simultaneously greater than 32767 and less than -32768 (an impossibility). It should be `hi | lo` to detect either positive or negative saturation."
+ ]
+}

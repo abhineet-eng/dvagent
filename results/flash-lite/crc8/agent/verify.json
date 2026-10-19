@@ -1,0 +1,120 @@
+{
+ "design": "crc8",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_init",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_hold_behavior",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_ascii_123456789",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_nbytes_wrap",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1229,
+    "completion_tokens": 2361,
+    "seconds": 5.4
+   }
+  },
+  {
+   "index": 1,
+   "kind": "fix",
+   "tb_file": "tb_01.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_reset_and_init",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_hold_behavior",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_ascii_123456789",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_nbytes_wrap",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.44,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 6,
+    "total": 6,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": "testbench",
+   "root_cause": "The testbench attempts to assign dut.rst.value = 0 directly after await ReadOnly() without waiting for a falling clock edge or delta delay, violating race-free timing rules when transitioning out of a read-only phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5350,
+    "completion_tokens": 2511,
+    "seconds": 5.3
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_01.py",
+  "final": "tb_01.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 2,
+  "prompt_tokens": 6579,
+  "completion_tokens": 4872,
+  "seconds": 10.7
+ },
+ "seconds": 29.8
+}

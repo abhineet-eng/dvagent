@@ -1,0 +1,110 @@
+{
+ "mutants": [
+  "sat_mac_m000",
+  "sat_mac_m001",
+  "sat_mac_m002",
+  "sat_mac_m003",
+  "sat_mac_m004",
+  "sat_mac_m006",
+  "sat_mac_m007",
+  "sat_mac_m008",
+  "sat_mac_m009",
+  "sat_mac_m010",
+  "sat_mac_m011",
+  "sat_mac_m012"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_basic_mac_and_restart",
+    "test_constrained_random",
+    "test_idle_and_clear",
+    "test_positive_and_negative_saturation",
+    "test_reset"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "sat_mac_m000": "fail",
+    "sat_mac_m001": "fail",
+    "sat_mac_m002": "fail",
+    "sat_mac_m003": "fail",
+    "sat_mac_m004": "fail",
+    "sat_mac_m006": "fail",
+    "sat_mac_m007": "fail",
+    "sat_mac_m009": "fail",
+    "sat_mac_m010": "fail",
+    "sat_mac_m011": "fail",
+    "sat_mac_m012": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 17.8
+  },
+  "feedback": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_basic_mac_and_restart",
+    "test_constrained_random",
+    "test_idle_and_clear",
+    "test_positive_and_negative_saturation",
+    "test_reset"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "sat_mac_m000": "fail",
+    "sat_mac_m001": "fail",
+    "sat_mac_m002": "fail",
+    "sat_mac_m003": "fail",
+    "sat_mac_m004": "fail",
+    "sat_mac_m006": "fail",
+    "sat_mac_m007": "fail",
+    "sat_mac_m009": "fail",
+    "sat_mac_m010": "fail",
+    "sat_mac_m011": "fail",
+    "sat_mac_m012": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 17.8,
+   "same_as": "single"
+  },
+  "final": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_basic_mac_and_restart",
+    "test_constrained_random",
+    "test_idle_and_clear",
+    "test_positive_and_negative_saturation",
+    "test_reset"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "sat_mac_m000": "fail",
+    "sat_mac_m001": "fail",
+    "sat_mac_m002": "fail",
+    "sat_mac_m003": "fail",
+    "sat_mac_m004": "fail",
+    "sat_mac_m006": "fail",
+    "sat_mac_m007": "fail",
+    "sat_mac_m009": "fail",
+    "sat_mac_m010": "fail",
+    "sat_mac_m011": "fail",
+    "sat_mac_m012": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 17.8,
+   "same_as": "single"
+  }
+ }
+}

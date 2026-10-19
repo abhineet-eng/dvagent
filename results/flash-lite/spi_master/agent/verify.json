@@ -1,0 +1,356 @@
+{
+ "design": "spi_master",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1651,
+    "completion_tokens": 3385,
+    "seconds": 8.8
+   }
+  },
+  {
+   "index": 1,
+   "kind": "fix",
+   "tb_file": "tb_01.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model incorrectly computed the transfer duration (expecting 16 * D + 1 cycles instead of exactly 16 * D for the done pulse timing) and used `Random` instead of `random.Random`.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7487,
+    "completion_tokens": 3134,
+    "seconds": 6.7
+   }
+  },
+  {
+   "index": 2,
+   "kind": "fix",
+   "tb_file": "tb_02.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model had an off-by-one error in tracking `done` timing (returning `done` 1 cycle late) and `test_constrained_random` illegally updated `dut.miso.value` inside a ReadOnly phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6961,
+    "completion_tokens": 2899,
+    "seconds": 6.3
+   }
+  },
+  {
+   "index": 3,
+   "kind": "fix",
+   "tb_file": "tb_03.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model had an error in timing the transfer duration and done pulse (expecting transfer completion at cycle 16 * D + 1 instead of 16 * D), and test_constrained_random attempted to write `dut.miso` during a ReadOnly sync phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6758,
+    "completion_tokens": 2873,
+    "seconds": 6.5
+   }
+  },
+  {
+   "index": 4,
+   "kind": "fix",
+   "tb_file": "tb_04.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model had an incorrect timing for when `done` asserts (expecting it one cycle off from the DUT) and `test_constrained_random` attempted to assign `dut.miso` during a ReadOnly phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6784,
+    "completion_tokens": 2932,
+    "seconds": 5.9
+   }
+  },
+  {
+   "index": 5,
+   "kind": "fix",
+   "tb_file": "tb_05.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model had an error in tracking transfer completion timing and the testbench wrote to `dut.miso` during the `ReadOnly` phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6995,
+    "completion_tokens": 2930,
+    "seconds": 6.0
+   }
+  },
+  {
+   "index": 6,
+   "kind": "fix",
+   "tb_file": "tb_06.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model incorrectly managed the done pulse duration and timing compared to the DUT's registered output cycle, and test_constrained_random improperly assigned to `dut.miso` directly after a ReadOnly phase instead of waiting for FallingEdge.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7065,
+    "completion_tokens": 2858,
+    "seconds": 5.9
+   }
+  },
+  {
+   "index": 7,
+   "kind": "fix",
+   "tb_file": "tb_07.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset_and_defaults",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_transfer",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_start_ignored_while_busy",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.24,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": "testbench",
+   "root_cause": "The reference model had an off-by-one error in transfer duration (expecting 16 * D + 1 cycles instead of exactly 16 * D cycles for completion), and test_constrained_random attempted to modify `dut.miso` during a ReadOnly phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7047,
+    "completion_tokens": 2875,
+    "seconds": 6.0
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "final": "tb_07.py"
+ },
+ "passed": false,
+ "coverage": null,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 8,
+  "prompt_tokens": 50748,
+  "completion_tokens": 23886,
+  "seconds": 52.1
+ },
+ "seconds": 60.3
+}

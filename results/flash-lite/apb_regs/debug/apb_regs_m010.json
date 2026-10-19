@@ -1,0 +1,29 @@
+{
+ "case": "apb_regs_m010",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 28,
+   "explanation": "Line 28 uses 'paddr != A_ID' instead of 'paddr == A_ID', which makes 'known' evaluate incorrectly for address 0x0C (ID) and breaks address validation for valid registers.",
+   "edits": [
+    {
+     "line": 28,
+     "old_text": "    wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr != A_ID);",
+     "new_text": "    wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/apb_regs/debug/apb_regs_m010_fix1/apb_regs.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6134,
+    "completion_tokens": 184,
+    "seconds": 1.2
+   },
+   "edited_lines": [
+    28
+   ]
+  }
+ ]
+}

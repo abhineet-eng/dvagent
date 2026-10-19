@@ -1,0 +1,25 @@
+{
+ "mutant": "updown_counter_m001",
+ "bug_line": 16,
+ "operator": "condition",
+ "description": "condition (!rst_n) inverted",
+ "original": "if (!rst_n) begin",
+ "mutated": "if (!(!rst_n)) begin",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  16
+ ],
+ "fixes": [
+  [
+   "if (!rst_n) begin"
+  ]
+ ],
+ "explanations": [
+  "The asynchronous reset condition uses a double negation (!(!rst_n)) which evaluates to rst_n instead of !rst_n, causing the reset to be active-high instead of active-low, breaking the asynchronous reset specification."
+ ]
+}

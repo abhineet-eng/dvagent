@@ -1,0 +1,25 @@
+{
+ "mutant": "updown_counter_m008",
+ "bug_line": 17,
+ "operator": "constant",
+ "description": "constant 8'd0 changed to 8'd1",
+ "original": "count <= 8'd0;",
+ "mutated": "count <= 8'd1;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  17
+ ],
+ "fixes": [
+  [
+   "count <= 8'd0;"
+  ]
+ ],
+ "explanations": [
+  "The asynchronous reset sets `count` to `8'd1` instead of `8'd0`, violating the specification requirement that `count` is 0 while `rst_n` is 0."
+ ]
+}

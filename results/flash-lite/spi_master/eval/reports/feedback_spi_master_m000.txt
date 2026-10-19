@@ -1,0 +1,36 @@
+fail: 2 passed, 2 failed (0.7 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_07.test_reset_and_defaults
+  INFO cocotb.regression                  Found test test_tb_07.test_basic_transfer
+  INFO cocotb.regression                  Found test test_tb_07.test_constrained_random
+  INFO cocotb.regression                  Found test test_tb_07.test_start_ignored_while_busy
+test test_start_ignored_while_busy did not finish; last testbench output:
+  Verify that start is ignored when busy=1.
+  ** TEST                                      STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  **************************************************************************************************
+  ** test_tb_07.test_reset_and_defaults         PASS          10.00           0.00      11549.35  **
+  ** test_tb_07.test_basic_transfer             FAIL          50.00           0.00      50632.40  **
+  ** test_tb_07.test_constrained_random         FAIL          20.00           0.00      45967.27  **
+  ** test_tb_07.test_start_ignored_while_busy   PASS       40995.00           0.45      91179.75  **
+  **************************************************************************************************
+  ** TESTS=4 PASS=2 FAIL=2 SKIP=0                          41075.00           0.46      89365.13  **
+  **************************************************************************************************
+  INFO: Running command vvp -M /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runner/work/dvagent/dvagent/results/flash-lite/spi_master/eval/builds/icarus_04f412ab20c8/sim.vvp in directory /home/runner/work/dvagent/dvagent/results/flash-lite/spi_master/eval/runs/run_2435187336_2893
+FAILED test_basic_transfer
+  testbench log before the failure:
+    Test a single basic 8-bit transfer with CLK_DIV=2.
+  Traceback (most recent call last):
+  File "test_tb_07.py", line 135, in test_basic_transfer
+  assert int(dut.sclk.value) == ref_out["sclk"], f"Cycle {cycle}: sclk mismatch. Expected {ref_out['sclk']}, got {int(dut.sclk.value)}"
+  AssertionError: Cycle 2: sclk mismatch. Expected 1, got 0
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained random transactions with reference model checking.
+  Exception: Write to object miso was scheduled during a read-only sync phase.
+passed: test_reset_and_defaults, test_start_ignored_while_busy

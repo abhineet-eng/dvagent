@@ -1,0 +1,29 @@
+{
+ "case": "sync_fifo_m001",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 50,
+   "explanation": "Line 50 uses `!(push && !do_push)` which incorrectly sets `overflow` to 1 whenever `push` is low and `do_push` is false, instead of checking if a push was requested (`push`) but rejected (`!do_push`). This breaks the rule: 'overflow becomes 1 when push = 1 but the push is rejected.'",
+   "edits": [
+    {
+     "line": 50,
+     "old_text": "            if (!(push && !do_push))",
+     "new_text": "            if (push && !do_push)"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sync_fifo/debug/sync_fifo_m001_fix1/sync_fifo.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5749,
+    "completion_tokens": 165,
+    "seconds": 5.5
+   },
+   "edited_lines": [
+    50
+   ]
+  }
+ ]
+}

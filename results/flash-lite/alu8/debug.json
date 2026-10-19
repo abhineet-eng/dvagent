@@ -1,0 +1,102 @@
+[
+ {
+  "mutant": "alu8_m000",
+  "bug_line": 13,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "wire [8:0] sum  = {1'b0, a} + {1'b0, b};",
+  "mutated": "wire [8:0] sum  = {1'b0, a} - {1'b0, b};",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   13
+  ],
+  "fixes": [
+   [
+    "wire [8:0] sum  = {1'b0, a} + {1'b0, b};"
+   ]
+  ],
+  "explanations": [
+   "Line 13 defines 'sum' using subtraction ({1'b0, a} - {1'b0, b}) instead of addition ({1'b0, a} + {1'b0, b}), which breaks the ADD operation by performing a subtraction instead."
+  ]
+ },
+ {
+  "mutant": "alu8_m001",
+  "bug_line": 33,
+  "operator": "bitwise",
+  "description": "'|' replaced by '&'",
+  "original": "3'd3: y = a | b;                              // OR",
+  "mutated": "3'd3: y = a & b;                              // OR",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   33
+  ],
+  "fixes": [
+   [
+    "3'd3: y = a | b;                              // OR"
+   ]
+  ],
+  "explanations": [
+   "OP 3 is OR, but line 33 implements AND (`a & b`) instead of OR (`a | b`), breaking the specification for the OR operation."
+  ]
+ },
+ {
+  "mutant": "alu8_m003",
+  "bug_line": 30,
+  "operator": "logical",
+  "description": "'&&' replaced by '||'",
+  "original": "overflow = (a[7] != b[7]) && (diff[7] != a[7]);",
+  "mutated": "overflow = (a[7] != b[7]) || (diff[7] != a[7]);",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   30
+  ],
+  "fixes": [
+   [
+    "overflow = (a[7] != b[7]) && (diff[7] != a[7]);"
+   ]
+  ],
+  "explanations": [
+   "For SUB (op 1), the overflow condition is incorrect. It currently uses a logical OR `(a[7] != b[7]) || (diff[7] != a[7])`, but signed overflow for subtraction occurs when `a` and `b` have *different* sign bits and the sign bit of `y` differs from `a`, which corresponds to `(a[7] != b[7]) && (diff[7] != a[7])` according to the specification."
+  ]
+ },
+ {
+  "mutant": "alu8_m004",
+  "bug_line": 37,
+  "operator": "relational",
+  "description": "'<' replaced by '<='",
+  "original": "default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)",
+  "mutated": "default: y = {7'd0, $signed(a) <= $signed(b)}; // SLT (signed)",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   37
+  ],
+  "fixes": [
+   [
+    "default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)"
+   ]
+  ],
+  "explanations": [
+   "Line 37 uses `<=` (less-than-or-equal) instead of `<` (strictly less than) for the SLT (Signed Less Than) operation, causing `a < b` to evaluate incorrectly as true when `a == b` (e.g., `a=0, b=0` and `a=128, b=128`), violating the SLT specification."
+  ]
+ }
+]

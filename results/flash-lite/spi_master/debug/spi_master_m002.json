@@ -1,0 +1,29 @@
+{
+ "case": "spi_master_m002",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 36,
+   "explanation": "After reset, cs_n should be 1 according to the specification ('After reset: cs_n = 1'), but line 36 sets cs_n <= 1'b0.",
+   "edits": [
+    {
+     "line": 36,
+     "old_text": "            cs_n    <= 1'b0;",
+     "new_text": "            cs_n    <= 1'b1;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/spi_master/debug/spi_master_m002_fix1/spi_master.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5791,
+    "completion_tokens": 130,
+    "seconds": 0.9
+   },
+   "edited_lines": [
+    36
+   ]
+  }
+ ]
+}

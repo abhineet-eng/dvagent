@@ -1,0 +1,29 @@
+{
+ "case": "seq_detector_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 39,
+   "explanation": "Line 39 decrements the count instead of incrementing it when a match occurs, violating the specification requirement that 'count increments by 1 at the same edge where match is set to 1'.",
+   "edits": [
+    {
+     "line": 39,
+     "old_text": "                count <= count - 8'd1;",
+     "new_text": "                count <= count + 8'd1;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/seq_detector/debug/seq_detector_m000_fix1/seq_detector.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4450,
+    "completion_tokens": 105,
+    "seconds": 0.8
+   },
+   "edited_lines": [
+    39
+   ]
+  }
+ ]
+}

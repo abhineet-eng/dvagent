@@ -1,0 +1,25 @@
+{
+ "mutant": "crc8_m000",
+ "bug_line": 33,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "nbytes <= nbytes + 8'd1;",
+ "mutated": "nbytes <= nbytes - 8'd1;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  33
+ ],
+ "fixes": [
+  [
+   "nbytes <= nbytes + 8'd1;"
+  ]
+ ],
+ "explanations": [
+  "nbytes decrements instead of increments when valid bytes are accepted, which violates behaviour rule 2 (\"nbytes increments by 1\") and the specification description (\"number of bytes accepted since the last reset/init, wraps from 255 to 0\")."
+ ]
+}

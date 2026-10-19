@@ -1,0 +1,25 @@
+{
+ "mutant": "seq_detector_m004",
+ "bug_line": 18,
+ "operator": "logical",
+ "description": "'&&' replaced by '||'",
+ "original": "wire      hit = din_valid && (state == S3) && din;",
+ "mutated": "wire      hit = din_valid && (state == S3) || din;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  18
+ ],
+ "fixes": [
+  [
+   "wire      hit = din_valid && (state == S3) && din;"
+  ]
+ ],
+ "explanations": [
+  "Line 18 incorrectly computes the match/hit signal using a combinational expression `wire hit = din_valid && (state == S3) || din;` which ignores `din_valid` for the `din` term and incorrectly asserts `hit` whenever `din` is high. It should be `wire hit = din_valid && (state == S3) && din;`, ensuring the match requires `din_valid` and that the final received bit is `1` while in state S3."
+ ]
+}

@@ -1,0 +1,46 @@
+fail: 0 passed, 5 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset_and_init
+  INFO cocotb.regression                  Found test test_tb_00.test_hold_behavior
+  INFO cocotb.regression                  Found test test_tb_00.test_ascii_123456789
+  INFO cocotb.regression                  Found test test_tb_00.test_nbytes_wrap
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+FAILED test_reset_and_init
+  testbench log before the failure:
+    Test synchronous reset and init functionality.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 64, in test_reset_and_init
+  assert int(dut.nbytes.value) == ref.nbytes, f"Mismatch nbytes: got {int(dut.nbytes.value)}, expected {ref.nbytes}"
+  File "binary.py", line 584, in __int__
+  return self.integer
+  File "binary.py", line 397, in integer
+  return self._convert_from(self._str)
+  File "binary.py", line 277, in _convert_from_unsigned
+  return int(x.translate(_resolve_table), 2)
+  File "binary.py", line 109, in __missing__
+  return self.resolve_x(key)
+  File "binary.py", line 84, in resolve_error
+  raise ValueError(
+  ValueError: Unresolvable bit in binary string: 'x'. Set the COCOTB_RESOLVE_X environment variable to configure how special values are resolved.
+FAILED test_hold_behavior
+  testbench log before the failure:
+    Test that outputs hold when valid=0.
+  Exception: Write to object rst was scheduled during a read-only sync phase.
+FAILED test_ascii_123456789
+  testbench log before the failure:
+    Test CRC-8 check value 0xF4 for ASCII string '123456789'.
+  Exception: Write to object rst was scheduled during a read-only sync phase.
+FAILED test_nbytes_wrap
+  testbench log before the failure:
+    Test nbytes wrapping from 255 to 0.
+  Exception: Write to object rst was scheduled during a read-only sync phase.
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained-random test with mixed valid, invalid, init, rst, and data.
+  Exception: Write to object rst was scheduled during a read-only sync phase.

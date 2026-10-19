@@ -1,0 +1,29 @@
+{
+ "case": "updown_counter_m008",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 17,
+   "explanation": "The asynchronous reset sets `count` to `8'd1` instead of `8'd0`, violating the specification requirement that `count` is 0 while `rst_n` is 0.",
+   "edits": [
+    {
+     "line": 17,
+     "old_text": "            count <= 8'd1;",
+     "new_text": "            count <= 8'd0;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/updown_counter/debug/updown_counter_m008_fix1/updown_counter.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5528,
+    "completion_tokens": 102,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    17
+   ]
+  }
+ ]
+}

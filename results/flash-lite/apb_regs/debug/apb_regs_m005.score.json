@@ -1,0 +1,25 @@
+{
+ "mutant": "apb_regs_m005",
+ "bug_line": 28,
+ "operator": "relational",
+ "description": "'==' replaced by '!='",
+ "original": "wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);",
+ "mutated": "wire known    = (paddr == A_CTRL) || is_data || (paddr != A_STATUS) || (paddr == A_ID);",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  28
+ ],
+ "fixes": [
+  [
+   "wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);"
+  ]
+ ],
+ "explanations": [
+  "Line 28 defines `known` with an incorrect operator `(paddr != A_STATUS)` instead of `(paddr == A_STATUS)`, causing valid addresses to be incorrectly marked as unknown (erroneous). Additionally, the first ACCESS cycle wait-state logic for `is_data` depends on the `known` signal or address decode. Since `is_data` is `paddr == A_DATA`, if address decoding/known is broken, it causes pready assertions to fail."
+ ]
+}

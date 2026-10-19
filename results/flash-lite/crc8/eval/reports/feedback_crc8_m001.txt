@@ -1,0 +1,31 @@
+fail: 2 passed, 3 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_01.test_reset_and_init
+  INFO cocotb.regression                  Found test test_tb_01.test_hold_behavior
+  INFO cocotb.regression                  Found test test_tb_01.test_ascii_123456789
+  INFO cocotb.regression                  Found test test_tb_01.test_nbytes_wrap
+  INFO cocotb.regression                  Found test test_tb_01.test_constrained_random
+FAILED test_ascii_123456789
+  testbench log before the failure:
+    Test CRC-8 check value 0xF4 for ASCII string '123456789'.
+  Traceback (most recent call last):
+  File "test_tb_01.py", line 143, in test_ascii_123456789
+  assert int(dut.crc.value) == ref.crc
+  AssertionError
+FAILED test_nbytes_wrap
+  testbench log before the failure:
+    Test nbytes wrapping from 255 to 0.
+  assert int(dut.crc.value) == ref.crc, f"Cycle {i}: crc got {hex(int(dut.crc.value))}, expected {hex(ref.crc)}"
+  AssertionError: Cycle 2: crc got 0x15, expected 0x1b
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained-random test with mixed valid, invalid, init, rst, and data.
+  assert int(dut.crc.value) == ref.crc, f"Cycle {cycle}: CRC mismatch. Got {hex(int(dut.crc.value))}, Expected {hex(ref.crc)}"
+  AssertionError: Cycle 3: CRC mismatch. Got 0x4b, Expected 0x1c
+passed: test_reset_and_init, test_hold_behavior

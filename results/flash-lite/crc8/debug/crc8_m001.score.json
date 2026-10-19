@@ -1,0 +1,25 @@
+{
+ "mutant": "crc8_m001",
+ "bug_line": 18,
+ "operator": "bitwise",
+ "description": "'^' replaced by '|'",
+ "original": "r = c ^ d;",
+ "mutated": "r = c | d;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  18
+ ],
+ "fixes": [
+  [
+   "r = c ^ d;"
+  ]
+ ],
+ "explanations": [
+  "Line 18 uses bitwise OR (`c | d`) instead of bitwise XOR (`c ^ d`) to combine the current CRC with the incoming data byte, breaking the reference algorithm requirement `r = crc XOR data`."
+ ]
+}

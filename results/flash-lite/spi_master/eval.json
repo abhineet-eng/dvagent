@@ -1,0 +1,93 @@
+{
+ "mutants": [
+  "spi_master_m000",
+  "spi_master_m001",
+  "spi_master_m002",
+  "spi_master_m003",
+  "spi_master_m004",
+  "spi_master_m005",
+  "spi_master_m006",
+  "spi_master_m007",
+  "spi_master_m008",
+  "spi_master_m009",
+  "spi_master_m010",
+  "spi_master_m011"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "fail",
+   "tests_total": 4,
+   "tests_passing": 2,
+   "passing_tests": [
+    "test_reset_and_defaults",
+    "test_start_ignored_while_busy"
+   ],
+   "coverage": 91.66666666666667,
+   "killed": {
+    "spi_master_m002": "fail",
+    "spi_master_m003": "fail"
+   },
+   "mutation_score": 16.67,
+   "seconds": 13.6
+  },
+  "feedback": {
+   "snapshot": "feedback",
+   "tb": "tb_07.py",
+   "golden_status": "fail",
+   "tests_total": 4,
+   "tests_passing": 3,
+   "passing_tests": [
+    "test_basic_transfer",
+    "test_reset_and_defaults",
+    "test_start_ignored_while_busy"
+   ],
+   "coverage": 91.66666666666667,
+   "killed": {
+    "spi_master_m000": "fail",
+    "spi_master_m001": "fail",
+    "spi_master_m002": "fail",
+    "spi_master_m003": "fail",
+    "spi_master_m004": "fail",
+    "spi_master_m005": "fail",
+    "spi_master_m006": "fail",
+    "spi_master_m007": "fail",
+    "spi_master_m009": "fail",
+    "spi_master_m010": "fail",
+    "spi_master_m011": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 3.8
+  },
+  "final": {
+   "snapshot": "feedback",
+   "tb": "tb_07.py",
+   "golden_status": "fail",
+   "tests_total": 4,
+   "tests_passing": 3,
+   "passing_tests": [
+    "test_basic_transfer",
+    "test_reset_and_defaults",
+    "test_start_ignored_while_busy"
+   ],
+   "coverage": 91.66666666666667,
+   "killed": {
+    "spi_master_m000": "fail",
+    "spi_master_m001": "fail",
+    "spi_master_m002": "fail",
+    "spi_master_m003": "fail",
+    "spi_master_m004": "fail",
+    "spi_master_m005": "fail",
+    "spi_master_m006": "fail",
+    "spi_master_m007": "fail",
+    "spi_master_m009": "fail",
+    "spi_master_m010": "fail",
+    "spi_master_m011": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 3.8,
+   "same_as": "feedback"
+  }
+ }
+}

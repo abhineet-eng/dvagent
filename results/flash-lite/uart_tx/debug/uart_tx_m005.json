@@ -1,0 +1,73 @@
+{
+ "case": "uart_tx_m005",
+ "fixed_self_check": false,
+ "attempts": [
+  {
+   "bug_line": 81,
+   "explanation": "In the DATA state, when bit_idx has reached 7, the code increments bit_idx and loads shreg[bit_idx + 3'd1] in the else branch instead of properly finishing the data bits and transitioning to parity or stop. This causes bit_idx to skip data bit indices and transitions to the stop or parity states incorrectly.",
+   "edits": [
+    {
+     "line": 81,
+     "old_text": "                            tx      <= shreg[bit_idx + 3'd1];",
+     "new_text": "                            tx      <= shreg[bit_idx];"
+    }
+   ],
+   "applied": true,
+   "self_check": "fail",
+   "patched_file": "results/flash-lite/uart_tx/debug/uart_tx_m005_fix1/uart_tx.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7756,
+    "completion_tokens": 168,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    81
+   ]
+  },
+  {
+   "bug_line": 80,
+   "explanation": "In the DATA state, when bit_idx != 3'd7, bit_idx is never incremented and shreg[bit_idx + 3'd1] accesses the wrong bit because bit_idx stays 0 for the entire data transmission.",
+   "edits": [
+    {
+     "line": 80,
+     "old_text": "                        end else begin",
+     "new_text": "                        end else begin\n                            bit_idx <= bit_idx + 3'd1;\n                            tx      <= shreg[bit_idx + 3'd1];"
+    }
+   ],
+   "applied": false,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7851,
+    "completion_tokens": 140,
+    "seconds": 1.0
+   },
+   "edited_lines": []
+  },
+  {
+   "bug_line": 80,
+   "explanation": "In the DATA state, `bit_idx` is checked against `3'd7` before it has reached the last bit or been incremented/processed correctly for all bits. When `bit_idx != 3'd7`, it enters the `else` branch (lines 79-82), but the increment `bit_idx <= bit_idx + 3'd1` is missing, causing `bit_idx` to remain 0 and skipping or mis-shifting data bits.",
+   "edits": [
+    {
+     "line": 80,
+     "old_text": "                        end else begin",
+     "new_text": "                        end else begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7873,
+    "completion_tokens": 180,
+    "seconds": 1.1
+   },
+   "edited_lines": [
+    79
+   ]
+  }
+ ]
+}

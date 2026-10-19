@@ -1,0 +1,29 @@
+{
+ "case": "alu8_m004",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 37,
+   "explanation": "Line 37 uses `<=` (less-than-or-equal) instead of `<` (strictly less than) for the SLT (Signed Less Than) operation, causing `a < b` to evaluate incorrectly as true when `a == b` (e.g., `a=0, b=0` and `a=128, b=128`), violating the SLT specification.",
+   "edits": [
+    {
+     "line": 37,
+     "old_text": "            default: y = {7'd0, $signed(a) <= $signed(b)}; // SLT (signed)",
+     "new_text": "            default: y = {7'd0, $signed(a) < $signed(b)}; // SLT (signed)"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/alu8/debug/alu8_m004_fix1/alu8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4795,
+    "completion_tokens": 201,
+    "seconds": 3.5
+   },
+   "edited_lines": [
+    37
+   ]
+  }
+ ]
+}

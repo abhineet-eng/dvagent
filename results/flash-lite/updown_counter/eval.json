@@ -1,0 +1,82 @@
+{
+ "mutants": [
+  "updown_counter_m000",
+  "updown_counter_m001",
+  "updown_counter_m002",
+  "updown_counter_m003",
+  "updown_counter_m004",
+  "updown_counter_m005",
+  "updown_counter_m006",
+  "updown_counter_m007",
+  "updown_counter_m008",
+  "updown_counter_m009",
+  "updown_counter_m010",
+  "updown_counter_m011"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "fail",
+   "tests_total": 6,
+   "tests_passing": 1,
+   "passing_tests": [
+    "test_reset_and_hold"
+   ],
+   "coverage": 57.142857142857146,
+   "killed": {
+    "updown_counter_m001": "fail",
+    "updown_counter_m003": "fail",
+    "updown_counter_m007": "fail",
+    "updown_counter_m008": "fail"
+   },
+   "mutation_score": 33.33,
+   "seconds": 13.2
+  },
+  "feedback": {
+   "snapshot": "feedback",
+   "tb": "tb_05.py",
+   "golden_status": "fail",
+   "tests_total": 6,
+   "tests_passing": 3,
+   "passing_tests": [
+    "test_dynamic_max_val_overflow",
+    "test_load_and_clamping",
+    "test_reset_and_hold"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "updown_counter_m001": "fail",
+    "updown_counter_m003": "fail",
+    "updown_counter_m007": "fail",
+    "updown_counter_m008": "fail",
+    "updown_counter_m010": "fail"
+   },
+   "mutation_score": 41.67,
+   "seconds": 3.3
+  },
+  "final": {
+   "snapshot": "feedback",
+   "tb": "tb_05.py",
+   "golden_status": "fail",
+   "tests_total": 6,
+   "tests_passing": 3,
+   "passing_tests": [
+    "test_dynamic_max_val_overflow",
+    "test_load_and_clamping",
+    "test_reset_and_hold"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "updown_counter_m001": "fail",
+    "updown_counter_m003": "fail",
+    "updown_counter_m007": "fail",
+    "updown_counter_m008": "fail",
+    "updown_counter_m010": "fail"
+   },
+   "mutation_score": 41.67,
+   "seconds": 3.3,
+   "same_as": "feedback"
+  }
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "mutant": "sat_mac_m003",
+ "bug_line": 29,
+ "operator": "constant",
+ "description": "constant 15 changed to 14",
+ "original": "acc <= sum[15:0];",
+ "mutated": "acc <= sum[14:0];",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  29
+ ],
+ "fixes": [
+  [
+   "acc <= sum[15:0];"
+  ]
+ ],
+ "explanations": [
+  "Line 29 assigns `sum[14:0]` (which is 15 bits, zero-extended or sign-extended incorrectly into 16 bits `acc`) instead of the full 16-bit lower portion or truncated `sum[15:0]`, causing the accumulator to drop sign bits or wrap incorrectly when not saturating. It violates the exact computation rule (no wrap) when `sum` is within range."
+ ]
+}

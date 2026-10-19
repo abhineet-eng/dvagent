@@ -1,0 +1,73 @@
+{
+ "design": "sat_mac",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_reset",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_idle_and_clear",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_mac_and_restart",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_positive_and_negative_saturation",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 1.04,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 8,
+    "total": 8,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1287,
+    "completion_tokens": 3171,
+    "seconds": 7.2
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_00.py",
+  "final": "tb_00.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 1,
+  "prompt_tokens": 1287,
+  "completion_tokens": 3171,
+  "seconds": 7.2
+ },
+ "seconds": 24.1
+}

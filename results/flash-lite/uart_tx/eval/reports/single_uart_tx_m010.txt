@@ -1,0 +1,46 @@
+fail: 0 passed, 6 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset_and_idle
+  INFO cocotb.regression                  Found test test_tb_00.test_single_frame_no_parity
+  INFO cocotb.regression                  Found test test_tb_00.test_single_frame_even_parity
+  INFO cocotb.regression                  Found test test_tb_00.test_single_frame_odd_parity
+  INFO cocotb.regression                  Found test test_tb_00.test_back_to_back
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+FAILED test_reset_and_idle
+  testbench log before the failure:
+    Test reset conditions and idle state.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 152, in test_reset_and_idle
+  assert int(dut.busy.value) == 0, f"Reset busy expected 0, got {int(dut.busy.value)}"
+  AssertionError: Reset busy expected 0, got 1
+FAILED test_single_frame_no_parity
+  testbench log before the failure:
+    Test single frame transmission without parity.
+  assert int(dut.busy.value) == exp_busy, f"Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}"
+  AssertionError: Cycle 0: busy mismatch. Got 0, exp 1
+FAILED test_single_frame_even_parity
+  testbench log before the failure:
+    Test single frame transmission with even parity.
+  assert int(dut.busy.value) == exp_busy, f"Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}"
+  AssertionError: Cycle 0: busy mismatch. Got 0, exp 1
+FAILED test_single_frame_odd_parity
+  testbench log before the failure:
+    Test single frame transmission with odd parity.
+  assert int(dut.busy.value) == exp_busy, f"Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}"
+  AssertionError: Cycle 0: busy mismatch. Got 0, exp 1
+FAILED test_back_to_back
+  testbench log before the failure:
+    Test back-to-back transmissions where start is asserted during the done cycle.
+  assert int(dut.busy.value) == exp_busy, f"Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}"
+  AssertionError: Cycle 0: busy mismatch. Got 0, exp 1
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained-random test of multiple frames with random data, parity options, and gaps.
+  assert int(dut.busy.value) == exp_busy, f"Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}"
+  AssertionError: Cycle 0: busy mismatch. Got 0, exp 1

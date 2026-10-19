@@ -1,0 +1,29 @@
+{
+ "case": "uart_tx_m002",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 97,
+   "explanation": "Line 97 checks `if (!(last_tick))` instead of `if (last_tick)` for the STOP state, causing the stop bit to last only 1 cycle instead of `CLKS_PER_BIT` cycles and ending the frame prematurely, which violates the requirement that each bit lasts `CLKS_PER_BIT` cycles and breaks `busy` timing.",
+   "edits": [
+    {
+     "line": 97,
+     "old_text": "                    if (!(last_tick)) begin",
+     "new_text": "                    if (last_tick) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/uart_tx/debug/uart_tx_m002_fix1/uart_tx.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7759,
+    "completion_tokens": 160,
+    "seconds": 1.4
+   },
+   "edited_lines": [
+    97
+   ]
+  }
+ ]
+}

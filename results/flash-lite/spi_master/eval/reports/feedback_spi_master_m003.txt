@@ -1,0 +1,46 @@
+fail: 1 passed, 3 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_07.test_reset_and_defaults
+  INFO cocotb.regression                  Found test test_tb_07.test_basic_transfer
+  INFO cocotb.regression                  Found test test_tb_07.test_constrained_random
+  INFO cocotb.regression                  Found test test_tb_07.test_start_ignored_while_busy
+test test_start_ignored_while_busy did not finish; last testbench output:
+  Verify that start is ignored when busy=1.
+  ** TEST                                      STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  **************************************************************************************************
+  ** test_tb_07.test_reset_and_defaults         FAIL          10.00           0.00      13019.01  **
+  ** test_tb_07.test_basic_transfer             FAIL          30.00           0.00      46987.79  **
+  ** test_tb_07.test_constrained_random         FAIL          20.00           0.00      46683.51  **
+  ** test_tb_07.test_start_ignored_while_busy   PASS         335.00           0.00      76132.21  **
+  **************************************************************************************************
+  ** TESTS=4 PASS=1 FAIL=3 SKIP=0                            395.00           0.01      27442.64  **
+  **************************************************************************************************
+  INFO: Running command vvp -M /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runne
+... (truncated) ...
+y.py", line 584, in __int__
+  return self.integer
+  File "binary.py", line 397, in integer
+  return self._convert_from(self._str)
+  File "binary.py", line 277, in _convert_from_unsigned
+  return int(x.translate(_resolve_table), 2)
+  File "binary.py", line 109, in __missing__
+  return self.resolve_x(key)
+  File "binary.py", line 84, in resolve_error
+  raise ValueError(
+  ValueError: Unresolvable bit in binary string: 'x'. Set the COCOTB_RESOLVE_X environment variable to configure how special values are resolved.
+FAILED test_basic_transfer
+  testbench log before the failure:
+    Test a single basic 8-bit transfer with CLK_DIV=2.
+  assert int(dut.sclk.value) == ref_out["sclk"], f"Cycle {cycle}: sclk mismatch. Expected {ref_out['sclk']}, got {int(dut.sclk.value)}"
+  ValueError: Unresolvable bit in binary string: 'x'. Set the COCOTB_RESOLVE_X environment variable to configure how special values are resolved.
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained random transactions with reference model checking.
+  Exception: Write to object miso was scheduled during a read-only sync phase.
+passed: test_start_ignored_while_busy

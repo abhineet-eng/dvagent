@@ -1,0 +1,43 @@
+fail: 1 passed, 3 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset_and_defaults
+  INFO cocotb.regression                  Found test test_tb_00.test_basic_transfer
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+  INFO cocotb.regression                  Found test test_tb_00.test_start_ignored_while_busy
+test test_start_ignored_while_busy did not finish; last testbench output:
+  Verify that start is ignored when busy=1.
+  ** TEST                                      STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  **************************************************************************************************
+  ** test_tb_00.test_reset_and_defaults         FAIL          10.00           0.00      13308.13  **
+  ** test_tb_00.test_basic_transfer             FAIL         350.00           0.01      54360.70  **
+  ** test_tb_00.test_constrained_random         FAIL          20.00           0.00      45078.06  **
+  ** test_tb_00.test_start_ignored_while_busy   PASS         355.00           0.00      80048.50  **
+  **************************************************************************************************
+  ** TESTS=4 PASS=1 FAIL=3 SKIP=0                            735.00           0.02      37126.88  **
+  **************************************************************************************************
+  INFO: Running command iverilog -o /home/runner/work/dvagent/dvagent/results/flash-lite/spi_master/eval/builds/icarus_c9a44fd9770f/sim.vvp -D COC
+... (truncated) ...
+python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runner/work/dvagent/dvagent/results/flash-lite/spi_master/eval/builds/icarus_c9a44fd9770f/sim.vvp in directory /home/runner/work/dvagent/dvagent/results/flash-lite/spi_master/eval/runs/run_2435184440_2893
+FAILED test_reset_and_defaults
+  testbench log before the failure:
+    Test reset state matches specification.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 123, in test_reset_and_defaults
+  assert int(dut.cs_n.value) == 1, f"Reset cs_n expected 1, got {int(dut.cs_n.value)}"
+  AssertionError: Reset cs_n expected 1, got 0
+FAILED test_basic_transfer
+  testbench log before the failure:
+    Test a single basic 8-bit transfer with CLK_DIV=2.
+  assert int(dut.done.value) == ref_out["done"], f"Cycle {cycle}: done mismatch. Expected {ref_out['done']}, got {int(dut.done.value)}"
+  AssertionError: Cycle 32: done mismatch. Expected 0, got 1
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained random transactions with reference model checking.
+  NameError: name 'Random' is not defined. Did you mean: 'random'?
+passed: test_start_ignored_while_busy

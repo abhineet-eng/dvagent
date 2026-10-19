@@ -1,0 +1,25 @@
+{
+ "mutant": "uart_tx_m000",
+ "bug_line": 80,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "bit_idx <= bit_idx + 3'd1;",
+ "mutated": "bit_idx <= bit_idx - 3'd1;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  80
+ ],
+ "fixes": [
+  [
+   "bit_idx <= bit_idx + 3'd1;"
+  ]
+ ],
+ "explanations": [
+  "In the DATA state, bit_idx is decremented using bit_idx - 3'd1 when transmitting LSB first, but bit_idx should be incremented (bit_idx + 3'd1) to iterate from 0 to 7. This causes the wrong bits of shreg to be transmitted and disrupts the timing/state machine."
+ ]
+}

@@ -1,0 +1,25 @@
+{
+ "mutant": "crc8_m003",
+ "bug_line": 19,
+ "operator": "constant",
+ "description": "constant 8 changed to 9",
+ "original": "for (i = 0; i < 8; i = i + 1)",
+ "mutated": "for (i = 0; i < 9; i = i + 1)",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  19
+ ],
+ "fixes": [
+  [
+   "for (i = 0; i < 8; i = i + 1)"
+  ]
+ ],
+ "explanations": [
+  "The loop inside the crc_byte function iterates 9 times instead of 8, repeating the bit-shift and polynomial XOR logic one time too many per byte, which violates the 8-bit reference algorithm specification."
+ ]
+}

@@ -1,0 +1,68 @@
+{
+ "design": "alu8",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_alu_directed_corner_cases",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_alu_shift_edge_cases",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_alu_signed_comparison",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_alu_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.66,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 9,
+    "total": 9,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1364,
+    "completion_tokens": 2118,
+    "seconds": 16.2
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_00.py",
+  "final": "tb_00.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 1,
+  "prompt_tokens": 1364,
+  "completion_tokens": 2118,
+  "seconds": 16.2
+ },
+ "seconds": 28.2
+}

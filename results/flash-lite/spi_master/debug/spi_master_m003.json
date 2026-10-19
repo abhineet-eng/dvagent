@@ -1,0 +1,52 @@
+{
+ "case": "spi_master_m003",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 34,
+   "explanation": "Line 34 contains an extraneous semicolon statement left over from debugging/typo, causing syntax or simulation issues (uninitialized or floating logic affecting reset or registers like sclk).",
+   "edits": [
+    {
+     "line": 34,
+     "old_text": "            ;",
+     "new_text": "            "
+    }
+   ],
+   "applied": true,
+   "self_check": "fail",
+   "patched_file": "results/flash-lite/spi_master/debug/spi_master_m003_fix1/spi_master.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5869,
+    "completion_tokens": 106,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    34
+   ]
+  },
+  {
+   "bug_line": 34,
+   "explanation": "Line 34 contains an empty statement semicolon (`;`) instead of initializing `sclk` to `1'b0` upon reset, which leaves `sclk` at 'x' and violates the reset requirements ('sclk = 0').",
+   "edits": [
+    {
+     "line": 34,
+     "old_text": "            ;",
+     "new_text": "            sclk    <= 1'b0;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/spi_master/debug/spi_master_m003_fix2/spi_master.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5932,
+    "completion_tokens": 106,
+    "seconds": 0.9
+   },
+   "edited_lines": [
+    34
+   ]
+  }
+ ]
+}

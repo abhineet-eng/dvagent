@@ -1,0 +1,29 @@
+{
+ "case": "uart_tx_m006",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 93,
+   "explanation": "In the PARITY state, decrementing the tick counter (`tick <= tick - 16'd1;`) instead of incrementing it (`tick <= tick + 16'd1;`) causes incorrect timing for the parity bit duration, leading to a tx mismatch.",
+   "edits": [
+    {
+     "line": 93,
+     "old_text": "                        tick <= tick - 16'd1;",
+     "new_text": "                        tick <= tick + 16'd1;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/uart_tx/debug/uart_tx_m006_fix1/uart_tx.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 7510,
+    "completion_tokens": 122,
+    "seconds": 21.9
+   },
+   "edited_lines": [
+    93
+   ]
+  }
+ ]
+}

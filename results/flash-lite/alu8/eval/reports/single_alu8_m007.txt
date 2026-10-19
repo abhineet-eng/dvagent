@@ -1,0 +1,27 @@
+fail: 2 passed, 2 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_alu_directed_corner_cases
+  INFO cocotb.regression                  Found test test_tb_00.test_alu_shift_edge_cases
+  INFO cocotb.regression                  Found test test_tb_00.test_alu_signed_comparison
+  INFO cocotb.regression                  Found test test_tb_00.test_alu_random
+FAILED test_alu_directed_corner_cases
+  testbench log before the failure:
+    Test specific corner cases for all operations.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 133, in test_alu_directed_corner_cases
+  await drive_and_check(dut, a, b, op, ref)
+  File "test_tb_00.py", line 117, in drive_and_check
+  assert got_y == exp_y, f"Mismatch on OP {op} (a={a}, b={b}): y got {got_y}, expected {exp_y}"
+  AssertionError: Mismatch on OP 2 (a=0, b=1): y got 1, expected 0
+FAILED test_alu_random
+  testbench log before the failure:
+    Run constrained-random tests across all operations.
+  assert got_y == exp_y, f"Mismatch on OP {op} (a={a}, b={b}): y got {got_y}, expected {exp_y}"
+  AssertionError: Mismatch on OP 2 (a=201, b=87): y got 223, expected 65
+passed: test_alu_shift_edge_cases, test_alu_signed_comparison

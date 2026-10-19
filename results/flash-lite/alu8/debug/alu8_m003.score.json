@@ -1,0 +1,25 @@
+{
+ "mutant": "alu8_m003",
+ "bug_line": 30,
+ "operator": "logical",
+ "description": "'&&' replaced by '||'",
+ "original": "overflow = (a[7] != b[7]) && (diff[7] != a[7]);",
+ "mutated": "overflow = (a[7] != b[7]) || (diff[7] != a[7]);",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  30
+ ],
+ "fixes": [
+  [
+   "overflow = (a[7] != b[7]) && (diff[7] != a[7]);"
+  ]
+ ],
+ "explanations": [
+  "For SUB (op 1), the overflow condition is incorrect. It currently uses a logical OR `(a[7] != b[7]) || (diff[7] != a[7])`, but signed overflow for subtraction occurs when `a` and `b` have *different* sign bits and the sign bit of `y` differs from `a`, which corresponds to `(a[7] != b[7]) && (diff[7] != a[7])` according to the specification."
+ ]
+}

@@ -1,0 +1,29 @@
+{
+ "case": "alu8_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 13,
+   "explanation": "Line 13 defines 'sum' using subtraction ({1'b0, a} - {1'b0, b}) instead of addition ({1'b0, a} + {1'b0, b}), which breaks the ADD operation by performing a subtraction instead.",
+   "edits": [
+    {
+     "line": 13,
+     "old_text": "    wire [8:0] sum  = {1'b0, a} - {1'b0, b};",
+     "new_text": "    wire [8:0] sum  = {1'b0, a} + {1'b0, b};"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/alu8/debug/alu8_m000_fix1/alu8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4295,
+    "completion_tokens": 179,
+    "seconds": 1.4
+   },
+   "edited_lines": [
+    13
+   ]
+  }
+ ]
+}

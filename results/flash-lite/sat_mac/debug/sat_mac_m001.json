@@ -1,0 +1,29 @@
+{
+ "case": "sat_mac_m001",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 30,
+   "explanation": "Line 30 uses `hi & lo` to determine if saturation occurred, which checks if the sum is simultaneously greater than 32767 and less than -32768 (an impossibility). It should be `hi | lo` to detect either positive or negative saturation.",
+   "edits": [
+    {
+     "line": 30,
+     "old_text": "            sat <= (clear ? 1'b0 : sat) | hi & lo;",
+     "new_text": "            sat <= (clear ? 1'b0 : sat) | hi | lo;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sat_mac/debug/sat_mac_m001_fix1/sat_mac.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5592,
+    "completion_tokens": 163,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    30
+   ]
+  }
+ ]
+}

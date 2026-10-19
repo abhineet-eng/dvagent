@@ -1,0 +1,112 @@
+[
+ {
+  "mutant": "uart_tx_m000",
+  "bug_line": 80,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "bit_idx <= bit_idx + 3'd1;",
+  "mutated": "bit_idx <= bit_idx - 3'd1;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   80
+  ],
+  "fixes": [
+   [
+    "bit_idx <= bit_idx + 3'd1;"
+   ]
+  ],
+  "explanations": [
+   "In the DATA state, bit_idx is decremented using bit_idx - 3'd1 when transmitting LSB first, but bit_idx should be incremented (bit_idx + 3'd1) to iterate from 0 to 7. This causes the wrong bits of shreg to be transmitted and disrupts the timing/state machine."
+  ]
+ },
+ {
+  "mutant": "uart_tx_m002",
+  "bug_line": 97,
+  "operator": "condition",
+  "description": "condition (last_tick) inverted",
+  "original": "if (last_tick) begin",
+  "mutated": "if (!(last_tick)) begin",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   97
+  ],
+  "fixes": [
+   [
+    "if (last_tick) begin"
+   ]
+  ],
+  "explanations": [
+   "Line 97 checks `if (!(last_tick))` instead of `if (last_tick)` for the STOP state, causing the stop bit to last only 1 cycle instead of `CLKS_PER_BIT` cycles and ending the frame prematurely, which violates the requirement that each bit lasts `CLKS_PER_BIT` cycles and breaks `busy` timing."
+  ]
+ },
+ {
+  "mutant": "uart_tx_m005",
+  "bug_line": 71,
+  "operator": "relational",
+  "description": "'==' replaced by '!='",
+  "original": "if (bit_idx == 3'd7) begin",
+  "mutated": "if (bit_idx != 3'd7) begin",
+  "attempts": 3,
+  "localized_first": false,
+  "localized_any": false,
+  "fixed_first": false,
+  "fixed": false,
+  "self_check_pass": false,
+  "predicted_lines": [
+   81,
+   80,
+   79
+  ],
+  "fixes": [
+   [
+    "tx      <= shreg[bit_idx];"
+   ],
+   [
+    "end else begin\n                            bit_idx <= bit_idx + 3'd1;\n                            tx      <= shreg[bit_idx + 3'd1];"
+   ],
+   [
+    "end else begin"
+   ]
+  ],
+  "explanations": [
+   "In the DATA state, when bit_idx has reached 7, the code increments bit_idx and loads shreg[bit_idx + 3'd1] in the else branch instead of properly finishing the data bits and transitioning to parity or stop. This causes bit_idx to skip data bit indices and transitions to the stop or parity states incorrectly.",
+   "In the DATA state, when bit_idx != 3'd7, bit_idx is never incremented and shreg[bit_idx + 3'd1] accesses the wrong bit because bit_idx stays 0 for the entire data transmission.",
+   "In the DATA state, `bit_idx` is checked against `3'd7` before it has reached the last bit or been incremented/processed correctly for all bits. When `bit_idx != 3'd7`, it enters the `else` branch (lines 79-82), but the increment `bit_idx <= bit_idx + 3'd1` is missing, causing `bit_idx` to remain 0 and skipping or mis-shifting data bits."
+  ]
+ },
+ {
+  "mutant": "uart_tx_m006",
+  "bug_line": 93,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "tick <= tick + 16'd1;",
+  "mutated": "tick <= tick - 16'd1;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   93
+  ],
+  "fixes": [
+   [
+    "tick <= tick + 16'd1;"
+   ]
+  ],
+  "explanations": [
+   "In the PARITY state, decrementing the tick counter (`tick <= tick - 16'd1;`) instead of incrementing it (`tick <= tick + 16'd1;`) causes incorrect timing for the parity bit duration, leading to a tx mismatch."
+  ]
+ }
+]

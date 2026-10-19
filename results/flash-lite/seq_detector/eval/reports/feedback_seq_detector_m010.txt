@@ -1,0 +1,36 @@
+fail: 1 passed, 4 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_01.test_reset
+  INFO cocotb.regression                  Found test test_tb_01.test_din_valid_gating
+  INFO cocotb.regression                  Found test test_tb_01.test_basic_and_overlapping
+  INFO cocotb.regression                  Found test test_tb_01.test_count_saturation
+  INFO cocotb.regression                  Found test test_tb_01.test_constrained_random
+FAILED test_din_valid_gating
+  testbench log before the failure:
+    Test that din_valid=0 ignores inputs completely.
+  Traceback (most recent call last):
+  File "test_tb_01.py", line 121, in test_din_valid_gating
+  assert int(dut.match.value) == expected_match, f"Match mismatch on stream element ({din}, valid={valid}). Expected {expected_match}, got {int(dut.match.value)}"
+  AssertionError: Match mismatch on stream element (1, valid=1). Expected 0, got 1
+FAILED test_basic_and_overlapping
+  testbench log before the failure:
+    Test basic 1011 pattern and overlapping occurrences like 1011011.
+  assert int(dut.match.value) == expected_match, f"Match mismatch for bit {b}. Expected {expected_match}, got {int(dut.match.value)}"
+  AssertionError: Match mismatch for bit 1. Expected 0, got 1
+FAILED test_count_saturation
+  testbench log before the failure:
+    Test that count saturates at 255 and never wraps.
+  assert int(dut.match.value) == expected_match, f"Match mismatch at index {idx} (bit {b}). Expected {expected_match}, got {int(dut.match.value)}"
+  AssertionError: Match mismatch at index 0 (bit 1). Expected 0, got 1
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained-random test of bit streams and valid flags with reference model check.
+  assert int(dut.match.value) == expected_match, \
+  AssertionError: Cycle 8: Match mismatch (din=1, valid=1). Expected 0, got 1
+passed: test_reset

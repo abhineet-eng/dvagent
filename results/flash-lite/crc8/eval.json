@@ -1,0 +1,107 @@
+{
+ "mutants": [
+  "crc8_m000",
+  "crc8_m001",
+  "crc8_m002",
+  "crc8_m003",
+  "crc8_m004",
+  "crc8_m005",
+  "crc8_m006",
+  "crc8_m007",
+  "crc8_m008",
+  "crc8_m009",
+  "crc8_m010",
+  "crc8_m011"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "fail",
+   "tests_total": 5,
+   "tests_passing": 1,
+   "passing_tests": [
+    "test_reset_and_init"
+   ],
+   "coverage": 83.33333333333333,
+   "killed": {
+    "crc8_m000": "fail",
+    "crc8_m002": "fail",
+    "crc8_m003": "fail",
+    "crc8_m004": "fail",
+    "crc8_m005": "fail",
+    "crc8_m006": "fail",
+    "crc8_m007": "fail",
+    "crc8_m008": "fail",
+    "crc8_m009": "fail",
+    "crc8_m010": "fail",
+    "crc8_m011": "fail"
+   },
+   "mutation_score": 91.67,
+   "seconds": 12.9
+  },
+  "feedback": {
+   "snapshot": "feedback",
+   "tb": "tb_01.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_ascii_123456789",
+    "test_constrained_random",
+    "test_hold_behavior",
+    "test_nbytes_wrap",
+    "test_reset_and_init"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "crc8_m000": "fail",
+    "crc8_m001": "fail",
+    "crc8_m002": "fail",
+    "crc8_m003": "fail",
+    "crc8_m004": "fail",
+    "crc8_m005": "fail",
+    "crc8_m006": "fail",
+    "crc8_m007": "fail",
+    "crc8_m008": "fail",
+    "crc8_m009": "fail",
+    "crc8_m010": "fail",
+    "crc8_m011": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 3.7
+  },
+  "final": {
+   "snapshot": "feedback",
+   "tb": "tb_01.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_ascii_123456789",
+    "test_constrained_random",
+    "test_hold_behavior",
+    "test_nbytes_wrap",
+    "test_reset_and_init"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "crc8_m000": "fail",
+    "crc8_m001": "fail",
+    "crc8_m002": "fail",
+    "crc8_m003": "fail",
+    "crc8_m004": "fail",
+    "crc8_m005": "fail",
+    "crc8_m006": "fail",
+    "crc8_m007": "fail",
+    "crc8_m008": "fail",
+    "crc8_m009": "fail",
+    "crc8_m010": "fail",
+    "crc8_m011": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 3.7,
+   "same_as": "feedback"
+  }
+ }
+}

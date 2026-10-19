@@ -1,0 +1,2571 @@
+<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>DVAgent report</title><style>
+:root{--bg:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#e1e0d9;
+--accent:#2a78d6;--good:#006300;--bad:#d03b3b;--code:#f3f2ee}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0d;--surface:#1a1a19;
+--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;--line:#2c2c2a;--accent:#3987e5;--good:#0ca30c;--bad:#e66767;--code:#232321}}
+:root[data-theme="dark"]{--bg:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;--muted:#898781;
+--line:#2c2c2a;--accent:#3987e5;--good:#0ca30c;--bad:#e66767;--code:#232321}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);
+font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1100px;margin:0 auto;padding:32px 16px 64px}
+h1{font-size:26px;margin:0 0 4px}h2{font-size:19px;margin:36px 0 10px}h3{font-size:16px;margin:20px 0 6px}
+.sub{color:var(--ink2);margin:0 0 20px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin:16px 0}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.tile b{display:block;font-size:26px;font-weight:600}.tile span{color:var(--ink2);font-size:13px}
+table{border-collapse:collapse;width:100%;background:var(--surface);font-size:13.5px;
+font-variant-numeric:tabular-nums}
+th,td{border-bottom:1px solid var(--line);padding:7px 9px;text-align:left;vertical-align:top}
+th{color:var(--ink2);font-weight:600}.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+.ok{color:var(--good);font-weight:600}.no{color:var(--bad);font-weight:600}
+details{background:var(--surface);border:1px solid var(--line);border-radius:10px;margin:10px 0;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+pre{background:var(--code);padding:10px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.45}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+img{max-width:100%;border-radius:10px;border:1px solid var(--line)}
+.muted{color:var(--muted)}
+</style></head><body><main><h1>DVAgent benchmark report</h1><p class='sub'>Model <code>gemini-3.5-flash-lite</code> via gemini · started 2026-10-19 18:27:00 · 10 designs · 120 injected bugs</p>
+<div class='tiles'><div class='tile'><b>56% → 83%</b><span>bugs caught: one-shot LLM → full agent</span></div><div class='tile'><b>4/10 → 7/10</b><span>testbenches that run clean on the correct design</span></div><div class='tile'><b>89.5%</b><span>of 38 caught bugs fixed (verified by hidden tests)</span></div><div class='tile'><b>84</b><span>LLM calls in total (gemini-3.5-flash-lite)</span></div></div>
+<picture><source media='(prefers-color-scheme: dark)' srcset='chart_dark.png'><img src='chart_light.png' alt='Bugs caught per design at each agent stage'></picture>
+<h2>Per design</h2><div class='wrap'><table><tr><th>Design</th><th>Level</th><th>Passes on correct RTL<br>1-shot / final</th><th>Coverage<br>1-shot / final</th><th>Bugs caught<br>1-shot / +feedback / final</th><th>Debug<br>line found / fixed</th><th>LLM calls</th><th>False alarms</th></tr>
+<tr><td><a href='#alu8'>alu8</a></td><td>easy</td><td><span class='ok'>yes</span> 4/4 / <span class='ok'>yes</span> 4/4</td><td>100.0% / 100.0%</td><td>12 / 12 / 12 of 12</td><td>4/4 / 4/4</td><td>5</td><td>0</td></tr>
+<tr><td><a href='#updown_counter'>updown_counter</a></td><td>easy</td><td><span class='no'>no</span> 1/6 / <span class='no'>no</span> 3/6</td><td>57.1% / 100.0%</td><td>4 / 5 / 5 of 12</td><td>4/4 / 3/4</td><td>14</td><td>0</td></tr>
+<tr><td><a href='#seq_detector'>seq_detector</a></td><td>easy</td><td><span class='no'>no</span> 1/5 / <span class='ok'>yes</span> 5/5</td><td>33.3% / 100.0%</td><td>2 / 12 / 12 of 12</td><td>3/4 / 4/4</td><td>8</td><td>0</td></tr>
+<tr><td><a href='#sync_fifo'>sync_fifo</a></td><td>medium</td><td><span class='no'>no</span> 0/0 / <span class='ok'>yes</span> 5/5</td><td>n/a / 100.0%</td><td>0 / 12 / 12 of 12</td><td>4/4 / 4/4</td><td>7</td><td>0</td></tr>
+<tr><td><a href='#rr_arbiter'>rr_arbiter</a></td><td>medium</td><td><span class='ok'>yes</span> 5/5 / <span class='ok'>yes</span> 5/5</td><td>100.0% / 100.0%</td><td>12 / 12 / 12 of 12</td><td>3/4 / 3/4</td><td>7</td><td>0</td></tr>
+<tr><td><a href='#crc8'>crc8</a></td><td>medium</td><td><span class='no'>no</span> 1/5 / <span class='ok'>yes</span> 5/5</td><td>83.3% / 100.0%</td><td>11 / 12 / 12 of 12</td><td>4/4 / 4/4</td><td>6</td><td>0</td></tr>
+<tr><td><a href='#sat_mac'>sat_mac</a></td><td>medium</td><td><span class='ok'>yes</span> 5/5 / <span class='ok'>yes</span> 5/5</td><td>100.0% / 100.0%</td><td>11 / 11 / 11 of 12</td><td>4/4 / 4/4</td><td>5</td><td>0</td></tr>
+<tr><td><a href='#uart_tx'>uart_tx</a></td><td>hard</td><td><span class='ok'>yes</span> 6/6 / <span class='ok'>yes</span> 6/6</td><td>100.0% / 100.0%</td><td>11 / 11 / 11 of 12</td><td>3/4 / 3/4</td><td>7</td><td>0</td></tr>
+<tr><td><a href='#spi_master'>spi_master</a></td><td>hard</td><td><span class='no'>no</span> 2/4 / <span class='no'>no</span> 3/4</td><td>91.7% / 91.7%</td><td>2 / 11 / 11 of 12</td><td>3/4 / 3/4</td><td>15</td><td>0</td></tr>
+<tr><td><a href='#apb_regs'>apb_regs</a></td><td>hard</td><td><span class='no'>no</span> 1/4 / <span class='no'>no</span> 2/4</td><td>92.3% / 92.3%</td><td>2 / 2 / 2 of 12</td><td>2/2 / 2/2</td><td>10</td><td>0</td></tr>
+</table></div>
+<h2 id='alu8'>alu8</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>pass (4/4 tests)</td><td>100.0%</td><td></td></tr>
+</table></div>
+<details><summary>Final testbench (tb_00.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for alu8:
+1. Combinational verification model:
+   - Python reference model that precisely mirrors the specification for all 8 operations (0 to 7).
+2. Exhaustive corner-case checks:
+   - ADD: zero inputs, max inputs, carry generation, overflow cases (positive+positive-&gt;negative, negative+negative-&gt;positive).
+   - SUB: zero inputs, equal inputs, borrow generation (a &lt; b), overflow cases (positive-negative-&gt;negative, negative-positive-&gt;positive).
+   - Bitwise operations (AND, OR, XOR): pattern checks, mask operations, all zeros, all ones.
+   - Shifts (SHL, SHR): shift amounts s from 0 to 7, verify shifted-out bits (carry) and results.
+   - SLT (Signed Less Than): negative vs positive, positive vs negative, equal signed numbers, boundary values.
+3. Zero and Negative flags:
+   - Verify `zero` is active only when `y == 0`.
+   - Verify `negative` matches `y[7]`.
+4. Constrained-random verification:
+   - Apply thousands of random test vectors across all operations using a fixed seed (`random.Random(1)`).
+&quot;&quot;&quot;
+
+import cocotb
+from cocotb.triggers import Timer
+import random
+
+class ALU8RefModel:
+    def step(self, a, b, op):
+        # Ensure values are within 8-bit unsigned
+        a_u = a &amp; 0xFF
+        b_u = b &amp; 0xFF
+        
+        # Signed 8-bit interpretations (two&#x27;s complement)
+        a_s = a_u if a_u &lt; 128 else a_u - 256
+        b_s = b_u if b_u &lt; 128 else b_u - 256
+        
+        s = b_u &amp; 0x7
+        
+        carry = 0
+        overflow = 0
+        y = 0
+        
+        if op == 0:  # ADD
+            full_sum = a_u + b_u
+            y = full_sum &amp; 0xFF
+            carry = 1 if full_sum &gt; 255 else 0
+            # Overflow: same sign for a and b, different sign for y
+            y_s = y if y &lt; 128 else y - 256
+            if (a_s &gt;= 0 and b_s &gt;= 0 and y_s &lt; 0) or (a_s &lt; 0 and b_s &lt; 0 and y_s &gt;= 0):
+                overflow = 1
+                
+        elif op == 1:  # SUB
+            full_sub = a_u - b_u
+            y = full_sub &amp; 0xFF
+            carry = 1 if a_u &lt; b_u else 0
+            # Overflow: different signs for a and b, sign of y differs from a
+            y_s = y if y &lt; 128 else y - 256
+            if (a_s &gt;= 0 and b_s &lt; 0 and y_s &lt; 0) or (a_s &lt; 0 and b_s &gt;= 0 and y_s &gt;= 0):
+                overflow = 1
+                
+        elif op == 2:  # AND
+            y = (a_u &amp; b_u) &amp; 0xFF
+            carry = 0
+            overflow = 0
+            
+        elif op == 3:  # OR
+            y = (a_u | b_u) &amp; 0xFF
+            carry = 0
+            overflow = 0
+            
+        elif op == 4:  # XOR
+            y = (a_u ^ b_u) &amp; 0xFF
+            carry = 0
+            overflow = 0
+            
+        elif op == 5:  # SHL
+            if s == 0:
+                y = a_u
+                carry = 0
+            else:
+                y = (a_u &lt;&lt; s) &amp; 0xFF
+                # last bit shifted out: bit a[8 - s]
+                carry = (a_u &gt;&gt; (8 - s)) &amp; 1
+            overflow = 0
+            
+        elif op == 6:  # SHR
+            if s == 0:
+                y = a_u
+                carry = 0
+            else:
+                y = (a_u &gt;&gt; s) &amp; 0xFF
+                # last bit shifted out: bit a[s - 1]
+                carry = (a_u &gt;&gt; (s - 1)) &amp; 1
+            overflow = 0
+            
+        elif op == 7:  # SLT
+            y = 1 if a_s &lt; b_s else 0
+            carry = 0
+            overflow = 0
+            
+        zero = 1 if y == 0 else 0
+        negative = 1 if (y &amp; 0x80) else 0
+        
+        return y, carry, overflow, zero, negative
+
+async def drive_and_check(dut, a, b, op, ref_model):
+    dut.a.value = a
+    dut.b.value = b
+    dut.op.value = op
+    
+    # Combinational settling delay
+    await Timer(1, units=&quot;ns&quot;)
+    
+    exp_y, exp_carry, exp_overflow, exp_zero, exp_negative = ref_model.step(a, b, op)
+    
+    got_y = int(dut.y.value)
+    got_carry = int(dut.carry.value)
+    got_overflow = int(dut.overflow.value)
+    got_zero = int(dut.zero.value)
+    got_negative = int(dut.negative.value)
+    
+    assert got_y == exp_y, f&quot;Mismatch on OP {op} (a={a}, b={b}): y got {got_y}, expected {exp_y}&quot;
+    assert got_carry == exp_carry, f&quot;Mismatch on OP {op} (a={a}, b={b}): carry got {got_carry}, expected {exp_carry}&quot;
+    assert got_overflow == exp_overflow, f&quot;Mismatch on OP {op} (a={a}, b={b}): overflow got {got_overflow}, expected {exp_overflow}&quot;
+    assert got_zero == exp_zero, f&quot;Mismatch on OP {op} (a={a}, b={b}): zero got {got_zero}, expected {exp_zero}&quot;
+    assert got_negative == exp_negative, f&quot;Mismatch on OP {op} (a={a}, b={b}): negative got {got_negative}, expected {exp_negative}&quot;
+
+@cocotb.test()
+async def test_alu_directed_corner_cases(dut):
+    &quot;&quot;&quot;Test specific corner cases for all operations.&quot;&quot;&quot;
+    ref = ALU8RefModel()
+    
+    corner_values = [0x00, 0x01, 0x7F, 0x80, 0xFF, 0x55, 0xAA]
+    
+    for op in range(8):
+        for a in corner_values:
+            for b in corner_values:
+                await drive_and_check(dut, a, b, op, ref)
+
+@cocotb.test()
+async def test_alu_shift_edge_cases(dut):
+    &quot;&quot;&quot;Specifically test shift operations (SHL, SHR) with various shift amounts (s from 0 to 7).&quot;&quot;&quot;
+    ref = ALU8RefModel()
+    
+    test_patterns = [0x01, 0x80, 0xAA, 0x55, 0xFF, 0x0F, 0xF0]
+    for op in [5, 6]:
+        for a in test_patterns:
+            for b_val in range(8):
+                await drive_and_check(dut, a, b_val, op, ref)
+
+@cocotb.test()
+async def test_alu_signed_comparison(dut):
+    &quot;&quot;&quot;Test SLT (Signed Less Than) thoroughly with positive and negative numbers.&quot;&quot;&quot;
+    ref = ALU8RefModel()
+    
+    # Test cases covering negative/positive boundaries
+    signed_vals = [-128, -127, -1, 0, 1, 126, 127]
+    for val_a in signed_vals:
+        for val_b in signed_vals:
+            # Convert to unsigned 8-bit for inputs
+            a = val_a &amp; 0xFF
+            b = val_b &amp; 0xFF
+            await drive_and_check(dut, a, b, 7, ref)
+
+@cocotb.test()
+async def test_alu_random(dut):
+    &quot;&quot;&quot;Run constrained-random tests across all operations.&quot;&quot;&quot;
+    ref = ALU8RefModel()
+    rng = random.Random(1)
+    
+    for _ in range(3000):
+        a = rng.randint(0, 255)
+        b = rng.randint(0, 255)
+        op = rng.randint(0, 7)
+        await drive_and_check(dut, a, b, op, ref)
+</code></pre></details>
+<details><summary>Bug alu8_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 13) — <span class='ok'>fixed</span></summary><p>Injected: <code>wire [8:0] sum  = {1&#x27;b0, a} + {1&#x27;b0, b};</code> → <code>wire [8:0] sum  = {1&#x27;b0, a} - {1&#x27;b0, b};</code></p><p>Agent's guesses for the faulty line: [13] · attempts: 1</p><p><b>Attempt 1:</b> Line 13 defines &#x27;sum&#x27; using subtraction ({1&#x27;b0, a} - {1&#x27;b0, b}) instead of addition ({1&#x27;b0, a} + {1&#x27;b0, b}), which breaks the ADD operation by performing a subtraction instead.<br><code>wire [8:0] sum  = {1&#x27;b0, a} + {1&#x27;b0, b};</code></p></details>
+<details><summary>Bug alu8_m001: &#x27;|&#x27; replaced by &#x27;&amp;&#x27; (line 33) — <span class='ok'>fixed</span></summary><p>Injected: <code>3&#x27;d3: y = a | b;                              // OR</code> → <code>3&#x27;d3: y = a &amp; b;                              // OR</code></p><p>Agent's guesses for the faulty line: [33] · attempts: 1</p><p><b>Attempt 1:</b> OP 3 is OR, but line 33 implements AND (`a &amp; b`) instead of OR (`a | b`), breaking the specification for the OR operation.<br><code>3&#x27;d3: y = a | b;                              // OR</code></p></details>
+<details><summary>Bug alu8_m003: &#x27;&amp;&amp;&#x27; replaced by &#x27;||&#x27; (line 30) — <span class='ok'>fixed</span></summary><p>Injected: <code>overflow = (a[7] != b[7]) &amp;&amp; (diff[7] != a[7]);</code> → <code>overflow = (a[7] != b[7]) || (diff[7] != a[7]);</code></p><p>Agent's guesses for the faulty line: [30] · attempts: 1</p><p><b>Attempt 1:</b> For SUB (op 1), the overflow condition is incorrect. It currently uses a logical OR `(a[7] != b[7]) || (diff[7] != a[7])`, but signed overflow for subtraction occurs when `a` and `b` have *different* sign bits and the sign bit of `y` differs from `a`, which corresponds to `(a[7] != b[7]) &amp;&amp; (diff[7] != a[7])` according to the specification.<br><code>overflow = (a[7] != b[7]) &amp;&amp; (diff[7] != a[7]);</code></p></details>
+<details><summary>Bug alu8_m004: &#x27;&lt;&#x27; replaced by &#x27;&lt;=&#x27; (line 37) — <span class='ok'>fixed</span></summary><p>Injected: <code>default: y = {7&#x27;d0, $signed(a) &lt; $signed(b)}; // SLT (signed)</code> → <code>default: y = {7&#x27;d0, $signed(a) &lt;= $signed(b)}; // SLT (signed)</code></p><p>Agent's guesses for the faulty line: [37] · attempts: 1</p><p><b>Attempt 1:</b> Line 37 uses `&lt;=` (less-than-or-equal) instead of `&lt;` (strictly less than) for the SLT (Signed Less Than) operation, causing `a &lt; b` to evaluate incorrectly as true when `a == b` (e.g., `a=0, b=0` and `a=128, b=128`), violating the SLT specification.<br><code>default: y = {7&#x27;d0, $signed(a) &lt; $signed(b)}; // SLT (signed)</code></p></details>
+<h2 id='updown_counter'>updown_counter</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>fail (1/6 tests)</td><td></td><td></td></tr>
+<tr><td>1</td><td>fix</td><td>fail (3/6 tests)</td><td></td><td>[testbench] The reference model evaluated the combinatorial output `zero` based on the old state before the clock edge instead of the updated registered `self.count` state.</td></tr>
+<tr><td>2</td><td>fix</td><td>fail (3/6 tests)</td><td></td><td>[testbench] The testbench reference model incorrectly defined terminal count (`tc`) when `count` already exceeds `max_val` due to a lowered `max_val`, or during wrap conditions where the reference model&#x27;s `tc` expression didn&#x27;t match the DUT&#x27;s combinational logic for `tc` when `count &gt;= max_val` or `count == 0`</td></tr>
+<tr><td>3</td><td>fix</td><td>fail (3/6 tests)</td><td></td><td>[testbench] The reference model evaluated `tc` assuming it should be 0 when `count == 0` during down-counting or when `count &gt;= max_val` during up-counting, whereas the specification states `tc` equals 1 when the *next* enabled count step will wrap (which happens when `count == 0` for down-counting and `count &gt;</td></tr>
+<tr><td>4</td><td>fix</td><td>fail (3/6 tests)</td><td></td><td>[testbench] The reference model evaluated `tc` using the state *after* the clock edge rather than the current state before the edge, and the reference model&#x27;s `tc` formula was missing the condition for when `count &gt; max_val` during up counting.</td></tr>
+<tr><td>4</td><td>fix</td><td>— </td><td></td><td>[testbench] The testbench reference model incorrectly computes `tc` when `en` is low (en=0), requiring `en` to be true for `tc` to be asserted. However, according to the specification and the DUT, `tc` depends only on the current inputs (`en`, `load`, `up`, `max_val`) and `count`, where `tc` = 1 when the next e</td></tr>
+<tr><td>4</td><td>fix</td><td>— </td><td></td><td>[testbench] The reference model incorrectly required `en` to be 1 for `tc` to be asserted, but the DUT asserts `tc` combinational from inputs and count whenever a wrap would occur on the next enabled step (`en` and not `load` and `(up &amp; (count &gt;= max_val) | (~up &amp; (count == 0)))`). Wait, looking at the spec: &#x27;t</td></tr>
+<tr><td>5</td><td>fix</td><td>fail (3/6 tests)</td><td></td><td>[testbench] The testbench reference model incorrectly set `tc = 0` when `en=0`, but the DUT&#x27;s combinational `tc` logic evaluates based on `en=1` and `load=0` regardless of whether `en` is actually asserted in the current test cycle, or the reference model&#x27;s `tc` check fails when `en=0` because the DUT computes </td></tr>
+</table></div>
+<details><summary>Final testbench (tb_05.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for updown_counter:
+1. Asynchronous active-low reset: `rst_n` forces `count` to 0 immediately.
+2. Synchronous load with clamping: `load` sets `count` to `min(d, max_val)`, taking priority over counting.
+3. Up counting and wrapping: increments normally, wraps to 0 when `count &gt;= max_val`.
+4. Down counting and wrapping: decrements normally, wraps to `max_val` when `count == 0`.
+5. Hold state: when `en` = 0 and `load` = 0, `count` remains unchanged.
+6. Dynamic `max_val` changes: handles `max_val` alterations correctly, including when `count &gt; max_val`.
+7. Combinational outputs (`zero` and `tc`): checked against specification on every cycle using a reference model.
+8. Constrained-random stimulus: long randomized test vectors to uncover corner cases.
+&quot;&quot;&quot;
+
+import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+
+
+class CounterRefModel:
+    def __init__(self):
+        self.count = 0
+
+    def step(self, rst_n, en, up, load, d, max_val):
+        if not rst_n:
+            self.count = 0
+            zero = 1 if self.count == 0 else 0
+            tc = 0
+            return self.count, tc, zero
+
+        # Combinatorial outputs depend on current self.count and inputs *before* state update
+        if en and not load:
+            if up:
+                tc = 1 if self.count &gt;= max_val else 0
+            else:
+                tc = 1 if self.count == 0 else 0
+        else:
+            tc = 0
+
+        # State update logic (priority order)
+        if load:
+            self.count = d if d &lt;= max_val else max_val
+        elif en:
+            if up:
+                if self.count &gt;= max_val:
+                    self.count = 0
+                else:
+                    self.count = self.count + 1
+            else:
+                if self.count == 0:
+                    self.count = max_val
+                else:
+                    self.count = self.count - 1
+        else:
+            # hold
+            pass
+
+        # Keep within 8 bits
+        self.count &amp;= 0xFF
+        
+        # zero depends on the newly updated count (registered output)
+        zero = 1 if self.count == 0 else 0
+        
+        return self.count, tc, zero
+
+
+async def run_cycle(dut, ref, rst_n, en, up, load, d, max_val):
+    # 1. Capture current inputs before falling edge
+    curr_rst_n = int(dut.rst_n.value) if dut.rst_n.value.is_resolvable else 0
+    curr_en = int(dut.en.value) if dut.en.value.is_resolvable else 0
+    curr_up = int(dut.up.value) if dut.up.value.is_resolvable else 0
+    curr_load = int(dut.load.value) if dut.load.value.is_resolvable else 0
+    curr_d = int(dut.d.value) if dut.d.value.is_resolvable else 0
+    curr_max = int(dut.max_val.value) if dut.max_val.value.is_resolvable else 0
+
+    # Get expected outputs for current cycle using model before update
+    expected_count, expected_tc, expected_zero = ref.step(
+        curr_rst_n, curr_en, curr_up, curr_load, curr_d, curr_max
+    )
+
+    # Check combinational outputs and previous cycle&#x27;s registered count during ReadOnly phase
+    await ReadOnly()
+    got_count = int(dut.count.value)
+    got_tc = int(dut.tc.value)
+    got_zero = int(dut.zero.value)
+
+    assert got_count == expected_count, f&quot;Count mismatch: got {got_count}, expected {expected_count}&quot;
+    assert got_zero == expected_zero, f&quot;Zero mismatch: got {got_zero}, expected {expected_zero}&quot;
+    assert got_tc == expected_tc, f&quot;TC mismatch: got {got_tc}, expected {expected_tc} (count={got_count}, max_val={curr_max}, en={curr_en}, up={curr_up}, load={curr_load})&quot;
+
+    # 2. Drive new inputs at falling edge
+    await FallingEdge(dut.clk)
+    dut.rst_n.value = rst_n
+    dut.en.value = en
+    dut.up.value = up
+    dut.load.value = load
+    dut.d.value = d
+    dut.max_val.value = max_val
+
+
+@cocotb.test()
+async def test_reset_and_hold(dut):
+    &quot;&quot;&quot;Test asynchronous reset and hold behavior.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CounterRefModel()
+
+    # Apply async reset
+    dut.rst_n.value = 0
+    dut.en.value = 0
+    dut.up.value = 1
+    dut.load.value = 0
+    dut.d.value = 50
+    dut.max_val.value = 10
+    await Timer(15, units=&quot;ns&quot;)
+
+    # Check reset state
+    await ReadOnly()
+    assert int(dut.count.value) == 0
+    assert int(dut.zero.value) == 1
+
+    # Release reset, en=0, load=0 -&gt; should hold at 0
+    for _ in range(5):
+        await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=0, d=0, max_val=10)
+    await ClockCycles(dut.clk, 1)
+
+
+@cocotb.test()
+async def test_load_and_clamping(dut):
+    &quot;&quot;&quot;Test synchronous load and max_val clamping.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CounterRefModel()
+
+    # Reset
+    dut.rst_n.value = 0
+    dut.en.value = 0
+    dut.up.value = 1
+    dut.load.value = 0
+    dut.d.value = 0
+    dut.max_val.value = 100
+    await Timer(15, units=&quot;ns&quot;)
+
+    # Release reset and load valid value (d &lt;= max_val)
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=1, d=45, max_val=100)
+    # Load with d &gt; max_val (should clamp to max_val)
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=1, d=200, max_val=50)
+    # Load with max_val changing dynamically
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=1, d=30, max_val=20) # clamps to 20
+    await ClockCycles(dut.clk, 1)
+
+
+@cocotb.test()
+async def test_up_counting_and_wrapping(dut):
+    &quot;&quot;&quot;Test up counting and wrapping at max_val, plus tc generation.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CounterRefModel()
+
+    # Reset
+    dut.rst_n.value = 0
+    dut.en.value = 0
+    dut.up.value = 1
+    dut.load.value = 0
+    dut.d.value = 0
+    dut.max_val.value = 5
+    await Timer(15, units=&quot;ns&quot;)
+
+    # Release reset and load 3
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=1, d=3, max_val=5)
+    
+    # Enable up counting from 3 to 5, wrap to 0, then 1
+    # Count = 3, en=1, up=1, max=5 -&gt; tc=0
+    await run_cycle(dut, ref, rst_n=1, en=1, up=1, load=0, d=0, max_val=5)
+    # Count = 4, en=1, up=1, max=5 -&gt; tc=0
+    await run_cycle(dut, ref, rst_n=1, en=1, up=1, load=0, d=0, max_val=5)
+    # Count = 5, en=1, up=1, max=5 -&gt; tc should be 1 (about to wrap)
+    await run_cycle(dut, ref, rst_n=1, en=1, up=1, load=0, d=0, max_val=5)
+    # Count wraps to 0
+    await run_cycle(dut, ref, rst_n=1, en=1, up=1, load=0, d=0, max_val=5)
+    # Count = 1
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=0, d=0, max_val=5)
+    await ClockCycles(dut.clk, 1)
+
+
+@cocotb.test()
+async def test_down_counting_and_wrapping(dut):
+    &quot;&quot;&quot;Test down counting and wrapping to max_val when count == 0.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CounterRefModel()
+
+    # Reset
+    dut.rst_n.value = 0
+    dut.en.value = 0
+    dut.up.value = 0
+    dut.load.value = 0
+    dut.d.value = 0
+    dut.max_val.value = 3
+    await Timer(15, units=&quot;ns&quot;)
+
+    # Load 2
+    await run_cycle(dut, ref, rst_n=1, en=0, up=0, load=1, d=2, max_val=3)
+    # Count = 2, down count to 0, wrap to max_val (3)
+    await run_cycle(dut, ref, rst_n=1, en=1, up=0, load=0, d=0, max_val=3) # count -&gt; 1
+    await run_cycle(dut, ref, rst_n=1, en=1, up=0, load=0, d=0, max_val=3) # count -&gt; 0, tc should be 1
+    await run_cycle(dut, ref, rst_n=1, en=1, up=0, load=0, d=0, max_val=3) # count wraps to 3
+    await run_cycle(dut, ref, rst_n=1, en=0, up=0, load=0, d=0, max_val=3) # hold at 3
+    await ClockCycles(dut.clk, 1)
+
+
+@cocotb.test()
+async def test_dynamic_max_val_overflow(dut):
+    &quot;&quot;&quot;Test lowering max_val below current count and subsequent counting up.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CounterRefModel()
+
+    # Reset
+    dut.rst_n.value = 0
+    dut.en.value = 0
+    dut.up.value = 1
+    dut.load.value = 0
+    dut.d.value = 0
+    dut.max_val.value = 10
+    await Timer(15, units=&quot;ns&quot;)
+
+    # Load 8
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=1, d=8, max_val=10)
+    # Lower max_val to 5 while count is 8 (count &gt; max_val)
+    await run_cycle(dut, ref, rst_n=1, en=0, up=1, load=0, d=0, max_val=5)
+    # Enable up counting: since count (8) &gt;= max_val (5), next step should wrap to 0 immediately
+    await run_cycle(dut, ref, rst_n=1, en=1, up=1, load=0, d=0, max_val=5)
+    await ClockCycles(dut.clk, 1)
+
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Constrained-random verification test over multiple cycles.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CounterRefModel()
+    rng = random.Random(42)
+
+    # Reset
+    dut.rst_n.value = 0
+    dut.en.value = 0
+    dut.up.value = 0
+    dut.load.value = 0
+    dut.d.value = 0
+    dut.max_val.value = 10
+    await Timer(15, units=&quot;ns&quot;)
+
+    for _ in range(1500):
+        rst_n = rng.choices([0, 1], weights=[1, 99])[0] # rare reset
+        en = rng.choice([0, 1])
+        up = rng.choice([0, 1])
+        load = rng.choices([0, 1], weights=[85, 15])[0]
+        d = rng.randint(0, 255)
+        max_val = rng.randint(1, 255)
+
+        await run_cycle(dut, ref, rst_n, en, up, load, d, max_val)
+
+    await ClockCycles(dut.clk, 5)
+</code></pre></details>
+<details><summary>Bug updown_counter_m001: condition (!rst_n) inverted (line 16) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (!rst_n) begin</code> → <code>if (!(!rst_n)) begin</code></p><p>Agent's guesses for the faulty line: [16] · attempts: 1</p><p><b>Attempt 1:</b> The asynchronous reset condition uses a double negation (!(!rst_n)) which evaluates to rst_n instead of !rst_n, causing the reset to be active-high instead of active-low, breaking the asynchronous reset specification.<br><code>if (!rst_n) begin</code></p></details>
+<details><summary>Bug updown_counter_m003: assignment &#x27;count &lt;= 8&#x27;d0;&#x27; removed (line 17) — <span class='ok'>fixed</span></summary><p>Injected: <code>count &lt;= 8&#x27;d0;</code> → <code>;</code></p><p>Agent's guesses for the faulty line: [17] · attempts: 1</p><p><b>Attempt 1:</b> The asynchronous reset block leaves count unassigned (empty semicolon) when rst_n is low, resulting in &#x27;x&#x27; values on the count register. According to the specification, while rst_n is 0, count must be 0 immediately.<br><code>count &lt;= 8&#x27;d0;</code></p></details>
+<details><summary>Bug updown_counter_m007: condition (en) inverted (line 20) — <span class='no'>not fixed</span></summary><p>Injected: <code>end else if (en) begin</code> → <code>end else if (!(en)) begin</code></p><p>Agent's guesses for the faulty line: [20, 20, 20] · attempts: 3</p><p><b>Attempt 1:</b> Line 20 checks `else if (!(en))` instead of `else if (en)`, which causes the counter to execute up/down counting when `en` is low and hold when `en` is high, violating the count enable (`en`) specification.<br><code>} else if (en) begin</code></p><p><b>Attempt 2:</b> Line 20 checks `else if (!(en))`, which causes the counter to only increment, decrement, or wrap when `en` is 0 (disabled), instead of counting when `en` is 1 (enabled). This violates the requirement that counting occurs when `en` is active.<br><code>} else if (en) begin</code></p><p><b>Attempt 3:</b> Line 20 checks `else if (!(en))`, which causes the counter to only increment, decrement, or wrap when `en` is 0 (disabled), violating the specification that counting occurs when `en` is 1.<br><code>} else if (en) begin</code></p></details>
+<details><summary>Bug updown_counter_m008: constant 8&#x27;d0 changed to 8&#x27;d1 (line 17) — <span class='ok'>fixed</span></summary><p>Injected: <code>count &lt;= 8&#x27;d0;</code> → <code>count &lt;= 8&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [17] · attempts: 1</p><p><b>Attempt 1:</b> The asynchronous reset sets `count` to `8&#x27;d1` instead of `8&#x27;d0`, violating the specification requirement that `count` is 0 while `rst_n` is 0.<br><code>count &lt;= 8&#x27;d0;</code></p></details>
+<h2 id='seq_detector'>seq_detector</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>fail (1/5 tests)</td><td></td><td></td></tr>
+<tr><td>1</td><td>fix</td><td>pass (5/5 tests)</td><td>100.0%</td><td>[testbench] The helper function reset_dut leaves rst=0 inside a ReadOnly phase or right after a RisingEdge without waiting for FallingEdge, causing subsequent signal drives to occur during ReadOnly phase.</td></tr>
+</table></div>
+<details><summary>Final testbench (tb_01.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for seq_detector:
+1. Reset behavior: Verify that &#x27;rst&#x27; active-high clears &#x27;match&#x27; and &#x27;count&#x27; to 0 and resets state.
+2. Din_valid gating: Verify that when &#x27;din_valid&#x27; = 0, bits are ignored (don&#x27;t affect matching or break sequences).
+3. Basic pattern detection: Verify simple &quot;1011&quot; sequence detection and &#x27;match&#x27; pulse generation (1 cycle).
+4. Overlapping patterns: Verify that &quot;1011011&quot; correctly generates two matches.
+5. Consecutive overlapping patterns: Verify &quot;10111011&quot; yields two matches.
+6. Count saturation: Verify that &#x27;count&#x27; increments correctly on each match and saturates at 255.
+7. Random stimulus testing: Use a constrained-random bit stream with variable &#x27;din_valid&#x27; toggling,
+   compared cycle-by-cycle against a Python reference model.
+&quot;&quot;&quot;
+
+import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, ClockCycles
+
+class SeqDetectorRefModel:
+    def __init__(self):
+        self.state = 0  # number of matched bits in &quot;1011&quot; (0 to 3)
+        self.count = 0
+        self.match = 0
+
+    def step(self, rst, din, din_valid):
+        if rst:
+            self.state = 0
+            self.count = 0
+            self.match = 0
+            return self.match, self.count
+
+        # match is a registered output for one cycle
+        self.match = 0
+
+        if din_valid:
+            bit = din &amp; 1
+            if self.state == 0:
+                if bit == 1:
+                    self.state = 1
+                else:
+                    self.state = 0
+            elif self.state == 1:
+                if bit == 0:
+                    self.state = 2
+                else:
+                    self.state = 1  # remaining in state 1 if bit is 1 (e.g. 11)
+            elif self.state == 2:
+                if bit == 1:
+                    self.state = 3
+                else:
+                    self.state = 0
+            elif self.state == 3:
+                if bit == 1:
+                    # Match completed! Overlap: trailing &#x27;1&#x27; is the first bit of next occurrence
+                    self.match = 1
+                    if self.count &lt; 255:
+                        self.count += 1
+                    self.state = 1
+                else:
+                    if bit == 0:
+                        self.state = 2
+                    else:
+                        self.state = 1
+
+        return self.match, self.count
+
+
+async def reset_dut(dut):
+    await FallingEdge(dut.clk)
+    dut.rst.value = 1
+    dut.din.value = 0
+    dut.din_valid.value = 0
+    await RisingEdge(dut.clk)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+
+
+@cocotb.test()
+async def test_reset(dut):
+    &quot;&quot;&quot;Test reset clears outputs and internal state.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    
+    # Initialize
+    dut.rst.value = 1
+    dut.din.value = 0
+    dut.din_valid.value = 0
+    await ClockCycles(dut.clk, 2)
+    
+    await ReadOnly()
+    assert int(dut.match.value) == 0, f&quot;Match not 0 after reset: got {int(dut.match.value)}&quot;
+    assert int(dut.count.value) == 0, f&quot;Count not 0 after reset: got {int(dut.count.value)}&quot;
+
+
+@cocotb.test()
+async def test_din_valid_gating(dut):
+    &quot;&quot;&quot;Test that din_valid=0 ignores inputs completely.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SeqDetectorRefModel()
+    ref.step(1, 0, 0) # reset ref model
+    await reset_dut(dut)
+
+    # Send &quot;1011&quot; with din_valid=0 sprinkled around
+    stream = [
+        (1, 0),  # ignored
+        (1, 1),  # part of 1011 (state 1)
+        (0, 0),  # ignored
+        (0, 1),  # part of 1011 (state 2)
+        (1, 0),  # ignored
+        (1, 1),  # part of 1011 (state 3)
+        (1, 1),  # completes 1011 -&gt; match
+    ]
+
+    for din, valid in stream:
+        await FallingEdge(dut.clk)
+        dut.din.value = din
+        dut.din_valid.value = valid
+        
+        expected_match, expected_count = ref.step(0, din, valid)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.match.value) == expected_match, f&quot;Match mismatch on stream element ({din}, valid={valid}). Expected {expected_match}, got {int(dut.match.value)}&quot;
+        assert int(dut.count.value) == expected_count, f&quot;Count mismatch on stream element ({din}, valid={valid}). Expected {expected_count}, got {int(dut.count.value)}&quot;
+
+
+@cocotb.test()
+async def test_basic_and_overlapping(dut):
+    &quot;&quot;&quot;Test basic 1011 pattern and overlapping occurrences like 1011011.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SeqDetectorRefModel()
+    ref.step(1, 0, 0)
+    await reset_dut(dut)
+
+    # &quot;1011011&quot;
+    bits = [1, 0, 1, 1, 0, 1, 1]
+
+    for b in bits:
+        await FallingEdge(dut.clk)
+        dut.din.value = b
+        dut.din_valid.value = 1
+
+        expected_match, expected_count = ref.step(0, b, 1)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.match.value) == expected_match, f&quot;Match mismatch for bit {b}. Expected {expected_match}, got {int(dut.match.value)}&quot;
+        assert int(dut.count.value) == expected_count, f&quot;Count mismatch for bit {b}. Expected {expected_count}, got {int(dut.count.value)}&quot;
+
+
+@cocotb.test()
+async def test_count_saturation(dut):
+    &quot;&quot;&quot;Test that count saturates at 255 and never wraps.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SeqDetectorRefModel()
+    ref.step(1, 0, 0)
+    await reset_dut(dut)
+
+    # We need 260 matches. Each match can be achieved with &quot;1011&quot;.
+    sequence = [1, 0, 1, 1] + [0, 1, 1] * 260
+
+    for idx, b in enumerate(sequence):
+        await FallingEdge(dut.clk)
+        dut.din.value = b
+        dut.din_valid.value = 1
+
+        expected_match, expected_count = ref.step(0, b, 1)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.match.value) == expected_match, f&quot;Match mismatch at index {idx} (bit {b}). Expected {expected_match}, got {int(dut.match.value)}&quot;
+        assert int(dut.count.value) == expected_count, f&quot;Count mismatch at index {idx} (bit {b}). Expected {expected_count}, got {int(dut.count.value)}&quot;
+
+    assert int(dut.count.value) == 255, f&quot;Count did not saturate at 255, got {int(dut.count.value)}&quot;
+
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Constrained-random test of bit streams and valid flags with reference model check.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SeqDetectorRefModel()
+    ref.step(1, 0, 0)
+    await reset_dut(dut)
+
+    rng = random.Random(42)
+
+    # Run 5000 random cycles
+    for cycle in range(5000):
+        # Periodically reset to test reset robustness during random operation
+        if cycle == 2500:
+            await FallingEdge(dut.clk)
+            dut.rst.value = 1
+            dut.din.value = 0
+            dut.din_valid.value = 0
+            ref.step(1, 0, 0)
+            await RisingEdge(dut.clk)
+            await FallingEdge(dut.clk)
+            dut.rst.value = 0
+            continue
+
+        din = rng.choice([0, 1])
+        din_valid = rng.choices([0, 1], weights=[3, 7])[0] # 70% valid rate
+
+        await FallingEdge(dut.clk)
+        dut.din.value = din
+        dut.din_valid.value = din_valid
+
+        expected_match, expected_count = ref.step(0, din, din_valid)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.match.value) == expected_match, \
+            f&quot;Cycle {cycle}: Match mismatch (din={din}, valid={din_valid}). Expected {expected_match}, got {int(dut.match.value)}&quot;
+        assert int(dut.count.value) == expected_count, \
+            f&quot;Cycle {cycle}: Count mismatch (din={din}, valid={din_valid}). Expected {expected_count}, got {int(dut.count.value)}&quot;
+</code></pre></details>
+<details><summary>Bug seq_detector_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 39) — <span class='ok'>fixed</span></summary><p>Injected: <code>count &lt;= count + 8&#x27;d1;</code> → <code>count &lt;= count - 8&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [39] · attempts: 1</p><p><b>Attempt 1:</b> Line 39 decrements the count instead of incrementing it when a match occurs, violating the specification requirement that &#x27;count increments by 1 at the same edge where match is set to 1&#x27;.<br><code>count &lt;= count + 8&#x27;d1;</code></p></details>
+<details><summary>Bug seq_detector_m001: condition (rst) inverted (line 30) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (rst) begin</code> → <code>if (!(rst)) begin</code></p><p>Agent's guesses for the faulty line: [25, 25, 30] · attempts: 3</p><p><b>Attempt 1:</b> The default case in the state transition table incorrectly transitions to S2 (state for &#x27;10&#x27;) when din is 0, instead of returning to S0 when the pattern breaks, or properly handling other states. Specifically, the default case is hit for state S3 (value 2&#x27;d3), so when receiving a 0 in state S3 (i.e., failing &#x27;101&#x27;), it goes to S2 instead of S0.<br><code>default: next = din ? S1 : S0;</code></p><p><b>Attempt 2:</b> The default case in the next-state logic uses `din ? S1 : S2`, which maps the S3 state when `din=0` to S2 (incorrectly transitioning to &#x27;10&#x27; instead of returning to S0 or S1). This breaks the state machine sequence for &#x27;1011&#x27; detection, causing state S3 to misbehave and preventing matches from being detected.<br><code>default: next = din ? S1 : S0;</code></p><p><b>Attempt 3:</b> The synchronous reset condition checks `if (!(rst))`, but `rst` is defined as active-high (`rst = 1` asserts reset). Therefore, `!(rst)` evaluates to 0 when reset is asserted, so the design never enters the reset branch, leaving internal signals like `count` uninitialized (`x`) and preventing state machine initialization.<br><code>if (rst) begin</code></p></details>
+<details><summary>Bug seq_detector_m002: constant 8&#x27;hFF changed to 8&#x27;hFE (line 38) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (hit &amp;&amp; count != 8&#x27;hFF)</code> → <code>if (hit &amp;&amp; count != 8&#x27;hFE)</code></p><p>Agent's guesses for the faulty line: [38] · attempts: 1</p><p><b>Attempt 1:</b> Line 38 checks `count != 8&#x27;hFE` (which is 254) instead of `count != 8&#x27;hFF` (255), causing the count to stop incrementing at 254 instead of saturating at 255 as specified.<br><code>if (hit &amp;&amp; count != 8&#x27;hFF)</code></p></details>
+<details><summary>Bug seq_detector_m004: &#x27;&amp;&amp;&#x27; replaced by &#x27;||&#x27; (line 18) — <span class='ok'>fixed</span></summary><p>Injected: <code>wire      hit = din_valid &amp;&amp; (state == S3) &amp;&amp; din;</code> → <code>wire      hit = din_valid &amp;&amp; (state == S3) || din;</code></p><p>Agent's guesses for the faulty line: [18] · attempts: 1</p><p><b>Attempt 1:</b> Line 18 incorrectly computes the match/hit signal using a combinational expression `wire hit = din_valid &amp;&amp; (state == S3) || din;` which ignores `din_valid` for the `din` term and incorrectly asserts `hit` whenever `din` is high. It should be `wire hit = din_valid &amp;&amp; (state == S3) &amp;&amp; din;`, ensuring the match requires `din_valid` and that the final received bit is `1` while in state S3.<br><code>wire      hit = din_valid &amp;&amp; (state == S3) &amp;&amp; din;</code></p></details>
+<h2 id='sync_fifo'>sync_fifo</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>tb_error </td><td></td><td></td></tr>
+<tr><td>1</td><td>fix</td><td>fail (0/5 tests)</td><td></td><td>[testbench] A syntax error on line 121 (&#x27;await apply_res_and_model = None&#x27;) was introduced accidentally during testbench editing.</td></tr>
+<tr><td>2</td><td>fix</td><td>pass (5/5 tests)</td><td>100.0%</td><td>[testbench] The testbench attempts to assign a value to `dut.rst` immediately after an `await ReadOnly()` phase in `apply_reset` and across test cases, which violates cocotb&#x27;s rule that signals cannot be scheduled for write during a read-only phase.</td></tr>
+</table></div>
+<details><summary>Final testbench (tb_02.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for sync_fifo:
+1. Reset behavior: Verify FIFO becomes empty (count=0, empty=1, full=0, almost_full=0), 
+   and error flags (overflow, underflow) are cleared.
+2. Basic push and pop: Push data into an empty FIFO, verify dout reflects the pushed data 
+   immediately (first-word fall-through), count increments, and empty goes low.
+3. Simultaneous push and pop: Test pushing and popping at the same time when empty, 
+   when partially full, and when full. Verify count behavior and data correctness.
+4. Overflow condition: Try pushing into a full FIFO (without simultaneous pop), verify push 
+   is rejected and sticky `overflow` flag asserts and stays asserted.
+5. Underflow condition: Try popping from an empty FIFO, verify pop is rejected and sticky 
+   `underflow` flag asserts and stays asserted.
+6. Almost full flag: Verify `almost_full` asserts correctly when count &gt;= 6 and deasserts below 6.
+7. Constrained-random sequence: Run a randomized test with mixed push/pop requests, validating 
+   against a Python reference model on every single clock edge.
+&quot;&quot;&quot;
+
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+import random
+
+class FifoRefModel:
+    def __init__(self, depth=8):
+        self.depth = depth
+        self.buffer = []
+        self.count = 0
+        self.overflow = 0
+        self.underflow = 0
+
+    def step(self, rst, push, din, pop):
+        if rst:
+            self.buffer = []
+            self.count = 0
+            self.overflow = 0
+            self.underflow = 0
+            return
+
+        # Determine if pop is accepted
+        pop_accepted = pop and (self.count &gt; 0)
+        if pop and not pop_accepted:
+            self.underflow = 1
+
+        # Determine if push is accepted
+        # A full FIFO can accept a push if a pop is also accepted in the same cycle
+        full = (self.count == self.depth)
+        push_accepted = push and (not full or pop_accepted)
+        if push and not push_accepted:
+            self.overflow = 1
+
+        # Execute operations
+        if pop_accepted:
+            self.buffer.pop(0)
+            self.count -= 1
+
+        if push_accepted:
+            self.buffer.append(din &amp; 0xFF)
+            self.count += 1
+
+    @property
+    def empty(self):
+        return 1 if self.count == 0 else 0
+
+    @property
+    def full(self):
+        return 1 if self.count == self.depth else 0
+
+    @property
+    def almost_full(self):
+        return 1 if self.count &gt;= 6 else 0
+
+    @property
+    def dout(self):
+        if self.empty:
+            return 0  # Unspecified in spec, but DUT/model needs a value
+        return self.buffer[0]
+
+
+async def apply_reset(dut):
+    dut.rst.value = 1
+    dut.push.value = 0
+    dut.din.value = 0
+    dut.pop.value = 0
+    await FallingEdge(dut.clk)
+    await RisingEdge(dut.clk)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+
+
+@cocotb.test()
+async def test_reset(dut):
+    &quot;&quot;&quot;Test reset behavior and initial state.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    
+    # Apply reset
+    dut.rst.value = 1
+    dut.push.value = 1
+    dut.din.value = 0xAA
+    dut.pop.value = 1
+    await FallingEdge(dut.clk)
+    await RisingEdge(dut.clk)
+    
+    dut.rst.value = 0
+    await ReadOnly()
+
+    assert int(dut.count.value) == 0, f&quot;Expected count=0 after reset, got {int(dut.count.value)}&quot;
+    assert int(dut.empty.value) == 1, f&quot;Expected empty=1 after reset, got {int(dut.empty.value)}&quot;
+    assert int(dut.full.value) == 0, f&quot;Expected full=0 after reset, got {int(dut.full.value)}&quot;
+    assert int(dut.almost_full.value) == 0, f&quot;Expected almost_full=0 after reset, got {int(dut.almost_full.value)}&quot;
+    assert int(dut.overflow.value) == 0, f&quot;Expected overflow=0 after reset, got {int(dut.overflow.value)}&quot;
+    assert int(dut.underflow.value) == 0, f&quot;Expected underflow=0 after reset, got {int(dut.underflow.value)}&quot;
+
+
+@cocotb.test()
+async def test_basic_push_pop(dut):
+    &quot;&quot;&quot;Test basic pushing, first-word fall-through, popping, and count tracking.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = FifoRefModel()
+
+    await apply_reset(dut)
+    ref.step(rst=1, push=0, din=0, pop=0)
+    ref.step(rst=0, push=0, din=0, pop=0) # account for falling edge reset release
+
+    test_data = [0x10, 0x20, 0x30, 0x40]
+
+    # Push data items one by one
+    for val in test_data:
+        await FallingEdge(dut.clk)
+        dut.rst.value = 0
+        dut.push.value = 1
+        dut.din.value = val
+        dut.pop.value = 0
+        
+        ref.step(rst=0, push=1, din=val, pop=0)
+        
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.count.value) == ref.count, f&quot;Count mismatch: got {int(dut.count.value)}, expected {ref.count}&quot;
+        assert int(dut.empty.value) == ref.empty, f&quot;Empty mismatch&quot;
+        assert int(dut.full.value) == ref.full, f&quot;Full mismatch&quot;
+        assert int(dut.dout.value) == ref.dout, f&quot;Dout mismatch: got {int(dut.dout.value):02x}, expected {ref.dout:02x}&quot;
+
+    # Pop data items one by one
+    for expected_val in test_data:
+        # Check dout before pop (first-word fall-through)
+        await ReadOnly()
+        assert int(dut.dout.value) == ref.dout, f&quot;Fall-through dout mismatch before pop&quot;
+
+        await FallingEdge(dut.clk)
+        dut.push.value = 0
+        dut.pop.value = 1
+
+        ref.step(rst=0, push=0, din=0, pop=1)
+
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.count.value) == ref.count, f&quot;Count mismatch after pop: got {int(dut.count.value)}, expected {ref.count}&quot;
+        assert int(dut.empty.value) == ref.empty, f&quot;Empty mismatch after pop&quot;
+
+
+@cocotb.test()
+async def test_overflow_underflow(dut):
+    &quot;&quot;&quot;Test sticky overflow and underflow conditions.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = FifoRefModel()
+    await apply_reset(dut)
+    ref.step(rst=1, push=0, din=0, pop=0)
+    ref.step(rst=0, push=0, din=0, pop=0)
+
+    # Trigger Underflow first by popping empty FIFO
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+    dut.push.value = 0
+    dut.pop.value = 1
+    ref.step(rst=0, push=0, din=0, pop=1)
+
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+
+    assert int(dut.underflow.value) == 1, &quot;Underflow flag should be set&quot;
+    assert int(dut.overflow.value) == 0, &quot;Overflow flag should not be set yet&quot;
+
+    # Fill the FIFO to capacity (8 items)
+    for i in range(8):
+        await FallingEdge(dut.clk)
+        dut.push.value = 1
+        dut.din.value = i
+        dut.pop.value = 0
+        ref.step(rst=0, push=1, din=i, pop=0)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+    assert int(dut.full.value) == 1, &quot;FIFO should be full&quot;
+    assert int(dut.count.value) == 8, &quot;Count should be 8&quot;
+
+    # Try pushing into full FIFO -&gt; should cause Overflow
+    await FallingEdge(dut.clk)
+    dut.push.value = 1
+    dut.din.value = 0xFF
+    dut.pop.value = 0
+    ref.step(rst=0, push=1, din=0xFF, pop=0)
+
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+
+    assert int(dut.overflow.value) == 1, &quot;Overflow flag should be set&quot;
+    assert int(dut.underflow.value) == 1, &quot;Underflow flag should remain set (sticky)&quot;
+    assert int(dut.count.value) == 8, &quot;Count should remain 8&quot;
+
+
+@cocotb.test()
+async def test_simultaneous_push_pop(dut):
+    &quot;&quot;&quot;Test simultaneous push and pop operations across empty, partial, and full states.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = FifoRefModel()
+    await apply_reset(dut)
+    ref.step(rst=1, push=0, din=0, pop=0)
+    ref.step(rst=0, push=0, din=0, pop=0)
+
+    # 1. Push + Pop on empty FIFO (pop ignored, push accepted)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+    dut.push.value = 1
+    dut.din.value = 0x55
+    dut.pop.value = 1
+    ref.step(rst=0, push=1, din=0x55, pop=1)
+
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+
+    assert int(dut.count.value) == ref.count, f&quot;Count mismatch: got {int(dut.count.value)}, expected {ref.count}&quot;
+    assert int(dut.dout.value) == ref.dout, f&quot;Dout mismatch: got {int(dut.dout.value)}, expected {ref.dout}&quot;
+
+    # Fill FIFO up to 8 items
+    for i in range(7):
+        await FallingEdge(dut.clk)
+        dut.push.value = 1
+        dut.din.value = 0x60 + i
+        dut.pop.value = 0
+        ref.step(rst=0, push=1, din=0x60 + i, pop=0)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+    assert int(dut.full.value) == 1, &quot;FIFO should be full (count=8)&quot;
+
+    # 2. Push + Pop on full FIFO (both accepted, count stays 8)
+    await FallingEdge(dut.clk)
+    dut.push.value = 1
+    dut.din.value = 0x99
+    dut.pop.value = 1
+    ref.step(rst=0, push=1, din=0x99, pop=1)
+
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+
+    assert int(dut.count.value) == 8, f&quot;Count should stay 8 on simultaneous push/pop when full, got {int(dut.count.value)}&quot;
+    assert int(dut.full.value) == 1, &quot;FIFO should remain full&quot;
+    assert int(dut.dout.value) == ref.dout, &quot;Oldest element should have advanced&quot;
+
+
+@cocotb.test()
+async def test_almost_full_and_random(dut):
+    &quot;&quot;&quot;Constrained-random test checking almost_full flag and overall state tracking.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = FifoRefModel()
+    await apply_reset(dut)
+    ref.step(rst=1, push=0, din=0, pop=0)
+    ref.step(rst=0, push=0, din=0, pop=0)
+
+    rng = random.Random(42)
+
+    for cycle in range(1500):
+        push = rng.choice([0, 1, 1])  # slightly higher weight to push
+        pop = rng.choice([0, 1])
+        din = rng.randint(0, 255)
+
+        await FallingEdge(dut.clk)
+        dut.rst.value = 0
+        dut.push.value = push
+        dut.din.value = din
+        dut.pop.value = pop
+
+        ref.step(rst=0, push=push, din=din, pop=pop)
+
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        # Check all outputs against reference model on every cycle
+        assert int(dut.count.value) == ref.count, f&quot;[Cycle {cycle}] Count mismatch: got {int(dut.count.value)}, expected {ref.count}&quot;
+        assert int(dut.empty.value) == ref.empty, f&quot;[Cycle {cycle}] Empty mismatch: got {int(dut.empty.value)}, expected {ref.empty}&quot;
+        assert int(dut.full.value) == ref.full, f&quot;[Cycle {cycle}] Full mismatch: got {int(dut.full.value)}, expected {ref.full}&quot;
+        assert int(dut.almost_full.value) == ref.almost_full, f&quot;[Cycle {cycle}] Almost full mismatch: got {int(dut.almost_full.value)}, expected {ref.almost_full}&quot;
+        assert int(dut.overflow.value) == ref.overflow, f&quot;[Cycle {cycle}] Overflow mismatch: got {int(dut.overflow.value)}, expected {ref.overflow}&quot;
+        assert int(dut.underflow.value) == ref.underflow, f&quot;[Cycle {cycle}] Underflow mismatch: got {int(dut.underflow.value)}, expected {ref.underflow}&quot;
+        
+        if not ref.empty:
+            assert int(dut.dout.value) == ref.dout, f&quot;[Cycle {cycle}] Dout mismatch: got {int(dut.dout.value):02x}, expected {ref.dout:02x}&quot;
+</code></pre></details>
+<details><summary>Bug sync_fifo_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 47) — <span class='ok'>fixed</span></summary><p>Injected: <code>count &lt;= count + 4&#x27;d1;</code> → <code>count &lt;= count - 4&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [47] · attempts: 1</p><p><b>Attempt 1:</b> Line 47 incorrectly decrements count instead of incrementing it when only a push is accepted, violating the count update specification (&#x27;count increases by 1 when only a push is accepted&#x27;).<br><code>count &lt;= count + 4&#x27;d1;</code></p></details>
+<details><summary>Bug sync_fifo_m001: condition (push &amp;&amp; !do_push) inverted (line 50) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (push &amp;&amp; !do_push)</code> → <code>if (!(push &amp;&amp; !do_push))</code></p><p>Agent's guesses for the faulty line: [50] · attempts: 1</p><p><b>Attempt 1:</b> Line 50 uses `!(push &amp;&amp; !do_push)` which incorrectly sets `overflow` to 1 whenever `push` is low and `do_push` is false, instead of checking if a push was requested (`push`) but rejected (`!do_push`). This breaks the rule: &#x27;overflow becomes 1 when push = 1 but the push is rejected.&#x27;<br><code>if (push &amp;&amp; !do_push)</code></p></details>
+<details><summary>Bug sync_fifo_m002: constant 4&#x27;d8 changed to 4&#x27;d9 (line 24) — <span class='ok'>fixed</span></summary><p>Injected: <code>assign full        = (count == 4&#x27;d8);</code> → <code>assign full        = (count == 4&#x27;d9);</code></p><p>Agent's guesses for the faulty line: [24] · attempts: 1</p><p><b>Attempt 1:</b> Line 24 checks `count == 4&#x27;d9` for the `full` flag, but the FIFO depth is 8 and `count` reaches a maximum value of 8. Therefore `full` never asserts when the FIFO becomes full (count == 8).<br><code>assign full        = (count == 4&#x27;d8);</code></p></details>
+<details><summary>Bug sync_fifo_m003: assignment &#x27;underflow &lt;= 1&#x27;b0;&#x27; removed (line 40) — <span class='ok'>fixed</span></summary><p>Injected: <code>underflow &lt;= 1&#x27;b0;</code> → <code>;</code></p><p>Agent's guesses for the faulty line: [40] · attempts: 1</p><p><b>Attempt 1:</b> A stray semicolon on line 40 leaves &#x27;underflow&#x27; unassigned during reset, resulting in &#x27;x&#x27; during the reset test and failing assertions.<br><code>underflow &lt;= 1&#x27;b0;</code></p></details>
+<h2 id='rr_arbiter'>rr_arbiter</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>pass (5/5 tests)</td><td>100.0%</td><td></td></tr>
+</table></div>
+<details><summary>Final testbench (tb_00.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for rr_arbiter:
+1. Reset Behavior: Verify that after reset, grant = 0, owner = 0, busy = 0, and internal &#x27;last&#x27; = 3.
+2. Single Requester: Verify that any single requester gets the grant and keeps it as long as req is high.
+3. Round-Robin Ordering: Verify proper round-robin priority order (last + 1, last + 2, last + 3, last + 4 modulo 4) when multiple requests are active simultaneously.
+4. Retention (Keep): Verify that an owner keeps the bus as long as its request remains high, even if higher priority requests appear.
+5. Hand-Over: Verify seamless hand-over with no idle cycle when the current owner drops its request and another request is pending.
+6. Drop to Idle: Verify that when all requests drop, grant goes to 0, busy goes to 0, while owner and last retain their values.
+7. Constrained-Random Test: Drive randomized request patterns across multiple cycles and verify against the Python reference model.
+&quot;&quot;&quot;
+
+import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+
+class RefModel:
+    def __init__(self):
+        self.last = 3
+        self.grant = 0
+        self.owner = 0
+        self.busy = 0
+
+    def step(self, rst, req):
+        if rst:
+            self.last = 3
+            self.grant = 0
+            self.owner = 0
+            self.busy = 0
+            return
+
+        # 1. Keep: if grant is non-zero and req[owner] == 1
+        keep = False
+        if self.grant != 0:
+            owner_bit = (self.grant &gt;&gt; self.owner) &amp; 1
+            if owner_bit == 1 and ((req &gt;&gt; self.owner) &amp; 1) == 1:
+                keep = True
+
+        if keep:
+            # Nothing changes for grant, owner, last
+            pass
+        else:
+            # 2. Arbitrate: search order (last+1, last+2, last+3, last+4) % 4
+            winner = None
+            for offset in range(1, 5):
+                idx = (self.last + offset) % 4
+                if (req &gt;&gt; idx) &amp; 1:
+                    winner = idx
+                    break
+
+            if winner is not None:
+                self.owner = winner
+                self.last = winner
+                self.grant = 1 &lt;&lt; winner
+            else:
+                # 3. No requester
+                self.grant = 0
+                # owner and last keep their values
+
+        self.busy = 1 if self.grant != 0 else 0
+
+async def initialize(dut):
+    dut.rst.value = 1
+    dut.req.value = 0
+    await FallingEdge(dut.clk)
+    await RisingEdge(dut.clk)
+    dut.rst.value = 0
+    await ReadOnly()
+
+@cocotb.test()
+async def test_reset(dut):
+    &quot;&quot;&quot;Test reset conditions and initial state.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    
+    dut.rst.value = 1
+    dut.req.value = 0x5
+    await ClockCycles(dut.clk, 2)
+    
+    await ReadOnly()
+    assert int(dut.grant.value) == 0, f&quot;Expected grant=0 after reset, got {int(dut.grant.value)}&quot;
+    assert int(dut.owner.value) == 0, f&quot;Expected owner=0 after reset, got {int(dut.owner.value)}&quot;
+    assert int(dut.busy.value) == 0, f&quot;Expected busy=0 after reset, got {int(dut.busy.value)}&quot;
+
+@cocotb.test()
+async def test_single_requester(dut):
+    &quot;&quot;&quot;Test single requester behavior and bus retention.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = RefModel()
+    await initialize(dut)
+
+    # Request from requester 2
+    for req_val in [0x4, 0x4, 0x4, 0x0, 0x2, 0x2, 0x0]:
+        await FallingEdge(dut.clk)
+        dut.req.value = req_val
+        ref.step(0, req_val)
+        
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        assert int(dut.grant.value) == ref.grant, f&quot;req={req_val:04b}: expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}&quot;
+        assert int(dut.owner.value) == ref.owner, f&quot;req={req_val:04b}: expected owner={ref.owner}, got {int(dut.owner.value)}&quot;
+        assert int(dut.busy.value) == ref.busy, f&quot;req={req_val:04b}: expected busy={ref.busy}, got {int(dut.busy.value)}&quot;
+
+@cocotb.test()
+async def test_round_robin_order(dut):
+    &quot;&quot;&quot;Test round-robin priority order when multiple requesters are active.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = RefModel()
+    await initialize(dut)
+
+    # Assert all requests simultaneously: 0xF
+    # After reset, last = 3, so priority order should be 0, 1, 2, 3
+    # Cycle 1: req=0xF -&gt; grants 0
+    # Cycle 2: req=0xF -&gt; keeps 0 (req[0]==1)
+    # Let&#x27;s drop req[0] to test round robin hand-over to 1, then 2, then 3
+    req_sequence = [0xF, 0xE, 0xC, 0x8, 0x0, 0xF, 0xF, 0xF, 0xF]
+    
+    for req_val in req_sequence:
+        await FallingEdge(dut.clk)
+        dut.req.value = req_val
+        ref.step(0, req_val)
+        
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        assert int(dut.grant.value) == ref.grant, f&quot;req={req_val:04b}: expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}&quot;
+        assert int(dut.owner.value) == ref.owner, f&quot;req={req_val:04b}: expected owner={ref.owner}, got {int(dut.owner.value)}&quot;
+        assert int(dut.busy.value) == ref.busy, f&quot;req={req_val:04b}: expected busy={ref.busy}, got {int(dut.busy.value)}&quot;
+
+@cocotb.test()
+async def test_retention_and_handover(dut):
+    &quot;&quot;&quot;Test keep condition vs new higher/lower priority requests.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = RefModel()
+    await initialize(dut)
+
+    # Sequence to test owner keeping bus even when other requests arrive
+    req_sequence = [
+        0x2, # req[1] -&gt; grant 1
+        0x3, # req[1] and req[0] -&gt; owner is 1, req[1] is high -&gt; keep 1
+        0x1, # drop req[1], keep req[0] -&gt; hand over to 0 immediately
+        0x1, # keep 0
+        0xD, # req[0], req[2], req[3] active, owner is 0. req[0] is high -&gt; keep 0
+        0xC, # drop req[0], req[2], req[3] active, last=0 -&gt; next is 1,2,3 -&gt; grants 2 (since last=0, order is 1,2,3,0 -&gt; index 2 is first set)
+        0x0  # drop all
+    ]
+
+    for req_val in req_sequence:
+        await FallingEdge(dut.clk)
+        dut.req.value = req_val
+        ref.step(0, req_val)
+        
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        assert int(dut.grant.value) == ref.grant, f&quot;req={req_val:04b}: expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}&quot;
+        assert int(dut.owner.value) == ref.owner, f&quot;req={req_val:04b}: expected owner={ref.owner}, got {int(dut.owner.value)}&quot;
+        assert int(dut.busy.value) == ref.busy, f&quot;req={req_val:04b}: expected busy={ref.busy}, got {int(dut.busy.value)}&quot;
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Run constrained-random testing over 1000 cycles and check against reference model.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = RefModel()
+    await initialize(dut)
+
+    rng = random.Random(42)
+
+    for _ in range(1000):
+        req_val = rng.randint(0, 15)
+        rst_val = 1 if rng.random() &lt; 0.02 else 0 # occasional random reset
+
+        await FallingEdge(dut.clk)
+        dut.req.value = req_val
+        dut.rst.value = rst_val
+        ref.step(rst_val, req_val)
+
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        assert int(dut.grant.value) == ref.grant, f&quot;Random test fail: rst={rst_val}, req={req_val:04b}, expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}&quot;
+        assert int(dut.owner.value) == ref.owner, f&quot;Random test fail: rst={rst_val}, req={req_val:04b}, expected owner={ref.owner}, got {int(dut.owner.value)}&quot;
+        assert int(dut.busy.value) == ref.busy, f&quot;Random test fail: rst={rst_val}, req={req_val:04b}, expected busy={ref.busy}, got {int(dut.busy.value)}&quot;
+</code></pre></details>
+<details><summary>Bug rr_arbiter_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 28) — <span class='ok'>fixed</span></summary><p>Injected: <code>pick = last + 2&#x27;d3;</code> → <code>pick = last - 2&#x27;d3;</code></p><p>Agent's guesses for the faulty line: [28] · attempts: 1</p><p><b>Attempt 1:</b> Line 28 incorrectly subtracts 3 instead of adding 1 modulo 4 or using the standard offset for rot[2] (which corresponds to last + 3). Subtracting 3 breaks the round-robin priority order search (`last+1, last+2, last+3, last+4`).<br><code>pick = last + 2&#x27;d3;</code></p></details>
+<details><summary>Bug rr_arbiter_m001: condition (rst) inverted (line 40) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (rst) begin</code> → <code>if (!(rst)) begin</code></p><p>Agent's guesses for the faulty line: [40] · attempts: 1</p><p><b>Attempt 1:</b> The active-high reset check uses `!(rst)` instead of `rst`, meaning the reset logic is active when `rst` is low and inactive when `rst` is high, breaking the synchronous active-high reset requirement.<br><code>if (rst) begin</code></p></details>
+<details><summary>Bug rr_arbiter_m002: constant 1&#x27;b1 changed to 1&#x27;b0 (line 22) — <span class='ok'>fixed</span></summary><p>Injected: <code>found = 1&#x27;b1;</code> → <code>found = 1&#x27;b0;</code></p><p>Agent's guesses for the faulty line: [22] · attempts: 1</p><p><b>Attempt 1:</b> The &#x27;keep&#x27; signal condition uses &#x27;busy &amp;&amp; req[owner]&#x27;, but when &#x27;grant&#x27; is non-zero (so &#x27;busy&#x27; is 1), the active requester is &#x27;owner&#x27;. However, &#x27;req[owner]&#x27; correctly checks the owner&#x27;s request, but if &#x27;grant&#x27; is 0, &#x27;busy&#x27; is 0, so &#x27;keep&#x27; is 0. Wait, looking at line 37: &#x27;wire keep = busy &amp;&amp; req[owner];&#x27; seems fine at first glance, but the bug is actually that when grant is 0, busy is 0, and therefore keep is 0. Let&#x27;s check line 44: &#x27;else if (!keep)&#x27;. When grant is 0 (idle), keep is 0, so it goes to arbitrate. But wait! Look at the pick logic: if none of rot bits are set, found is set to 1_b0 (<br><code>found = 1&#x27;b1;</code></p></details>
+<details><summary>Bug rr_arbiter_m003: assignment &#x27;grant &lt;= 4&#x27;b0001 &lt;&lt; pick;&#x27; removed (line 46) — <span class='no'>not fixed</span></summary><p>Injected: <code>grant &lt;= 4&#x27;b0001 &lt;&lt; pick;</code> → <code>;</code></p><p>Agent's guesses for the faulty line: [45, 45, 45] · attempts: 3</p><p><b>Attempt 1:</b> When arbitrating and a valid new requester is found (found=1), the RTL leaves the grant signal unassigned or unchanged rather than updating it to the one-hot encoding of the new winner (`1 &lt;&lt; pick`), which violates behavior rule 2.<br><code>if (found) {</code></p><p><b>Attempt 2:</b> When arbitrating and a winner is found (`found` is high), the RTL does not update `grant` with the newly picked requester (`1 &lt;&lt; pick`), leaving `grant` at 0. This violates behavior rule 2.<br><code>if (found) {; grant &lt;= 4&#x27;b0001 &lt;&lt; pick;</code></p><p><b>Attempt 3:</b> When arbitrating and finding a new winner (`found`), the RTL leaves the `grant` register unassigned (executing an empty statement `;`), causing `grant` to become 0 instead of updating to `1 &lt;&lt; pick`. This violates the arbitration behavior specification.<br><code>if (found) {; grant &lt;= 1 &lt;&lt; pick;</code></p></details>
+<h2 id='crc8'>crc8</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>fail (1/5 tests)</td><td></td><td></td></tr>
+<tr><td>1</td><td>fix</td><td>pass (5/5 tests)</td><td>100.0%</td><td>[testbench] The testbench attempts to assign dut.rst.value = 0 directly after await ReadOnly() without waiting for a falling clock edge or delta delay, violating race-free timing rules when transitioning out of a read-only phase.</td></tr>
+</table></div>
+<details><summary>Final testbench (tb_01.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for crc8 (CRC-8 / SMBUS):
+1. Reset Behavior: Verify synchronous active-high reset sets crc to 0x00 and nbytes to 0.
+2. Init Behavior: Verify synchronous init signal resets crc to 0x00 and nbytes to 0.
+3. Hold Behavior: Verify outputs hold their values when valid = 0 and no reset/init is active.
+4. Single Byte Processing: Verify CRC calculation for a single byte against the reference model.
+5. Stream Processing (ASCII &quot;123456789&quot;): Verify standard check value 0xF4 after processing &quot;123456789&quot;.
+6. Byte Counter Wrap-around: Verify nbytes wraps around from 255 to 0.
+7. Constrained-Random Testing: Run a randomized stream of valid/invalid bytes, resets, and inits to ensure robustness.
+&quot;&quot;&quot;
+
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer
+import random
+
+class CRC8ReferenceModel:
+    def __init__(self):
+        self.crc = 0x00
+        self.nbytes = 0
+
+    def step(self, rst, init, valid, data):
+        if rst or init:
+            self.crc = 0x00
+            self.nbytes = 0
+        elif valid:
+            r = self.crc ^ data
+            for _ in range(8):
+                if (r &amp; 0x80) != 0:
+                    r = ((r &lt;&lt; 1) &amp; 0xFF) ^ 0x07
+                else:
+                    r = (r &lt;&lt; 1) &amp; 0xFF
+            self.crc = r
+            self.nbytes = (self.nbytes + 1) &amp; 0xFF
+        # else hold
+
+async def reset_dut(dut):
+    dut.rst.value = 1
+    dut.init.value = 0
+    dut.valid.value = 0
+    dut.data.value = 0
+    await FallingEdge(dut.clk)
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+
+@cocotb.test()
+async def test_reset_and_init(dut):
+    &quot;&quot;&quot;Test synchronous reset and init functionality.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CRC8ReferenceModel()
+
+    await reset_dut(dut)
+    
+    # Release reset, drive some data
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+    dut.valid.value = 1
+    dut.data.value = 0x55
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    ref.step(rst=0, init=0, valid=1, data=0x55)
+    
+    assert int(dut.crc.value) == ref.crc, f&quot;Mismatch after data: got {hex(int(dut.crc.value))}, expected {hex(ref.crc)}&quot;
+    assert int(dut.nbytes.value) == ref.nbytes, f&quot;Mismatch nbytes: got {int(dut.nbytes.value)}, expected {ref.nbytes}&quot;
+
+    # Test init
+    await FallingEdge(dut.clk)
+    dut.init.value = 1
+    dut.valid.value = 0
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    ref.step(rst=0, init=1, valid=0, data=0)
+
+    assert int(dut.crc.value) == 0x00, f&quot;Init failed crc: {hex(int(dut.crc.value))}&quot;
+    assert int(dut.nbytes.value) == 0, f&quot;Init failed nbytes: {int(dut.nbytes.value)}&quot;
+
+    # Test rst
+    await FallingEdge(dut.clk)
+    dut.init.value = 0
+    dut.rst.value = 1
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    ref.step(rst=1, init=0, valid=0, data=0)
+
+    assert int(dut.crc.value) == 0x00, f&quot;Rst failed crc: {hex(int(dut.crc.value))}&quot;
+    assert int(dut.nbytes.value) == 0, f&quot;Rst failed nbytes: {int(dut.nbytes.value)}&quot;
+
+
+@cocotb.test()
+async def test_hold_behavior(dut):
+    &quot;&quot;&quot;Test that outputs hold when valid=0.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CRC8ReferenceModel()
+
+    await reset_dut(dut)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+
+    # Send one byte
+    await FallingEdge(dut.clk)
+    dut.valid.value = 1
+    dut.data.value = 0xAB
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    ref.step(0, 0, 1, 0xAB)
+    
+    expected_crc = ref.crc
+    expected_nbytes = ref.nbytes
+
+    # Now deassert valid for a few cycles
+    for _ in range(5):
+        await FallingEdge(dut.clk)
+        dut.valid.value = 0
+        dut.data.value = random.randint(0, 255)
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        ref.step(0, 0, 0, int(dut.data.value))
+
+        assert int(dut.crc.value) == expected_crc, f&quot;CRC changed on invalid cycle: got {hex(int(dut.crc.value))}, expected {hex(expected_crc)}&quot;
+        assert int(dut.nbytes.value) == expected_nbytes, f&quot;nbytes changed on invalid cycle: got {int(dut.nbytes.value)}, expected {expected_nbytes}&quot;
+
+
+@cocotb.test()
+async def test_ascii_123456789(dut):
+    &quot;&quot;&quot;Test CRC-8 check value 0xF4 for ASCII string &#x27;123456789&#x27;.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CRC8ReferenceModel()
+
+    await reset_dut(dut)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+
+    data_bytes = [ord(c) for c in &quot;123456789&quot;]
+
+    for b in data_bytes:
+        await FallingEdge(dut.clk)
+        dut.valid.value = 1
+        dut.data.value = b
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        ref.step(0, 0, 1, b)
+
+        assert int(dut.crc.value) == ref.crc
+        assert int(dut.nbytes.value) == ref.nbytes
+
+    assert int(dut.crc.value) == 0xF4, f&quot;Check value mismatch: got {hex(int(dut.crc.value))}, expected 0xF4&quot;
+    assert int(dut.nbytes.value) == 9, f&quot;nbytes mismatch: got {int(dut.nbytes.value)}, expected 9&quot;
+
+
+@cocotb.test()
+async def test_nbytes_wrap(dut):
+    &quot;&quot;&quot;Test nbytes wrapping from 255 to 0.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CRC8ReferenceModel()
+
+    await reset_dut(dut)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+
+    # Feed 260 bytes
+    for i in range(260):
+        val = i &amp; 0xFF
+        await FallingEdge(dut.clk)
+        dut.valid.value = 1
+        dut.data.value = val
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        ref.step(0, 0, 1, val)
+
+        assert int(dut.crc.value) == ref.crc, f&quot;Cycle {i}: crc got {hex(int(dut.crc.value))}, expected {hex(ref.crc)}&quot;
+        assert int(dut.nbytes.value) == ref.nbytes, f&quot;Cycle {i}: nbytes got {int(dut.nbytes.value)}, expected {ref.nbytes}&quot;
+
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Constrained-random test with mixed valid, invalid, init, rst, and data.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = CRC8ReferenceModel()
+
+    await reset_dut(dut)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+
+    rng = random.Random(42)
+
+    for cycle in range(1000):
+        rst = 1 if rng.random() &lt; 0.02 else 0
+        init = 1 if (not rst and rng.random() &lt; 0.02) else 0
+        valid = rng.choice([0, 1])
+        data = rng.randint(0, 255)
+
+        await FallingEdge(dut.clk)
+        dut.rst.value = rst
+        dut.init.value = init
+        dut.valid.value = valid
+        dut.data.value = data
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        ref.step(rst, init, valid, data)
+
+        assert int(dut.crc.value) == ref.crc, f&quot;Cycle {cycle}: CRC mismatch. Got {hex(int(dut.crc.value))}, Expected {hex(ref.crc)}&quot;
+        assert int(dut.nbytes.value) == ref.nbytes, f&quot;Cycle {cycle}: nbytes mismatch. Got {int(dut.nbytes.value)}, Expected {ref.nbytes}&quot;
+</code></pre></details>
+<details><summary>Bug crc8_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 33) — <span class='ok'>fixed</span></summary><p>Injected: <code>nbytes &lt;= nbytes + 8&#x27;d1;</code> → <code>nbytes &lt;= nbytes - 8&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [33] · attempts: 1</p><p><b>Attempt 1:</b> nbytes decrements instead of increments when valid bytes are accepted, which violates behaviour rule 2 (&quot;nbytes increments by 1&quot;) and the specification description (&quot;number of bytes accepted since the last reset/init, wraps from 255 to 0&quot;).<br><code>nbytes &lt;= nbytes + 8&#x27;d1;</code></p></details>
+<details><summary>Bug crc8_m001: &#x27;^&#x27; replaced by &#x27;|&#x27; (line 18) — <span class='ok'>fixed</span></summary><p>Injected: <code>r = c ^ d;</code> → <code>r = c | d;</code></p><p>Agent's guesses for the faulty line: [18] · attempts: 1</p><p><b>Attempt 1:</b> Line 18 uses bitwise OR (`c | d`) instead of bitwise XOR (`c ^ d`) to combine the current CRC with the incoming data byte, breaking the reference algorithm requirement `r = crc XOR data`.<br><code>r = c ^ d;</code></p></details>
+<details><summary>Bug crc8_m002: condition (valid) inverted (line 31) — <span class='ok'>fixed</span></summary><p>Injected: <code>end else if (valid) begin</code> → <code>end else if (!(valid)) begin</code></p><p>Agent's guesses for the faulty line: [31] · attempts: 1</p><p><b>Attempt 1:</b> Line 31 checks `!(valid)` instead of `valid`, causing the CRC engine to update when valid is 0 and hold when valid is 1, which violates the behavior specification where valid=1 processes the byte and otherwise outputs hold.<br><code>end else if (valid) begin</code></p></details>
+<details><summary>Bug crc8_m003: constant 8 changed to 9 (line 19) — <span class='ok'>fixed</span></summary><p>Injected: <code>for (i = 0; i &lt; 8; i = i + 1)</code> → <code>for (i = 0; i &lt; 9; i = i + 1)</code></p><p>Agent's guesses for the faulty line: [19] · attempts: 1</p><p><b>Attempt 1:</b> The loop inside the crc_byte function iterates 9 times instead of 8, repeating the bit-shift and polynomial XOR logic one time too many per byte, which violates the 8-bit reference algorithm specification.<br><code>for (i = 0; i &lt; 8; i = i + 1)</code></p></details>
+<h2 id='sat_mac'>sat_mac</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>pass (5/5 tests)</td><td>100.0%</td><td></td></tr>
+</table></div>
+<details><summary>Final testbench (tb_00.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for sat_mac:
+1. Reset behavior: active-high synchronous reset sets acc = 0 and sat = 0 immediately.
+2. Idle behavior: when valid = 0 and clear = 0 (and rst = 0), acc and sat hold their values.
+3. Clear behavior: when clear = 1 and valid = 0, acc = 0 and sat = 0.
+4. Basic MAC operation: valid = 1, clear = 0 accumulates products correctly over multiple cycles.
+5. Restart accumulation: valid = 1 and clear = 1 starts a new accumulation with the current product.
+6. Positive saturation: accumulation exceeding 32767 clamps to 32767 and sets sticky &#x27;sat&#x27; flag to 1.
+7. Negative saturation: accumulation falling below -32768 clamps to -32768 and sets sticky &#x27;sat&#x27; flag to 1.
+8. Sticky sat flag: once sat becomes 1, it remains 1 until a new clear or reset, even if subsequent steps do not saturate.
+9. Constrained-random test: random inputs for valid, clear, a, b to verify against Python reference model.
+&quot;&quot;&quot;
+
+import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+
+class SatMacRefModel:
+    def __init__(self):
+        self.acc = 0
+        self.sat = 0
+
+    def step(self, rst, valid, clear, a, b):
+        if rst:
+            self.acc = 0
+            self.sat = 0
+        elif valid:
+            base = 0 if clear else self.acc
+            p = a * b
+            s = base + p
+            
+            step_sat = 0
+            if s &gt; 32767:
+                self.acc = 32767
+                step_sat = 1
+            elif s &lt; -32768:
+                self.acc = -32768
+                step_sat = 1
+            else:
+                self.acc = s
+
+            if clear:
+                self.sat = step_sat
+            else:
+                self.sat = self.sat | step_sat
+        elif clear:
+            self.acc = 0
+            self.sat = 0
+        else:
+            # Holds values
+            pass
+        return self.acc, self.sat
+
+
+async def apply_inputs(dut, rst, valid, clear, a, b):
+    await FallingEdge(dut.clk)
+    dut.rst.value = rst
+    dut.valid.value = valid
+    dut.clear.value = clear
+    dut.a.value = a
+    dut.b.value = b
+
+
+async def check_outputs(ref_model, dut):
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    expected_acc, expected_sat = ref_model.acc, ref_model.sat
+    got_acc = dut.acc.value.signed_integer
+    got_sat = int(dut.sat.value)
+    assert got_acc == expected_acc, f&quot;ACC mismatch: expected {expected_acc}, got {got_acc}&quot;
+    assert got_sat == expected_sat, f&quot;SAT mismatch: expected {expected_sat}, got {got_sat}&quot;
+
+
+@cocotb.test()
+async def test_reset(dut):
+    &quot;&quot;&quot;Test synchronous reset behavior.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SatMacRefModel()
+
+    # Initial drive
+    await apply_inputs(dut, rst=1, valid=0, clear=0, a=0, b=0)
+    ref.step(rst=1, valid=0, clear=0, a=0, b=0)
+    await check_outputs(ref, dut)
+
+    # Deassert reset, check zero state
+    await apply_inputs(dut, rst=0, valid=0, clear=0, a=10, b=20)
+    ref.step(rst=0, valid=0, clear=0, a=10, b=20)
+    await check_outputs(ref, dut)
+
+    # Assert reset mid-operation
+    await apply_inputs(dut, rst=1, valid=1, clear=0, a=50, b=50)
+    ref.step(rst=1, valid=1, clear=0, a=50, b=50)
+    await check_outputs(ref, dut)
+
+
+@cocotb.test()
+async def test_idle_and_clear(dut):
+    &quot;&quot;&quot;Test idle holding and clear functionality.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SatMacRefModel()
+
+    # Reset first
+    await apply_inputs(dut, rst=1, valid=0, clear=0, a=0, b=0)
+    ref.step(rst=1, valid=0, clear=0, a=0, b=0)
+    await check_outputs(ref, dut)
+
+    # Accumulate some value
+    await apply_inputs(dut, rst=0, valid=1, clear=1, a=10, b=10)
+    ref.step(rst=0, valid=1, clear=1, a=10, b=10)
+    await check_outputs(ref, dut) # acc = 100
+
+    # Idle (valid=0, clear=0) should hold value
+    await apply_inputs(dut, rst=0, valid=0, clear=0, a=20, b=20)
+    ref.step(rst=0, valid=0, clear=0, a=20, b=20)
+    await check_outputs(ref, dut) # acc = 100
+
+    # Clear alone (valid=0, clear=1) should zero out
+    await apply_inputs(dut, rst=0, valid=0, clear=1, a=0, b=0)
+    ref.step(rst=0, valid=0, clear=1, a=0, b=0)
+    await check_outputs(ref, dut) # acc = 0, sat = 0
+
+
+@cocotb.test()
+async def test_basic_mac_and_restart(dut):
+    &quot;&quot;&quot;Test basic MAC accumulation and clear+valid restart.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SatMacRefModel()
+
+    await apply_inputs(dut, rst=1, valid=0, clear=0, a=0, b=0)
+    ref.step(rst=1, valid=0, clear=0, a=0, b=0)
+    await check_outputs(ref, dut)
+
+    # Start accumulation with clear=1, valid=1
+    await apply_inputs(dut, rst=0, valid=1, clear=1, a=5, b=10)
+    ref.step(rst=0, valid=1, clear=1, a=5, b=10)
+    await check_outputs(ref, dut) # acc = 50
+
+    # Continue accumulation
+    await apply_inputs(dut, rst=0, valid=1, clear=0, a=3, b=4)
+    ref.step(rst=0, valid=1, clear=0, a=3, b=4)
+    await check_outputs(ref, dut) # acc = 50 + 12 = 62
+
+    # Restart accumulation with clear=1, valid=1
+    await apply_inputs(dut, rst=0, valid=1, clear=1, a=-2, b=15)
+    ref.step(rst=0, valid=1, clear=1, a=-2, b=15)
+    await check_outputs(ref, dut) # acc = -30
+
+
+@cocotb.test()
+async def test_positive_and_negative_saturation(dut):
+    &quot;&quot;&quot;Test positive and negative saturation and sticky sat flag.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SatMacRefModel()
+
+    await apply_inputs(dut, rst=1, valid=0, clear=0, a=0, b=0)
+    ref.step(rst=1, valid=0, clear=0, a=0, b=0)
+    await check_outputs(ref, dut)
+
+    # Drive a large positive product to saturate (127 * 127 = 16129, do twice: 32258, then another step)
+    # Let&#x27;s do 127 * 127 twice with clear=1 then clear=0
+    await apply_inputs(dut, rst=0, valid=1, clear=1, a=127, b=127)
+    ref.step(rst=0, valid=1, clear=1, a=127, b=127)
+    await check_outputs(ref, dut) # acc = 16129, sat = 0
+
+    await apply_inputs(dut, rst=0, valid=1, clear=0, a=127, b=127)
+    ref.step(rst=0, valid=1, clear=0, a=127, b=127)
+    await check_outputs(ref, dut) # acc = 32258, sat = 0
+
+    # Next addition should saturate at 32767
+    await apply_inputs(dut, rst=0, valid=1, clear=0, a=127, b=127)
+    ref.step(rst=0, valid=1, clear=0, a=127, b=127)
+    await check_outputs(ref, dut) # acc = 32767, sat = 1
+
+    # Non-saturating operation should keep sat = 1 (sticky)
+    await apply_inputs(dut, rst=0, valid=1, clear=0, a=1, b=1)
+    ref.step(rst=0, valid=1, clear=0, a=1, b=1)
+    await check_outputs(ref, dut) # acc = 32767, sat = 1
+
+    # Clear should clear sat
+    await apply_inputs(dut, rst=0, valid=0, clear=1, a=0, b=0)
+    ref.step(rst=0, valid=0, clear=1, a=0, b=0)
+    await check_outputs(ref, dut) # acc = 0, sat = 0
+
+    # Negative saturation test (-128 * 127 = -16256, twice -&gt; -32512, third -&gt; clamp to -32768)
+    await apply_inputs(dut, rst=0, valid=1, clear=1, a=-128, b=127)
+    ref.step(rst=0, valid=1, clear=1, a=-128, b=127)
+    await check_outputs(ref, dut) # acc = -16256
+
+    await apply_inputs(dut, rst=0, valid=1, clear=0, a=-128, b=127)
+    ref.step(rst=0, valid=1, clear=0, a=-128, b=127)
+    await check_outputs(ref, dut) # acc = -32512
+
+    await apply_inputs(dut, rst=0, valid=1, clear=0, a=-128, b=127)
+    ref.step(rst=0, valid=1, clear=0, a=-128, b=127)
+    await check_outputs(ref, dut) # acc = -32768, sat = 1
+
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Constrained-random test comparing DUT against reference model.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    ref = SatMacRefModel()
+
+    rng = random.Random(42)
+
+    # Reset
+    await apply_inputs(dut, rst=1, valid=0, clear=0, a=0, b=0)
+    ref.step(rst=1, valid=0, clear=0, a=0, b=0)
+    await check_outputs(ref, dut)
+
+    for _ in range(5000):
+        # Weighted random inputs to cover all corner cases nicely
+        rst = 1 if rng.random() &lt; 0.02 else 0
+        valid = rng.randint(0, 1)
+        clear = rng.randint(0, 1)
+        a = rng.randint(-128, 127)
+        b = rng.randint(-128, 127)
+
+        await apply_inputs(dut, rst=rst, valid=valid, clear=clear, a=a, b=b)
+        ref.step(rst=rst, valid=valid, clear=clear, a=a, b=b)
+        await check_outputs(ref, dut)
+</code></pre></details>
+<details><summary>Bug sat_mac_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 15) — <span class='ok'>fixed</span></summary><p>Injected: <code>wire signed [16:0] sum  = base + {prod[15], prod};</code> → <code>wire signed [16:0] sum  = base - {prod[15], prod};</code></p><p>Agent's guesses for the faulty line: [15] · attempts: 1</p><p><b>Attempt 1:</b> Line 15 computes `sum = base - {prod[15], prod};` instead of adding the product `base + {prod[15], prod}`, which violates the MAC operation requirement `s = base + p`.<br><code>wire signed [16:0] sum  = base + {prod[15], prod};</code></p></details>
+<details><summary>Bug sat_mac_m001: &#x27;|&#x27; replaced by &#x27;&amp;&#x27; (line 30) — <span class='ok'>fixed</span></summary><p>Injected: <code>sat &lt;= (clear ? 1&#x27;b0 : sat) | hi | lo;</code> → <code>sat &lt;= (clear ? 1&#x27;b0 : sat) | hi &amp; lo;</code></p><p>Agent's guesses for the faulty line: [30] · attempts: 1</p><p><b>Attempt 1:</b> Line 30 uses `hi &amp; lo` to determine if saturation occurred, which checks if the sum is simultaneously greater than 32767 and less than -32768 (an impossibility). It should be `hi | lo` to detect either positive or negative saturation.<br><code>sat &lt;= (clear ? 1&#x27;b0 : sat) | hi | lo;</code></p></details>
+<details><summary>Bug sat_mac_m002: condition (hi) inverted (line 24) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (hi)</code> → <code>if (!(hi))</code></p><p>Agent's guesses for the faulty line: [24] · attempts: 1</p><p><b>Attempt 1:</b> Line 24 checks `!(hi)` instead of `hi` to determine positive saturation, which inverts the positive saturation logic and causes normal or non-saturated positive values to incorrectly clamp to 32767.<br><code>if (hi)</code></p></details>
+<details><summary>Bug sat_mac_m003: constant 15 changed to 14 (line 29) — <span class='ok'>fixed</span></summary><p>Injected: <code>acc &lt;= sum[15:0];</code> → <code>acc &lt;= sum[14:0];</code></p><p>Agent's guesses for the faulty line: [29] · attempts: 1</p><p><b>Attempt 1:</b> Line 29 assigns `sum[14:0]` (which is 15 bits, zero-extended or sign-extended incorrectly into 16 bits `acc`) instead of the full 16-bit lower portion or truncated `sum[15:0]`, causing the accumulator to drop sign bits or wrap incorrectly when not saturating. It violates the exact computation rule (no wrap) when `sum` is within range.<br><code>acc &lt;= sum[15:0];</code></p></details>
+<h2 id='uart_tx'>uart_tx</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>pass (6/6 tests)</td><td>100.0%</td><td></td></tr>
+</table></div>
+<details><summary>Final testbench (tb_00.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for uart_tx:
+1. Reset behavior: Verify tx=1, busy=0, done=0 immediately after reset.
+2. Idle behavior: Verify tx remains 1 and busy=0 when start=0.
+3. Single frame transmission (No Parity):
+   - Check start bit (0), 8 data bits LSB-first, stop bit (1).
+   - Check bit duration (CLKS_PER_BIT cycles per bit).
+   - Check busy high during transmission, low when idle.
+   - Check done pulses for exactly 1 cycle upon completion.
+4. Single frame transmission (Even Parity):
+   - Check parity bit correctness when parity_en=1 and parity_odd=0.
+5. Single frame transmission (Odd Parity):
+   - Check parity bit correctness when parity_en=1 and parity_odd=1.
+6. Back-to-back transmissions:
+   - Issue a new start pulse during the cycle where done=1.
+   - Verify seamless transition with no idle gaps.
+7. Constrained-random testing:
+   - Stream multiple random bytes with random parity settings and random gaps between frames.
+&quot;&quot;&quot;
+
+import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, ClockCycles
+
+CLKS_PER_BIT = 4
+
+class UartTxRefModel:
+    def __init__(self, clks_per_bit=4):
+        self.clks_per_bit = clks_per_bit
+        self.tx = 1
+        self.busy = 0
+        self.done = 0
+        
+        self.state = &quot;IDLE&quot;
+        self.bit_counter = 0
+        self.clk_counter = 0
+        self.shift_reg = []
+        self.latched_data = 0
+        self.latched_parity_en = 0
+        self.latched_parity_odd = 0
+
+    def step(self, start, data, parity_en, parity_odd):
+        # Outputs are registered / updated on the rising edge
+        # Determine next state and outputs based on current state
+        
+        old_done = self.done
+        self.done = 0  # done is a 1-cycle pulse
+
+        if self.state == &quot;IDLE&quot;:
+            self.tx = 1
+            if start:
+                self.busy = 1
+                self.latched_data = data
+                self.latched_parity_en = parity_en
+                self.latched_parity_odd = parity_odd
+                
+                # Build frame bits: Start bit (0), 8 data bits LSB-first, optional parity, stop bit (1)
+                bits = [0]
+                for i in range(8):
+                    bits.append((data &gt;&gt; i) &amp; 1)
+                
+                if parity_en:
+                    # Even parity: XOR of data bits. Odd parity: inverse of even.
+                    data_xor = 0
+                    for i in range(8):
+                        data_xor ^= ((data &gt;&gt; i) &amp; 1)
+                    p_bit = data_xor if parity_odd == 0 else (1 - data_xor)
+                    bits.append(p_bit)
+                
+                bits.append(1)  # Stop bit
+                
+                self.shift_reg = bits
+                self.bit_counter = 0
+                self.clk_counter = 0
+                self.state = &quot;SENDING&quot;
+                self.tx = self.shift_reg[0]
+            else:
+                self.busy = 0
+
+        elif self.state == &quot;SENDING&quot;:
+            self.busy = 1
+            self.clk_counter += 1
+            if self.clk_counter &gt;= self.clks_per_bit:
+                self.clk_counter = 0
+                self.bit_counter += 1
+                if self.bit_counter &lt; len(self.shift_reg):
+                    self.tx = self.shift_reg[self.bit_counter]
+                else:
+                    # Frame finished at the end of the stop bit
+                    self.busy = 0
+                    self.done = 1
+                    self.tx = 1
+                    
+                    # Check if back-to-back start is requested right now
+                    if start:
+                        self.busy = 1
+                        self.latched_data = data
+                        self.latched_parity_en = parity_en
+                        self.latched_parity_odd = parity_odd
+                        
+                        bits = [0]
+                        for i in range(8):
+                            bits.append((data &gt;&gt; i) &amp; 1)
+                        if parity_en:
+                            data_xor = 0
+                            for i in range(8):
+                                data_xor ^= ((data &gt;&gt; i) &amp; 1)
+                            p_bit = data_xor if parity_odd == 0 else (1 - data_xor)
+                            bits.append(p_bit)
+                        bits.append(1)
+                        
+                        self.shift_reg = bits
+                        self.bit_counter = 0
+                        self.clk_counter = 0
+                        self.state = &quot;SENDING&quot;
+                        self.tx = self.shift_reg[0]
+                    else:
+                        self.state = &quot;IDLE&quot;
+
+        return self.tx, self.busy, self.done
+
+
+async def reset_dut(dut):
+    dut.rst.value = 1
+    dut.start.value = 0
+    dut.data.value = 0
+    dut.parity_en.value = 0
+    dut.parity_odd.value = 0
+    await ClockCycles(dut.clk, 3)
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+
+
+@cocotb.test()
+async def test_reset_and_idle(dut):
+    &quot;&quot;&quot;Test reset conditions and idle state.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    
+    dut.rst.value = 1
+    dut.start.value = 0
+    dut.data.value = 0x55
+    dut.parity_en.value = 0
+    dut.parity_odd.value = 0
+    
+    await ClockCycles(dut.clk, 2)
+    await ReadOnly()
+    
+    assert int(dut.tx.value) == 1, f&quot;Reset tx expected 1, got {int(dut.tx.value)}&quot;
+    assert int(dut.busy.value) == 0, f&quot;Reset busy expected 0, got {int(dut.busy.value)}&quot;
+    assert int(dut.done.value) == 0, f&quot;Reset done expected 0, got {int(dut.done.value)}&quot;
+    
+    # Release reset
+    await FallingEdge(dut.clk)
+    dut.rst.value = 0
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    
+    # Keep idle for a few cycles
+    ref = UartTxRefModel(CLKS_PER_BIT)
+    for _ in range(5):
+        await FallingEdge(dut.clk)
+        dut.start.value = 0
+        dut.data.value = 0xAA
+        dut.parity_en.value = 0
+        dut.parity_odd.value = 0
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        exp_tx, exp_busy, exp_done = ref.step(0, 0xAA, 0, 0)
+        assert int(dut.tx.value) == exp_tx, f&quot;Idle tx mismatch: got {int(dut.tx.value)}, exp {exp_tx}&quot;
+        assert int(dut.busy.value) == exp_busy, f&quot;Idle busy mismatch: got {int(dut.busy.value)}, exp {exp_busy}&quot;
+        assert int(dut.done.value) == exp_done, f&quot;Idle done mismatch: got {int(dut.done.value)}, exp {exp_done}&quot;
+
+
+@cocotb.test()
+async def test_single_frame_no_parity(dut):
+    &quot;&quot;&quot;Test single frame transmission without parity.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+    
+    ref = UartTxRefModel(CLKS_PER_BIT)
+    test_data = 0xA5  # 10100101
+    
+    # Send start
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.data.value = test_data
+    dut.parity_en.value = 0
+    dut.parity_odd.value = 0
+    
+    # Total cycles = 10 bits * 4 clks/bit = 40 cycles
+    total_cycles = 10 * CLKS_PER_BIT
+    
+    for cycle in range(total_cycles):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        # Check against reference model
+        exp_tx, exp_busy, exp_done = ref.step(int(dut.start.value), int(dut.data.value), int(dut.parity_en.value), int(dut.parity_odd.value))
+        
+        assert int(dut.tx.value) == exp_tx, f&quot;Cycle {cycle}: tx mismatch. Got {int(dut.tx.value)}, exp {exp_tx}&quot;
+        assert int(dut.busy.value) == exp_busy, f&quot;Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}&quot;
+        assert int(dut.done.value) == exp_done, f&quot;Cycle {cycle}: done mismatch. Got {int(dut.done.value)}, exp {exp_done}&quot;
+        
+        await FallingEdge(dut.clk)
+        # Drop start after 1 cycle
+        if cycle == 0:
+            dut.start.value = 0
+
+
+@cocotb.test()
+async def test_single_frame_even_parity(dut):
+    &quot;&quot;&quot;Test single frame transmission with even parity.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+    
+    ref = UartTxRefModel(CLKS_PER_BIT)
+    test_data = 0x3C  # 00111100 (four 1s -&gt; even parity bit should be 0)
+    
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.data.value = test_data
+    dut.parity_en.value = 1
+    dut.parity_odd.value = 0
+    
+    # Total cycles = 11 bits * 4 clks/bit = 44 cycles
+    total_cycles = 11 * CLKS_PER_BIT
+    
+    for cycle in range(total_cycles):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        exp_tx, exp_busy, exp_done = ref.step(int(dut.start.value), int(dut.data.value), int(dut.parity_en.value), int(dut.parity_odd.value))
+        
+        assert int(dut.tx.value) == exp_tx, f&quot;Cycle {cycle}: tx mismatch. Got {int(dut.tx.value)}, exp {exp_tx}&quot;
+        assert int(dut.busy.value) == exp_busy, f&quot;Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}&quot;
+        assert int(dut.done.value) == exp_done, f&quot;Cycle {cycle}: done mismatch. Got {int(dut.done.value)}, exp {exp_done}&quot;
+        
+        await FallingEdge(dut.clk)
+        if cycle == 0:
+            dut.start.value = 0
+
+
+@cocotb.test()
+async def test_single_frame_odd_parity(dut):
+    &quot;&quot;&quot;Test single frame transmission with odd parity.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+    
+    ref = UartTxRefModel(CLKS_PER_BIT)
+    test_data = 0x3C  # 00111100 (four 1s -&gt; even parity is 0, odd parity should be 1)
+    
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.data.value = test_data
+    dut.parity_en.value = 1
+    dut.parity_odd.value = 1
+    
+    total_cycles = 11 * CLKS_PER_BIT
+    
+    for cycle in range(total_cycles):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        exp_tx, exp_busy, exp_done = ref.step(int(dut.start.value), int(dut.data.value), int(dut.parity_en.value), int(dut.parity_odd.value))
+        
+        assert int(dut.tx.value) == exp_tx, f&quot;Cycle {cycle}: tx mismatch. Got {int(dut.tx.value)}, exp {exp_tx}&quot;
+        assert int(dut.busy.value) == exp_busy, f&quot;Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}&quot;
+        assert int(dut.done.value) == exp_done, f&quot;Cycle {cycle}: done mismatch. Got {int(dut.done.value)}, exp {exp_done}&quot;
+        
+        await FallingEdge(dut.clk)
+        if cycle == 0:
+            dut.start.value = 0
+
+
+@cocotb.test()
+async def test_back_to_back(dut):
+    &quot;&quot;&quot;Test back-to-back transmissions where start is asserted during the done cycle.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+    
+    ref = UartTxRefModel(CLKS_PER_BIT)
+    
+    # We will orchestrate 2 consecutive frames
+    data1 = 0xAA
+    data2 = 0x55
+    
+    # Frame 1 start
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.data.value = data1
+    dut.parity_en.value = 0
+    dut.parity_odd.value = 0
+    
+    total_cycles = (10 * CLKS_PER_BIT) + (10 * CLKS_PER_BIT)
+    
+    # Track when to assert second start
+    frame1_done_cycle = 10 * CLKS_PER_BIT - 1
+    
+    for cycle in range(total_cycles):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        exp_tx, exp_busy, exp_done = ref.step(int(dut.start.value), int(dut.data.value), int(dut.parity_en.value), int(dut.parity_odd.value))
+        
+        assert int(dut.tx.value) == exp_tx, f&quot;Cycle {cycle}: tx mismatch. Got {int(dut.tx.value)}, exp {exp_tx}&quot;
+        assert int(dut.busy.value) == exp_busy, f&quot;Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}&quot;
+        assert int(dut.done.value) == exp_done, f&quot;Cycle {cycle}: done mismatch. Got {int(dut.done.value)}, exp {exp_done}&quot;
+        
+        await FallingEdge(dut.clk)
+        if cycle == 0:
+            dut.start.value = 0
+        elif cycle == frame1_done_cycle - 1:
+            # Assert start right before the done cycle so it&#x27;s sampled when done=1
+            dut.start.value = 1
+            dut.data.value = data2
+            dut.parity_en.value = 1
+            dut.parity_odd.value = 1
+        elif cycle == frame1_done_cycle:
+            # Drop start after 1 cycle
+            dut.start.value = 0
+
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Constrained-random test of multiple frames with random data, parity options, and gaps.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+    
+    rng = random.Random(42)
+    ref = UartTxRefModel(CLKS_PER_BIT)
+    
+    # We will simulate a sequence of events
+    current_data = rng.randint(0, 255)
+    current_parity_en = rng.randint(0, 1)
+    current_parity_odd = rng.randint(0, 1)
+    
+    # Drive initial state
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.data.value = current_data
+    dut.parity_en.value = current_parity_en
+    dut.parity_odd.value = current_parity_odd
+    
+    # We simulate for 500 cycles total
+    start_asserted_this_cycle = True
+    
+    for cycle in range(500):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        
+        exp_tx, exp_busy, exp_done = ref.step(int(dut.start.value), int(dut.data.value), int(dut.parity_en.value), int(dut.parity_odd.value))
+        
+        assert int(dut.tx.value) == exp_tx, f&quot;Cycle {cycle}: tx mismatch. Got {int(dut.tx.value)}, exp {exp_tx}&quot;
+        assert int(dut.busy.value) == exp_busy, f&quot;Cycle {cycle}: busy mismatch. Got {int(dut.busy.value)}, exp {exp_busy}&quot;
+        assert int(dut.done.value) == exp_done, f&quot;Cycle {cycle}: done mismatch. Got {int(dut.done.value)}, exp {exp_done}&quot;
+        
+        await FallingEdge(dut.clk)
+        
+        # If start was high, drop it after 1 cycle
+        if start_asserted_this_cycle:
+            dut.start.value = 0
+            start_asserted_this_cycle = False
+        
+        # If we are idle, randomly decide whether to start a new transmission
+        if exp_busy == 0:
+            if rng.random() &lt; 0.4:
+                current_data = rng.randint(0, 255)
+                current_parity_en = rng.randint(0, 1)
+                current_parity_odd = rng.randint(0, 1)
+                dut.start.value = 1
+                dut.data.value = current_data
+                dut.parity_en.value = current_parity_en
+                dut.parity_odd.value = current_parity_odd
+                start_asserted_this_cycle = True
+</code></pre></details>
+<details><summary>Bug uart_tx_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 80) — <span class='ok'>fixed</span></summary><p>Injected: <code>bit_idx &lt;= bit_idx + 3&#x27;d1;</code> → <code>bit_idx &lt;= bit_idx - 3&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [80] · attempts: 1</p><p><b>Attempt 1:</b> In the DATA state, bit_idx is decremented using bit_idx - 3&#x27;d1 when transmitting LSB first, but bit_idx should be incremented (bit_idx + 3&#x27;d1) to iterate from 0 to 7. This causes the wrong bits of shreg to be transmitted and disrupts the timing/state machine.<br><code>bit_idx &lt;= bit_idx + 3&#x27;d1;</code></p></details>
+<details><summary>Bug uart_tx_m002: condition (last_tick) inverted (line 97) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (last_tick) begin</code> → <code>if (!(last_tick)) begin</code></p><p>Agent's guesses for the faulty line: [97] · attempts: 1</p><p><b>Attempt 1:</b> Line 97 checks `if (!(last_tick))` instead of `if (last_tick)` for the STOP state, causing the stop bit to last only 1 cycle instead of `CLKS_PER_BIT` cycles and ending the frame prematurely, which violates the requirement that each bit lasts `CLKS_PER_BIT` cycles and breaks `busy` timing.<br><code>if (last_tick) begin</code></p></details>
+<details><summary>Bug uart_tx_m005: &#x27;==&#x27; replaced by &#x27;!=&#x27; (line 71) — <span class='no'>not fixed</span></summary><p>Injected: <code>if (bit_idx == 3&#x27;d7) begin</code> → <code>if (bit_idx != 3&#x27;d7) begin</code></p><p>Agent's guesses for the faulty line: [81, 80, 79] · attempts: 3</p><p><b>Attempt 1:</b> In the DATA state, when bit_idx has reached 7, the code increments bit_idx and loads shreg[bit_idx + 3&#x27;d1] in the else branch instead of properly finishing the data bits and transitioning to parity or stop. This causes bit_idx to skip data bit indices and transitions to the stop or parity states incorrectly.<br><code>tx      &lt;= shreg[bit_idx];</code></p><p><b>Attempt 2:</b> In the DATA state, when bit_idx != 3&#x27;d7, bit_idx is never incremented and shreg[bit_idx + 3&#x27;d1] accesses the wrong bit because bit_idx stays 0 for the entire data transmission.<br><code>end else begin
+                            bit_idx &lt;= bit_idx + 3&#x27;d1;
+                            tx      &lt;= shreg[bit_idx + 3&#x27;d1];</code></p><p><b>Attempt 3:</b> In the DATA state, `bit_idx` is checked against `3&#x27;d7` before it has reached the last bit or been incremented/processed correctly for all bits. When `bit_idx != 3&#x27;d7`, it enters the `else` branch (lines 79-82), but the increment `bit_idx &lt;= bit_idx + 3&#x27;d1` is missing, causing `bit_idx` to remain 0 and skipping or mis-shifting data bits.<br><code>end else begin</code></p></details>
+<details><summary>Bug uart_tx_m006: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 93) — <span class='ok'>fixed</span></summary><p>Injected: <code>tick &lt;= tick + 16&#x27;d1;</code> → <code>tick &lt;= tick - 16&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [93] · attempts: 1</p><p><b>Attempt 1:</b> In the PARITY state, decrementing the tick counter (`tick &lt;= tick - 16&#x27;d1;`) instead of incrementing it (`tick &lt;= tick + 16&#x27;d1;`) causes incorrect timing for the parity bit duration, leading to a tx mismatch.<br><code>tick &lt;= tick + 16&#x27;d1;</code></p></details>
+<h2 id='spi_master'>spi_master</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>fail (2/4 tests)</td><td></td><td></td></tr>
+<tr><td>1</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The reference model incorrectly computed the transfer duration (expecting 16 * D + 1 cycles instead of exactly 16 * D for the done pulse timing) and used `Random` instead of `random.Random`.</td></tr>
+<tr><td>2</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The reference model had an off-by-one error in tracking `done` timing (returning `done` 1 cycle late) and `test_constrained_random` illegally updated `dut.miso.value` inside a ReadOnly phase.</td></tr>
+<tr><td>3</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The reference model had an error in timing the transfer duration and done pulse (expecting transfer completion at cycle 16 * D + 1 instead of 16 * D), and test_constrained_random attempted to write `dut.miso` during a ReadOnly sync phase.</td></tr>
+<tr><td>4</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The reference model had an incorrect timing for when `done` asserts (expecting it one cycle off from the DUT) and `test_constrained_random` attempted to assign `dut.miso` during a ReadOnly phase.</td></tr>
+<tr><td>5</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The reference model had an error in tracking transfer completion timing and the testbench wrote to `dut.miso` during the `ReadOnly` phase.</td></tr>
+<tr><td>6</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The reference model incorrectly managed the done pulse duration and timing compared to the DUT&#x27;s registered output cycle, and test_constrained_random improperly assigned to `dut.miso` directly after a ReadOnly phase instead of waiting for FallingEdge.</td></tr>
+<tr><td>7</td><td>fix</td><td>fail (3/4 tests)</td><td></td><td>[testbench] The reference model had an off-by-one error in transfer duration (expecting 16 * D + 1 cycles instead of exactly 16 * D cycles for completion), and test_constrained_random attempted to modify `dut.miso` during a ReadOnly phase.</td></tr>
+</table></div>
+<details><summary>Final testbench (tb_07.py)</summary><pre><code>import random
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+
+class SpiMasterRefModel:
+    def __init__(self, clk_div=2):
+        self.clk_div = clk_div
+        self.cs_n = 1
+        self.sclk = 0
+        self.busy = 0
+        self.done = 0
+        self.rx_data = 0
+        self.mosi = 0
+        
+        self.state = &quot;IDLE&quot;
+        self.counter = 0
+        self.tx_shift = 0
+        self.rx_shift = 0
+
+    def step(self, start, tx_data, miso):
+        D = self.clk_div
+        next_done = 0
+
+        if self.state == &quot;IDLE&quot;:
+            self.cs_n = 1
+            self.sclk = 0
+            self.busy = 0
+            self.done = 0
+            if start:
+                self.state = &quot;TRANSFER&quot;
+                self.counter = 1
+                self.tx_shift = tx_data
+                self.rx_shift = 0
+                self.busy = 1
+                self.cs_n = 0
+                self.sclk = 0
+                self.mosi = (self.tx_shift &gt;&gt; 7) &amp; 1
+
+        elif self.state == &quot;TRANSFER&quot;:
+            # Check sampling and shifting edges based on counter
+            for k in range(1, 9):
+                rise_edge = (2 * k - 1) * D
+                fall_edge = (2 * k) * D
+
+                if self.counter == rise_edge:
+                    self.sclk = 1
+                    bit = miso &amp; 1
+                    self.rx_shift = ((self.rx_shift &lt;&lt; 1) | bit) &amp; 0xFF
+
+                if self.counter == fall_edge:
+                    self.sclk = 0
+                    if k &lt; 8:
+                        self.mosi = (self.tx_shift &gt;&gt; (7 - k)) &amp; 1
+
+            if self.counter == 16 * D:
+                self.cs_n = 1
+                self.busy = 0
+                self.sclk = 0
+                self.rx_data = self.rx_shift
+                next_done = 1
+                self.state = &quot;IDLE&quot;
+            else:
+                self.counter += 1
+
+        res = {
+            &quot;cs_n&quot;: self.cs_n,
+            &quot;sclk&quot;: self.sclk,
+            &quot;busy&quot;: self.busy,
+            &quot;done&quot;: self.done,
+            &quot;rx_data&quot;: self.rx_data,
+            &quot;mosi&quot;: self.mosi
+        }
+        self.done = next_done
+        return res
+
+async def reset_dut(dut):
+    dut.rst.value = 1
+    dut.start.value = 0
+    dut.tx_data.value = 0
+    dut.miso.value = 0
+    await RisingEdge(dut.clk)
+    await RisingEdge(dut.clk)
+    dut.rst.value = 0
+    await ReadOnly()
+
+@cocotb.test()
+async def test_reset_and_defaults(dut):
+    &quot;&quot;&quot;Test reset state matches specification.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    dut.rst.value = 1
+    dut.start.value = 0
+    dut.tx_data.value = 0
+    dut.miso.value = 0
+    await ClockCycles(dut.clk, 2)
+    await ReadOnly()
+
+    assert int(dut.cs_n.value) == 1, f&quot;Reset cs_n expected 1, got {int(dut.cs_n.value)}&quot;
+    assert int(dut.sclk.value) == 0, f&quot;Reset sclk expected 0, got {int(dut.sclk.value)}&quot;
+    assert int(dut.busy.value) == 0, f&quot;Reset busy expected 0, got {int(dut.busy.value)}&quot;
+    assert int(dut.done.value) == 0, f&quot;Reset done expected 0, got {int(dut.done.value)}&quot;
+    assert int(dut.rx_data.value) == 0, f&quot;Reset rx_data expected 0, got {int(dut.rx_data.value)}&quot;
+    assert int(dut.mosi.value) == 0, f&quot;Reset mosi expected 0, got {int(dut.mosi.value)}&quot;
+
+@cocotb.test()
+async def test_basic_transfer(dut):
+    &quot;&quot;&quot;Test a single basic 8-bit transfer with CLK_DIV=2.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+
+    ref = SpiMasterRefModel(clk_div=2)
+    tx_val = 0xA5
+    miso_stream = [1, 0, 1, 1, 0, 0, 1, 0]
+    
+    # Start transfer
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.tx_data.value = tx_val
+    dut.miso.value = miso_stream[0]
+
+    total_cycles = 16 * 2
+    miso_idx = 0
+
+    for cycle in range(total_cycles):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        start_val = int(dut.start.value)
+        tx_val_val = int(dut.tx_data.value)
+        miso_val = int(dut.miso.value)
+
+        ref_out = ref.step(start_val, tx_val_val, miso_val)
+
+        assert int(dut.cs_n.value) == ref_out[&quot;cs_n&quot;], f&quot;Cycle {cycle}: cs_n mismatch. Expected {ref_out[&#x27;cs_n&#x27;]}, got {int(dut.cs_n.value)}&quot;
+        assert int(dut.sclk.value) == ref_out[&quot;sclk&quot;], f&quot;Cycle {cycle}: sclk mismatch. Expected {ref_out[&#x27;sclk&#x27;]}, got {int(dut.sclk.value)}&quot;
+        assert int(dut.busy.value) == ref_out[&quot;busy&quot;], f&quot;Cycle {cycle}: busy mismatch. Expected {ref_out[&#x27;busy&#x27;]}, got {int(dut.busy.value)}&quot;
+        assert int(dut.done.value) == ref_out[&quot;done&quot;], f&quot;Cycle {cycle}: done mismatch. Expected {ref_out[&#x27;done&#x27;]}, got {int(dut.done.value)}&quot;
+        assert int(dut.rx_data.value) == ref_out[&quot;rx_data&quot;], f&quot;Cycle {cycle}: rx_data mismatch. Expected {ref_out[&#x27;rx_data&#x27;]}, got {int(dut.rx_data.value)}&quot;
+        if int(dut.cs_n.value) == 0:
+            assert int(dut.mosi.value) == ref_out[&quot;mosi&quot;], f&quot;Cycle {cycle}: mosi mismatch. Expected {ref_out[&#x27;mosi&#x27;]}, got {int(dut.mosi.value)}&quot;
+
+        await FallingEdge(dut.clk)
+        if cycle == 0:
+            dut.start.value = 0
+
+        miso_idx = (miso_idx + 1) % len(miso_stream)
+        dut.miso.value = miso_stream[miso_idx]
+
+@cocotb.test()
+async def test_constrained_random(dut):
+    &quot;&quot;&quot;Constrained random transactions with reference model checking.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+
+    rng = random.Random(42)
+    ref = SpiMasterRefModel(clk_div=2)
+
+    current_miso = 0
+    dut.miso.value = current_miso
+    dut.start.value = 0
+    dut.tx_data.value = 0
+
+    for _ in range(3):
+        tx_val = rng.randint(0, 255)
+        
+        await FallingEdge(dut.clk)
+        dut.start.value = 1
+        dut.tx_data.value = tx_val
+
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+
+        ref.step(1, tx_val, int(dut.miso.value))
+        
+        await FallingEdge(dut.clk)
+        dut.start.value = 0
+
+        while True:
+            await RisingEdge(dut.clk)
+            await ReadOnly()
+
+            ref_out = ref.step(0, 0, int(dut.miso.value))
+
+            assert int(dut.cs_n.value) == ref_out[&quot;cs_n&quot;]
+            assert int(dut.sclk.value) == ref_out[&quot;sclk&quot;]
+            assert int(dut.busy.value) == ref_out[&quot;busy&quot;]
+            assert int(dut.done.value) == ref_out[&quot;done&quot;]
+            assert int(dut.rx_data.value) == ref_out[&quot;rx_data&quot;]
+            if int(dut.cs_n.value) == 0:
+                assert int(dut.mosi.value) == ref_out[&quot;mosi&quot;]
+
+            if int(dut.done.value) == 1:
+                await FallingEdge(dut.clk)
+                current_miso = rng.randint(0, 1)
+                dut.miso.value = current_miso
+                break
+            
+            await FallingEdge(dut.clk)
+            current_miso = rng.randint(0, 1)
+            dut.miso.value = current_miso
+
+@cocotb.test()
+async def test_start_ignored_while_busy(dut):
+    &quot;&quot;&quot;Verify that start is ignored when busy=1.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.clk, 10, units=&quot;ns&quot;).start())
+    await reset_dut(dut)
+
+    ref = SpiMasterRefModel(clk_div=2)
+
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.tx_data.value = 0x55
+    dut.miso.value = 0
+
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    ref.step(1, 0x55, 0)
+
+    await FallingEdge(dut.clk)
+    dut.start.value = 0
+
+    for i in range(5):
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        ref.step(0, 0, 0)
+        await FallingEdge(dut.clk)
+
+    await FallingEdge(dut.clk)
+    dut.start.value = 1
+    dut.tx_data.value = 0xAA
+
+    await RisingEdge(dut.clk)
+    await ReadOnly()
+    ref_out = ref.step(1, 0xAA, 0)
+    assert int(dut.busy.value) == 1
+    assert int(dut.cs_n.value) == 0
+
+    await FallingEdge(dut.clk)
+    dut.start.value = 0
+
+    while int(dut.busy.value) == 1:
+        await RisingEdge(dut.clk)
+        await ReadOnly()
+        ref.step(0, 0, 0)
+        await FallingEdge(dut.clk)
+</code></pre></details>
+<details><summary>Bug spi_master_m000: &#x27;+&#x27; replaced by &#x27;-&#x27; (line 54) — <span class='no'>not fixed</span></summary><p>Injected: <code>div &lt;= div + 8&#x27;d1;</code> → <code>div &lt;= div - 8&#x27;d1;</code></p><p>Agent's guesses for the faulty line: [26, 53, 53] · attempts: 3</p><p><b>Attempt 1:</b> The wire half_done is comparing div (width 8) with LAST[7:0] where LAST is defined as an integer, which causes width or sign mismatch issues in the comparison, leading div to decrement improperly or fail the half-period check.<br><code>wire half_done = (div == LAST);</code></p><p><b>Attempt 2:</b> Line 53 checks `else if (!half_done)` instead of `else if (half_done)`, which means the divider decrements every cycle except when `half_done` is reached. It should reload the divider (`div &lt;= 8&#x27;d0`) and toggle the SPI state only when `half_done` is true, per the timing specification.<br><code>end else if (half_done) begin</code></p><p><b>Attempt 3:</b> The division counter condition used `!half_done` instead of `half_done` when counting down the SCLK half-period, causing `sclk` to toggle prematurely at `div == 0` instead of waiting for `div == LAST` (i.e. `CLK_DIV` cycles).<br><code>end else if (!half_done) begin</code></p></details>
+<details><summary>Bug spi_master_m001: condition (!sclk) inverted (line 57) — <span class='ok'>fixed</span></summary><p>Injected: <code>if (!sclk) begin</code> → <code>if (!(!sclk)) begin</code></p><p>Agent's guesses for the faulty line: [57] · attempts: 1</p><p><b>Attempt 1:</b> Line 49 assigns tx_sh to {tx_data[6:0], 1&#x27;b0} when starting a transfer, but the transmission shifts out bits using tx_sh[7] and shifts left on falling edges. For MSB-first transmission, tx_sh should store the remaining bits to transmit starting from bit 6 down to 0, which corresponds to {tx_data[6:0], 1&#x27;b0} correctly if bit 7 is already loaded into mosi, but wait—on line 49, tx_sh is assigned {tx_data[6:0], 1&#x27;b0} while mosi gets tx_data[7]. However, during the transfer shift on line 70, it does {tx_sh[6:0], 1&#x27;b0} while loading mosi from tx_sh[7] on line 69. Wait, look at line 49: tx_sh &lt;= {tx_<br><code>if (!sclk) begin</code></p></details>
+<details><summary>Bug spi_master_m002: constant 1&#x27;b1 changed to 1&#x27;b0 (line 36) — <span class='ok'>fixed</span></summary><p>Injected: <code>cs_n    &lt;= 1&#x27;b1;</code> → <code>cs_n    &lt;= 1&#x27;b0;</code></p><p>Agent's guesses for the faulty line: [36] · attempts: 1</p><p><b>Attempt 1:</b> After reset, cs_n should be 1 according to the specification (&#x27;After reset: cs_n = 1&#x27;), but line 36 sets cs_n &lt;= 1&#x27;b0.<br><code>cs_n    &lt;= 1&#x27;b1;</code></p></details>
+<details><summary>Bug spi_master_m003: assignment &#x27;sclk    &lt;= 1&#x27;b0;&#x27; removed (line 34) — <span class='ok'>fixed</span></summary><p>Injected: <code>sclk    &lt;= 1&#x27;b0;</code> → <code>;</code></p><p>Agent's guesses for the faulty line: [34, 34] · attempts: 2</p><p><b>Attempt 1:</b> Line 34 contains an extraneous semicolon statement left over from debugging/typo, causing syntax or simulation issues (uninitialized or floating logic affecting reset or registers like sclk).<br><code></code></p><p><b>Attempt 2:</b> Line 34 contains an empty statement semicolon (`;`) instead of initializing `sclk` to `1&#x27;b0` upon reset, which leaves `sclk` at &#x27;x&#x27; and violates the reset requirements (&#x27;sclk = 0&#x27;).<br><code>sclk    &lt;= 1&#x27;b0;</code></p></details>
+<h2 id='apb_regs'>apb_regs</h2>
+<div class='wrap'><table><tr><th>Step</th><th>Action</th><th>Result on the correct design</th><th>Coverage</th><th>Agent's diagnosis</th></tr>
+<tr><td>0</td><td>generate</td><td>fail (1/4 tests)</td><td></td><td></td></tr>
+<tr><td>1</td><td>fix</td><td>fail (1/4 tests)</td><td></td><td>[testbench] The testbench checked `pready` during the SETUP cycle or incorrectly timed the ACCESS phase for DATA transfers, whereas `pready` is defined as being low only during the *first ACCESS cycle* of a transfer to address 0x04.</td></tr>
+<tr><td>2</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The testbench scheduled signal updates during the ReadOnly phase and incorrectly assumed the timing of pready during DATA register access (checking pready before the rising edge of the first access cycle).</td></tr>
+<tr><td>3</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The testbench checked `pready` before the rising edge of the first access cycle instead of after the rising edge combined with `ReadOnly()` when `pready` actually registers its wait state.</td></tr>
+<tr><td>4</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The testbench sequence for `run_apb_transaction` drove `penable=1` and `paddr/pwdata` simultaneously on a falling edge right after the setup cycle without meeting the APB3 timing where the ACCESS cycle starts at the rising edge with `penable=1` already held or driven correctly, causing the DUT to mi</td></tr>
+<tr><td>5</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The testbench misinterprets APB3 transaction timing and drives penable=1 too late or fails to keep inputs stable across multiple cycles of a wait-state transfer, causing the DUT&#x27;s pready logic to miss the access phase detection.</td></tr>
+<tr><td>6</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The testbench misinterprets the timing of APB3 SETUP and ACCESS phases for DATA wait-state transfers, attempting to assert `penable=1` on the falling edge between SETUP and the first ACCESS cycle while expecting `pready=0` on that same first ACCESS cycle. In APB3, the SETUP cycle is maintained until</td></tr>
+<tr><td>7</td><td>fix</td><td>fail (2/4 tests)</td><td></td><td>[testbench] The testbench incorrectly drives `penable` high on the falling edge *after* the SETUP cycle, but according to the APB3 protocol and DUT design, `penable` must be asserted *during* the SETUP cycle (or driven on the rising edge / setup phase) so that when the rising edge enters the ACCESS cycle, both </td></tr>
+</table></div>
+<details><summary>Final testbench (tb_07.py)</summary><pre><code>&quot;&quot;&quot;
+Verification Plan for apb_regs:
+1. Reset Behavior:
+   - Verify asynchronous assertion of `presetn` resets registers:
+     CTRL (0x00) = 0x00000000
+     DATA (0x04) = 0x00000000
+     STATUS (0x08) = 0x00000000
+     ID (0x0C) = 0xA5B00001
+   - Verify pready=1 and pslverr=0 during reset.
+
+2. Standard APB3 Protocol &amp; Register Access:
+   - CTRL register: Read/Write, bits [7:0] stored, upper bits read as 0.
+   - DATA register: Read/Write, 32-bit storage, exactly ONE wait state (pready=0 on first ACCESS, pready=1 on second ACCESS).
+   - STATUS register: Read-only, increments on every successful write to CTRL or DATA, wraps at 65536 (16 bits), upper bits read as 0.
+   - ID register: Read-only, constant identification value.
+
+3. Error Handling (pslverr):
+   - Invalid addresses yield pslverr=1 on the completing ACCESS cycle.
+   - Writes to read-only registers yield pslverr=1 and do not modify the registers.
+
+4. Randomized testing:
+   - Sequence of random valid/invalid read and write transactions to verify state tracking against a Python reference model.
+&quot;&quot;&quot;
+
+import cocotb
+from cocotb.clock import Clock
+from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, Timer, ClockCycles
+import random
+
+class APBReferenceModel:
+    def __init__(self):
+        self.ctrl = 0
+        self.data = 0
+        self.status = 0
+        self.id_reg = 0xA5B00001
+
+    def reset(self):
+        self.ctrl = 0
+        self.data = 0
+        self.status = 0
+
+    def step(self, pwrite, paddr):
+        valid_addr = paddr in [0x00, 0x04, 0x08, 0x0C]
+        is_err = False
+        if not valid_addr:
+            is_err = True
+        elif pwrite and paddr in [0x08, 0x0C]:
+            is_err = True
+
+        if not valid_addr:
+            prdata = 0
+        elif paddr == 0x00:
+            prdata = self.ctrl &amp; 0xFF
+        elif paddr == 0x04:
+            prdata = self.data
+        elif paddr == 0x08:
+            prdata = self.status &amp; 0xFFFF
+        elif paddr == 0x0C:
+            prdata = self.id_reg
+        else:
+            prdata = 0
+
+        return prdata, is_err
+
+async def apply_reset(dut):
+    await FallingEdge(dut.pclk)
+    dut.presetn.value = 0
+    dut.psel.value = 0
+    dut.penable.value = 0
+    dut.pwrite.value = 0
+    dut.paddr.value = 0
+    dut.pwdata.value = 0
+    await ClockCycles(dut.pclk, 3)
+    await FallingEdge(dut.pclk)
+    dut.presetn.value = 1
+    await RisingEdge(dut.pclk)
+
+async def run_apb_transaction(dut, pwrite, paddr, pwdata):
+    # APB3 Transfer:
+    # 1. SETUP Cycle: psel=1, penable=0, drive address/data/control on falling edge
+    await FallingEdge(dut.pclk)
+    dut.psel.value = 1
+    dut.penable.value = 0
+    dut.pwrite.value = 1 if pwrite else 0
+    dut.paddr.value = paddr
+    dut.pwdata.value = pwdata
+
+    is_data = (paddr == 0x04)
+
+    # Rising edge of setup cycle -&gt; now enter ACCESS cycle 1
+    # For standard APB3, penable goes high for the ACCESS cycle.
+    # We set penable=1 at the start of the ACCESS cycle (or drive it right after the rising edge of setup).
+    # Actually, standard APB3 setup cycle is one clock edge to next. 
+    # Let&#x27;s assert penable=1 synchronously right at the beginning of the ACCESS cycle (on the rising edge or immediately after).
+    # Since inputs must be stable, we can set penable=1 on the falling edge of pclk during the setup cycle, 
+    # but wait: the spec says SETUP: psel=1, penable=0. ACCESS: penable=1.
+    # If SETUP is one clock cycle (from rising edge to rising edge), then during SETUP, penable=0.
+    # At the rising edge ending SETUP, we enter ACCESS, so penable must be 1 during ACCESS.
+    # To have penable=1 sampled correctly at the rising edge of setup (entering ACCESS), we must assert penable=1 during the setup cycle.
+    # Let&#x27;s set penable=1 on the falling edge *inside* the setup cycle (halfway through).
+    
+    await Timer(2, &quot;ns&quot;) # slightly after rising edge of setup
+    dut.penable.value = 1
+
+    if is_data:
+        # First ACCESS cycle: pready should be sampled as 0 at the rising edge ending ACCESS 1
+        await RisingEdge(dut.pclk)
+        await ReadOnly()
+        assert int(dut.pready.value) == 0, f&quot;Expected pready=0 for DATA transfer first ACCESS cycle at addr {hex(paddr)}&quot;
+
+        # Second ACCESS cycle: pready should be 1
+        await RisingEdge(dut.pclk)
+        await ReadOnly()
+        assert int(dut.pready.value) == 1, f&quot;Expected pready=1 for DATA transfer second ACCESS cycle at addr {hex(paddr)}&quot;
+    else:
+        # Standard transfer completing in 1st access cycle
+        await RisingEdge(dut.pclk)
+        await ReadOnly()
+        assert int(dut.pready.value) == 1, f&quot;Expected pready=1 for standard transfer at addr {hex(paddr)}&quot;
+
+    prdata = int(dut.prdata.value)
+    pslverr = int(dut.pslverr.value)
+
+    # End of transfer: deassert psel and penable on falling edge
+    await FallingEdge(dut.pclk)
+    dut.psel.value = 0
+    dut.penable.value = 0
+    
+    return prdata, pslverr
+
+
+@cocotb.test()
+async def test_reset_behavior(dut):
+    &quot;&quot;&quot;Test asynchronous reset and default register values.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.pclk, 10, units=&quot;ns&quot;).start())
+    
+    dut.presetn.value = 0
+    dut.psel.value = 1
+    dut.penable.value = 1
+    dut.pwrite.value = 1
+    dut.paddr.value = 0x04
+    dut.pwdata.value = 0xDEADBEEF
+    await ClockCycles(dut.pclk, 2)
+    
+    await ReadOnly()
+    assert int(dut.pslverr.value) == 0
+
+    await FallingEdge(dut.pclk)
+    dut.presetn.value = 1
+    await RisingEdge(dut.pclk)
+    await ReadOnly()
+
+    prdata, _ = await run_apb_transaction(dut, pwrite=0, paddr=0x0C, pwdata=0)
+    assert prdata == 0xA5B00001
+
+
+@cocotb.test()
+async def test_basic_registers(dut):
+    &quot;&quot;&quot;Test read/write functionality of CTRL, DATA, STATUS, and ID registers.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.pclk, 10, units=&quot;ns&quot;).start())
+    await apply_reset(dut)
+
+    # 1. Write to CTRL (only bits [7:0] stored)
+    prdata, pslverr = await run_apb_transaction(dut, pwrite=1, paddr=0x00, pwdata=0x12345678)
+    assert pslverr == 0
+
+    # Read back CTRL
+    prdata, pslverr = await run_apb_transaction(dut, pwrite=0, paddr=0x00, pwdata=0)
+    assert prdata == 0x78, f&quot;Expected CTRL to store 0x78, got {hex(prdata)}&quot;
+    assert pslverr == 0
+
+    # 2. Write to DATA (32-bit storage, 1 wait state)
+    prdata, pslverr = await run_apb_transaction(dut, pwrite=1, paddr=0x04, pwdata=0xABCDEF01)
+    assert pslverr == 0
+
+    # Read back DATA
+    prdata, pslverr = await run_apb_transaction(dut, pwrite=0, paddr=0x04, pwdata=0)
+    assert prdata == 0xABCDEF01, f&quot;Expected DATA to store 0xABCDEF01, got {hex(prdata)}&quot;
+    assert pslverr == 0
+
+    # 3. Check STATUS (should be 2 successful writes: CTRL and DATA)
+    prdata, pslverr = await run_apb_transaction(dut, pwrite=0, paddr=0x08, pwdata=0)
+    assert prdata == 2, f&quot;Expected STATUS write count to be 2, got {prdata}&quot;
+    assert pslverr == 0
+
+
+@cocotb.test()
+async def test_error_responses(dut):
+    &quot;&quot;&quot;Test invalid addresses and writes to read-only registers.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.pclk, 10, units=&quot;ns&quot;).start())
+    await apply_reset(dut)
+
+    # 1. Invalid address read
+    prdata, pslverr = await run_apb_transaction(dut, pwrite=0, paddr=0x13, pwdata=0)
+    assert pslverr == 1, &quot;Expected pslverr=1 for invalid read address&quot;
+    assert prdata == 0, &quot;Expected prdata=0 for invalid address read&quot;
+
+    # 2. Invalid address write
+    _, pslverr = await run_apb_transaction(dut, pwrite=1, paddr=0x03, pwdata=0x1234)
+    assert pslverr == 1, &quot;Expected pslverr=1 for invalid write address&quot;
+
+    # 3. Write to read-only register (STATUS at 0x08)
+    _, pslverr = await run_apb_transaction(dut, pwrite=1, paddr=0x08, pwdata=0x5555)
+    assert pslverr == 1, &quot;Expected pslverr=1 when writing to STATUS&quot;
+
+    # 4. Write to read-only register (ID at 0x0C)
+    _, pslverr = await run_apb_transaction(dut, pwrite=1, paddr=0x0C, pwdata=0x5555)
+    assert pslverr == 1, &quot;Expected pslverr=1 when writing to ID&quot;
+
+
+@cocotb.test()
+async def test_randomized_transactions(dut):
+    &quot;&quot;&quot;Constrained-random test checking transactions against the reference model.&quot;&quot;&quot;
+    cocotb.start_soon(Clock(dut.pclk, 10, units=&quot;ns&quot;).start())
+    await apply_reset(dut)
+
+    ref = APBReferenceModel()
+    rng = random.Random(1)
+
+    addresses = [0x00, 0x04, 0x08, 0x0C, 0x01, 0x03, 0x10, 0xFF]
+
+    for _ in range(50):
+        pwrite = rng.choice([0, 1])
+        paddr = rng.choice(addresses)
+        pwdata = rng.getrandbits(32)
+
+        expected_prdata, expected_pslverr = ref.step(pwrite=pwrite, paddr=paddr)
+
+        got_prdata, got_pslverr = await run_apb_transaction(dut, pwrite, paddr, pwdata)
+
+        assert got_pslverr == expected_pslverr, f&quot;Mismatch on pslverr at addr {hex(paddr)}, pwrite={pwrite}: expected {expected_pslverr}, got {got_pslverr}&quot;
+        if expected_pslverr == 0 or pwrite == 0:
+            if paddr in [0x00, 0x04, 0x08, 0x0C] and not (pwrite and paddr in [0x08, 0x0C]):
+                assert got_prdata == expected_prdata, f&quot;Mismatch on prdata at addr {hex(paddr)}: expected {hex(expected_prdata)}, got {hex(got_prdata)}&quot;
+
+        valid_addr = paddr in [0x00, 0x04, 0x08, 0x0C]
+        is_err = not valid_addr or (pwrite and paddr in [0x08, 0x0C])
+        if pwrite and not is_err:
+            if paddr == 0x00:
+                ref.ctrl = pwdata &amp; 0xFF
+                ref.status = (ref.status + 1) &amp; 0xFFFF
+            elif paddr == 0x04:
+                ref.data = pwdata
+                ref.status = (ref.status + 1) &amp; 0xFFFF
+</code></pre></details>
+<details><summary>Bug apb_regs_m005: &#x27;==&#x27; replaced by &#x27;!=&#x27; (line 28) — <span class='ok'>fixed</span></summary><p>Injected: <code>wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);</code> → <code>wire known    = (paddr == A_CTRL) || is_data || (paddr != A_STATUS) || (paddr == A_ID);</code></p><p>Agent's guesses for the faulty line: [28] · attempts: 1</p><p><b>Attempt 1:</b> Line 28 defines `known` with an incorrect operator `(paddr != A_STATUS)` instead of `(paddr == A_STATUS)`, causing valid addresses to be incorrectly marked as unknown (erroneous). Additionally, the first ACCESS cycle wait-state logic for `is_data` depends on the `known` signal or address decode. Since `is_data` is `paddr == A_DATA`, if address decoding/known is broken, it causes pready assertions to fail.<br><code>wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);</code></p></details>
+<details><summary>Bug apb_regs_m010: &#x27;==&#x27; replaced by &#x27;!=&#x27; (line 28) — <span class='ok'>fixed</span></summary><p>Injected: <code>wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);</code> → <code>wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr != A_ID);</code></p><p>Agent's guesses for the faulty line: [28] · attempts: 1</p><p><b>Attempt 1:</b> Line 28 uses &#x27;paddr != A_ID&#x27; instead of &#x27;paddr == A_ID&#x27;, which makes &#x27;known&#x27; evaluate incorrectly for address 0x0C (ID) and breaks address validation for valid registers.<br><code>wire known    = (paddr == A_CTRL) || is_data || (paddr == A_STATUS) || (paddr == A_ID);</code></p></details>
+<p class='muted'>Generated by DVAgent.</p></main></body></html>

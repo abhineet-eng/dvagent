@@ -1,0 +1,34 @@
+fail: 4 passed, 1 failed (1.1 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_01.test_reset
+  INFO cocotb.regression                  Found test test_tb_01.test_din_valid_gating
+  INFO cocotb.regression                  Found test test_tb_01.test_basic_and_overlapping
+  INFO cocotb.regression                  Found test test_tb_01.test_count_saturation
+  INFO cocotb.regression                  Found test test_tb_01.test_constrained_random
+test test_constrained_random did not finish; last testbench output:
+  Constrained-random test of bit streams and valid flags with reference model check.
+  ** TEST                                   STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  ***********************************************************************************************
+  ** test_tb_01.test_reset                   FAIL          10.00           0.00      13457.57  **
+  ** test_tb_01.test_din_valid_gating        PASS          90.00           0.00      54883.91  **
+  ** test_tb_01.test_basic_and_overlapping   PASS          90.00           0.00      59995.48  **
+  ** test_tb_01.test_count_saturation        PASS        7860.00           0.11      69266.46  **
+  ** test_tb_01.test_constrained_random      PASS       50030.00           0.74      67829.82  **
+  ***********************************************************************************************
+  ** TESTS=5 PASS=4 FAIL=1 SKIP=0                       58080.00           0.86      67390.00  **
+  ***********************************************************************************************
+  INFO: Running command vvp -M /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runner/work/dvagent/dvagent/results/flash-lite/seq_detector/eval/builds/icarus_43321b1671da/sim.vvp in directory /home/runner/work/dvagent/dvagent/results/flash-lite/seq_detector/eval/runs/run_2434674979_2893
+FAILED test_reset
+  testbench log before the failure:
+    Test reset clears outputs and internal state.
+  Traceback (most recent call last):
+  File "test_tb_01.py", line 89, in test_reset
+  assert int(dut.match.value) == 0, f"Match not 0 after reset: got {int(dut.match.value)}"
+  AssertionError: Match not 0 after reset: got 1
+passed: test_din_valid_gating, test_basic_and_overlapping, test_count_saturation, test_constrained_random

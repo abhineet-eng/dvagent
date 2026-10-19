@@ -1,0 +1,33 @@
+fail: 4 passed, 1 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset
+  INFO cocotb.regression                  Found test test_tb_00.test_single_requester
+  INFO cocotb.regression                  Found test test_tb_00.test_round_robin_order
+  INFO cocotb.regression                  Found test test_tb_00.test_retention_and_handover
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+FAILED test_constrained_random
+  testbench log before the failure:
+    Run constrained-random testing over 1000 cycles and check against reference model.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 181, in test_constrained_random
+  assert int(dut.grant.value) == ref.grant, f"Random test fail: rst={rst_val}, req={req_val:04b}, expected grant={ref.grant:04b}, got {int(dut.grant.value):04b}"
+  AssertionError: Random test fail: rst=0, req=1101, expected grant=0100, got 0001
+  INFO cocotb.regression                  ************************************************************************************************
+  ** TEST                                    STATUS  SIM TIME (ns)  REAL TIME (s)  RATIO (ns/s) **
+  ************************************************************************************************
+  ** test_tb_00.test_reset                    PASS          10.00           0.00      12525.30  **
+  ** test_tb_00.test_single_requester         PASS          80.00           0.00      53143.57  **
+  ** test_tb_00.test_round_robin_order        PASS         100.00  
+... (truncated) ...
+**********************************
+  ** TESTS=5 PASS=4 FAIL=1 SKIP=0                          360.00           0.01      26493.50  **
+  ************************************************************************************************
+  INFO: Running command iverilog -o /home/runner/work/dvagent/dvagent/results/flash-lite/rr_arbiter/eval/builds/icarus_2a1ce369006d/sim.vvp -D COCOTB_SIM=1 -s rr_arbiter -g2012 -f /home/runner/work/dvagent/dvagent/results/flash-lite/rr_arbiter/eval/builds/icarus_2a1ce369006d/cmds.f /home/runner/work/dvagent/dvagent/results/flash-lite/rr_arbiter/variants/rr_arbiter_m010/rr_arbiter.v in directory /home/runner/work/dvagent/dvagent/results/flash-lite/rr_arbiter/eval/builds/icarus_2a1ce369006d
+  INFO: Running command vvp -M /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb/libs -m libcocotbvpi_icarus /home/runner/work/dvagent/dvagent/results/flash-lite/rr_arbiter/eval/builds/icarus_2a1ce369006d/sim.vvp in directory /home/runner/work/dvagent/dvagent/results/flash-lite/rr_arbiter/eval/runs/run_2434835890_2893
+passed: test_reset, test_single_requester, test_round_robin_order, test_retention_and_handover

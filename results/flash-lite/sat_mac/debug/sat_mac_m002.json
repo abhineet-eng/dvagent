@@ -1,0 +1,29 @@
+{
+ "case": "sat_mac_m002",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 24,
+   "explanation": "Line 24 checks `!(hi)` instead of `hi` to determine positive saturation, which inverts the positive saturation logic and causes normal or non-saturated positive values to incorrectly clamp to 32767.",
+   "edits": [
+    {
+     "line": 24,
+     "old_text": "            if (!(hi))",
+     "new_text": "            if (hi)"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/sat_mac/debug/sat_mac_m002_fix1/sat_mac.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5229,
+    "completion_tokens": 122,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    24
+   ]
+  }
+ ]
+}

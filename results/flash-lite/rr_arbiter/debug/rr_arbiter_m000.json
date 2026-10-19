@@ -1,0 +1,29 @@
+{
+ "case": "rr_arbiter_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 28,
+   "explanation": "Line 28 incorrectly subtracts 3 instead of adding 1 modulo 4 or using the standard offset for rot[2] (which corresponds to last + 3). Subtracting 3 breaks the round-robin priority order search (`last+1, last+2, last+3, last+4`).",
+   "edits": [
+    {
+     "line": 28,
+     "old_text": "            pick = last - 2'd3;",
+     "new_text": "            pick = last + 2'd3;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/rr_arbiter/debug/rr_arbiter_m000_fix1/rr_arbiter.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4777,
+    "completion_tokens": 129,
+    "seconds": 0.9
+   },
+   "edited_lines": [
+    28
+   ]
+  }
+ ]
+}

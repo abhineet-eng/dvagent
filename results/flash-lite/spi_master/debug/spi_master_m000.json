@@ -1,0 +1,75 @@
+{
+ "case": "spi_master_m000",
+ "fixed_self_check": false,
+ "attempts": [
+  {
+   "bug_line": 26,
+   "explanation": "The wire half_done is comparing div (width 8) with LAST[7:0] where LAST is defined as an integer, which causes width or sign mismatch issues in the comparison, leading div to decrement improperly or fail the half-period check.",
+   "edits": [
+    {
+     "line": 26,
+     "old_text": "    wire half_done = (div == LAST[7:0]);",
+     "new_text": "    wire half_done = (div == LAST);"
+    }
+   ],
+   "applied": true,
+   "self_check": "fail",
+   "patched_file": "results/flash-lite/spi_master/debug/spi_master_m000_fix1/spi_master.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5819,
+    "completion_tokens": 144,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    26
+   ]
+  },
+  {
+   "bug_line": 53,
+   "explanation": "Line 53 checks `else if (!half_done)` instead of `else if (half_done)`, which means the divider decrements every cycle except when `half_done` is reached. It should reload the divider (`div <= 8'd0`) and toggle the SPI state only when `half_done` is true, per the timing specification.",
+   "edits": [
+    {
+     "line": 53,
+     "old_text": "            end else if (!half_done) begin",
+     "new_text": "            end else if (half_done) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "fail",
+   "patched_file": "results/flash-lite/spi_master/debug/spi_master_m000_fix2/spi_master.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6002,
+    "completion_tokens": 162,
+    "seconds": 1.2
+   },
+   "edited_lines": [
+    53
+   ]
+  },
+  {
+   "bug_line": 53,
+   "explanation": "The division counter condition used `!half_done` instead of `half_done` when counting down the SCLK half-period, causing `sclk` to toggle prematurely at `div == 0` instead of waiting for `div == LAST` (i.e. `CLK_DIV` cycles).",
+   "edits": [
+    {
+     "line": 53,
+     "old_text": "            end else if (!half_done) begin",
+     "new_text": "            end else if (!half_done) begin"
+    }
+   ],
+   "applied": true,
+   "self_check": "invalid",
+   "patched_file": null,
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 6062,
+    "completion_tokens": 128,
+    "seconds": 1.0
+   },
+   "edited_lines": [
+    53
+   ]
+  }
+ ]
+}

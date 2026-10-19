@@ -1,0 +1,112 @@
+[
+ {
+  "mutant": "seq_detector_m000",
+  "bug_line": 39,
+  "operator": "arithmetic",
+  "description": "'+' replaced by '-'",
+  "original": "count <= count + 8'd1;",
+  "mutated": "count <= count - 8'd1;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   39
+  ],
+  "fixes": [
+   [
+    "count <= count + 8'd1;"
+   ]
+  ],
+  "explanations": [
+   "Line 39 decrements the count instead of incrementing it when a match occurs, violating the specification requirement that 'count increments by 1 at the same edge where match is set to 1'."
+  ]
+ },
+ {
+  "mutant": "seq_detector_m001",
+  "bug_line": 30,
+  "operator": "condition",
+  "description": "condition (rst) inverted",
+  "original": "if (rst) begin",
+  "mutated": "if (!(rst)) begin",
+  "attempts": 3,
+  "localized_first": false,
+  "localized_any": true,
+  "fixed_first": false,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   25,
+   25,
+   30
+  ],
+  "fixes": [
+   [
+    "default: next = din ? S1 : S0;"
+   ],
+   [
+    "default: next = din ? S1 : S0;"
+   ],
+   [
+    "if (rst) begin"
+   ]
+  ],
+  "explanations": [
+   "The default case in the state transition table incorrectly transitions to S2 (state for '10') when din is 0, instead of returning to S0 when the pattern breaks, or properly handling other states. Specifically, the default case is hit for state S3 (value 2'd3), so when receiving a 0 in state S3 (i.e., failing '101'), it goes to S2 instead of S0.",
+   "The default case in the next-state logic uses `din ? S1 : S2`, which maps the S3 state when `din=0` to S2 (incorrectly transitioning to '10' instead of returning to S0 or S1). This breaks the state machine sequence for '1011' detection, causing state S3 to misbehave and preventing matches from being detected.",
+   "The synchronous reset condition checks `if (!(rst))`, but `rst` is defined as active-high (`rst = 1` asserts reset). Therefore, `!(rst)` evaluates to 0 when reset is asserted, so the design never enters the reset branch, leaving internal signals like `count` uninitialized (`x`) and preventing state machine initialization."
+  ]
+ },
+ {
+  "mutant": "seq_detector_m002",
+  "bug_line": 38,
+  "operator": "constant",
+  "description": "constant 8'hFF changed to 8'hFE",
+  "original": "if (hit && count != 8'hFF)",
+  "mutated": "if (hit && count != 8'hFE)",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   38
+  ],
+  "fixes": [
+   [
+    "if (hit && count != 8'hFF)"
+   ]
+  ],
+  "explanations": [
+   "Line 38 checks `count != 8'hFE` (which is 254) instead of `count != 8'hFF` (255), causing the count to stop incrementing at 254 instead of saturating at 255 as specified."
+  ]
+ },
+ {
+  "mutant": "seq_detector_m004",
+  "bug_line": 18,
+  "operator": "logical",
+  "description": "'&&' replaced by '||'",
+  "original": "wire      hit = din_valid && (state == S3) && din;",
+  "mutated": "wire      hit = din_valid && (state == S3) || din;",
+  "attempts": 1,
+  "localized_first": true,
+  "localized_any": true,
+  "fixed_first": true,
+  "fixed": true,
+  "self_check_pass": true,
+  "predicted_lines": [
+   18
+  ],
+  "fixes": [
+   [
+    "wire      hit = din_valid && (state == S3) && din;"
+   ]
+  ],
+  "explanations": [
+   "Line 18 incorrectly computes the match/hit signal using a combinational expression `wire hit = din_valid && (state == S3) || din;` which ignores `din_valid` for the `din` term and incorrectly asserts `hit` whenever `din` is high. It should be `wire hit = din_valid && (state == S3) && din;`, ensuring the match requires `din_valid` and that the final received bit is `1` while in state S3."
+  ]
+ }
+]

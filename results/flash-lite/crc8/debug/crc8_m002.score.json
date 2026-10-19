@@ -1,0 +1,25 @@
+{
+ "mutant": "crc8_m002",
+ "bug_line": 31,
+ "operator": "condition",
+ "description": "condition (valid) inverted",
+ "original": "end else if (valid) begin",
+ "mutated": "end else if (!(valid)) begin",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  31
+ ],
+ "fixes": [
+  [
+   "end else if (valid) begin"
+  ]
+ ],
+ "explanations": [
+  "Line 31 checks `!(valid)` instead of `valid`, causing the CRC engine to update when valid is 0 and hold when valid is 1, which violates the behavior specification where valid=1 processes the byte and otherwise outputs hold."
+ ]
+}

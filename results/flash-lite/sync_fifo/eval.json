@@ -1,0 +1,93 @@
+{
+ "mutants": [
+  "sync_fifo_m000",
+  "sync_fifo_m001",
+  "sync_fifo_m002",
+  "sync_fifo_m003",
+  "sync_fifo_m004",
+  "sync_fifo_m005",
+  "sync_fifo_m006",
+  "sync_fifo_m007",
+  "sync_fifo_m008",
+  "sync_fifo_m009",
+  "sync_fifo_m010",
+  "sync_fifo_m011"
+ ],
+ "snapshots": {
+  "single": {
+   "snapshot": "single",
+   "tb": "tb_00.py",
+   "golden_status": "tb_error",
+   "tests_total": 0,
+   "tests_passing": 0,
+   "passing_tests": [],
+   "coverage": null,
+   "killed": {},
+   "mutation_score": 0.0,
+   "seconds": 0.0
+  },
+  "feedback": {
+   "snapshot": "feedback",
+   "tb": "tb_02.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_almost_full_and_random",
+    "test_basic_push_pop",
+    "test_overflow_underflow",
+    "test_reset",
+    "test_simultaneous_push_pop"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "sync_fifo_m000": "fail",
+    "sync_fifo_m001": "fail",
+    "sync_fifo_m002": "fail",
+    "sync_fifo_m003": "fail",
+    "sync_fifo_m004": "fail",
+    "sync_fifo_m005": "fail",
+    "sync_fifo_m006": "fail",
+    "sync_fifo_m007": "fail",
+    "sync_fifo_m008": "fail",
+    "sync_fifo_m009": "fail",
+    "sync_fifo_m010": "fail",
+    "sync_fifo_m011": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 13.6
+  },
+  "final": {
+   "snapshot": "feedback",
+   "tb": "tb_02.py",
+   "golden_status": "pass",
+   "tests_total": 5,
+   "tests_passing": 5,
+   "passing_tests": [
+    "test_almost_full_and_random",
+    "test_basic_push_pop",
+    "test_overflow_underflow",
+    "test_reset",
+    "test_simultaneous_push_pop"
+   ],
+   "coverage": 100.0,
+   "killed": {
+    "sync_fifo_m000": "fail",
+    "sync_fifo_m001": "fail",
+    "sync_fifo_m002": "fail",
+    "sync_fifo_m003": "fail",
+    "sync_fifo_m004": "fail",
+    "sync_fifo_m005": "fail",
+    "sync_fifo_m006": "fail",
+    "sync_fifo_m007": "fail",
+    "sync_fifo_m008": "fail",
+    "sync_fifo_m009": "fail",
+    "sync_fifo_m010": "fail",
+    "sync_fifo_m011": "fail"
+   },
+   "mutation_score": 100.0,
+   "seconds": 13.6,
+   "same_as": "feedback"
+  }
+ }
+}

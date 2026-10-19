@@ -1,0 +1,37 @@
+{
+ "mutant": "rr_arbiter_m003",
+ "bug_line": 46,
+ "operator": "deleted",
+ "description": "assignment 'grant <= 4'b0001 << pick;' removed",
+ "original": "grant <= 4'b0001 << pick;",
+ "mutated": ";",
+ "attempts": 3,
+ "localized_first": false,
+ "localized_any": false,
+ "fixed_first": false,
+ "fixed": false,
+ "self_check_pass": false,
+ "predicted_lines": [
+  45,
+  45,
+  45
+ ],
+ "fixes": [
+  [
+   "if (found) {"
+  ],
+  [
+   "if (found) {",
+   "grant <= 4'b0001 << pick;"
+  ],
+  [
+   "if (found) {",
+   "grant <= 1 << pick;"
+  ]
+ ],
+ "explanations": [
+  "When arbitrating and a valid new requester is found (found=1), the RTL leaves the grant signal unassigned or unchanged rather than updating it to the one-hot encoding of the new winner (`1 << pick`), which violates behavior rule 2.",
+  "When arbitrating and a winner is found (`found` is high), the RTL does not update `grant` with the newly picked requester (`1 << pick`), leaving `grant` at 0. This violates behavior rule 2.",
+  "When arbitrating and finding a new winner (`found`), the RTL leaves the `grant` register unassigned (executing an empty statement `;`), causing `grant` to become 0 instead of updating to `1 << pick`. This violates the arbitration behavior specification."
+ ]
+}

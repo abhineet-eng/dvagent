@@ -1,0 +1,25 @@
+{
+ "mutant": "uart_tx_m006",
+ "bug_line": 93,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "tick <= tick + 16'd1;",
+ "mutated": "tick <= tick - 16'd1;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  93
+ ],
+ "fixes": [
+  [
+   "tick <= tick + 16'd1;"
+  ]
+ ],
+ "explanations": [
+  "In the PARITY state, decrementing the tick counter (`tick <= tick - 16'd1;`) instead of incrementing it (`tick <= tick + 16'd1;`) causes incorrect timing for the parity bit duration, leading to a tx mismatch."
+ ]
+}

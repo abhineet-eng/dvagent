@@ -1,0 +1,78 @@
+{
+ "design": "uart_tx",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_reset_and_idle",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_single_frame_no_parity",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_single_frame_even_parity",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_single_frame_odd_parity",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_back_to_back",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 0.33,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 22,
+    "total": 22,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1454,
+    "completion_tokens": 4546,
+    "seconds": 10.0
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_00.py",
+  "final": "tb_00.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 1,
+  "prompt_tokens": 1454,
+  "completion_tokens": 4546,
+  "seconds": 10.0
+ },
+ "seconds": 24.7
+}

@@ -1,0 +1,25 @@
+{
+ "mutant": "rr_arbiter_m000",
+ "bug_line": 28,
+ "operator": "arithmetic",
+ "description": "'+' replaced by '-'",
+ "original": "pick = last + 2'd3;",
+ "mutated": "pick = last - 2'd3;",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  28
+ ],
+ "fixes": [
+  [
+   "pick = last + 2'd3;"
+  ]
+ ],
+ "explanations": [
+  "Line 28 incorrectly subtracts 3 instead of adding 1 modulo 4 or using the standard offset for rot[2] (which corresponds to last + 3). Subtracting 3 breaks the round-robin priority order search (`last+1, last+2, last+3, last+4`)."
+ ]
+}

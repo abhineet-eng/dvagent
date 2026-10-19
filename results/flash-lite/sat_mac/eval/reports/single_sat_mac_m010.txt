@@ -1,0 +1,38 @@
+fail: 1 passed, 4 failed (0.2 s)
+output before the tests ran:
+  -.--ns INFO     gpi                                ..mbed/gpi_embed.cpp:79   in set_program_name_in_venv        Did not detect Python virtual environment. Using system-wide Python interpreter
+  -.--ns INFO     gpi                                ../gpi/GpiCommon.cpp:101  in gpi_print_registered_impl       VPI registered
+  INFO cocotb                             Running on Icarus Verilog version 12.0 (stable)
+  INFO cocotb                             Running tests with cocotb v1.9.2 from /opt/hostedtoolcache/Python/3.12.15/x64/lib/python3.12/site-packages/cocotb
+  INFO cocotb                             Seeding Python random module with supplied seed 12345
+  INFO cocotb.regression                  pytest not found, install it to enable better AssertionError messages
+  INFO cocotb.regression                  Found test test_tb_00.test_reset
+  INFO cocotb.regression                  Found test test_tb_00.test_idle_and_clear
+  INFO cocotb.regression                  Found test test_tb_00.test_basic_mac_and_restart
+  INFO cocotb.regression                  Found test test_tb_00.test_positive_and_negative_saturation
+  INFO cocotb.regression                  Found test test_tb_00.test_constrained_random
+FAILED test_idle_and_clear
+  testbench log before the failure:
+    Test idle holding and clear functionality.
+  Traceback (most recent call last):
+  File "test_tb_00.py", line 111, in test_idle_and_clear
+  await check_outputs(ref, dut) # acc = 100
+  File "test_tb_00.py", line 71, in check_outputs
+  assert got_acc == expected_acc, f"ACC mismatch: expected {expected_acc}, got {got_acc}"
+  AssertionError: ACC mismatch: expected 100, got -32768
+FAILED test_basic_mac_and_restart
+  testbench log before the failure:
+    Test basic MAC accumulation and clear+valid restart.
+  assert got_acc == expected_acc, f"ACC mismatch: expected {expected_acc}, got {got_acc}"
+  AssertionError: ACC mismatch: expected 50, got -32768
+FAILED test_positive_and_negative_saturation
+  testbench log before the failure:
+    Test positive and negative saturation and sticky sat flag.
+  assert got_acc == expected_acc, f"ACC mismatch: expected {expected_acc}, got {got_acc}"
+  AssertionError: ACC mismatch: expected 16129, got -32768
+FAILED test_constrained_random
+  testbench log before the failure:
+    Constrained-random test comparing DUT against reference model.
+  assert got_acc == expected_acc, f"ACC mismatch: expected {expected_acc}, got {got_acc}"
+  AssertionError: ACC mismatch: expected 1414, got -32768
+passed: test_reset

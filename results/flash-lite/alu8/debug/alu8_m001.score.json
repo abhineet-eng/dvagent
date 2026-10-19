@@ -1,0 +1,25 @@
+{
+ "mutant": "alu8_m001",
+ "bug_line": 33,
+ "operator": "bitwise",
+ "description": "'|' replaced by '&'",
+ "original": "3'd3: y = a | b;                              // OR",
+ "mutated": "3'd3: y = a & b;                              // OR",
+ "attempts": 1,
+ "localized_first": true,
+ "localized_any": true,
+ "fixed_first": true,
+ "fixed": true,
+ "self_check_pass": true,
+ "predicted_lines": [
+  33
+ ],
+ "fixes": [
+  [
+   "3'd3: y = a | b;                              // OR"
+  ]
+ ],
+ "explanations": [
+  "OP 3 is OR, but line 33 implements AND (`a & b`) instead of OR (`a | b`), breaking the specification for the OR operation."
+ ]
+}

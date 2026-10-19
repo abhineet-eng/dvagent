@@ -1,0 +1,120 @@
+{
+ "design": "seq_detector",
+ "steps": [
+  {
+   "index": 0,
+   "kind": "generate",
+   "tb_file": "tb_00.py",
+   "sim": {
+    "status": "fail",
+    "tests": [
+     {
+      "name": "test_reset",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_din_valid_gating",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_basic_and_overlapping",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_count_saturation",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": false,
+      "message": "Test failed with RANDOM_SEED=12345"
+     }
+    ],
+    "seconds": 0.23,
+    "coverage": null
+   },
+   "coverage": null,
+   "blame": null,
+   "root_cause": null,
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 1163,
+    "completion_tokens": 2474,
+    "seconds": 6.8
+   }
+  },
+  {
+   "index": 1,
+   "kind": "fix",
+   "tb_file": "tb_01.py",
+   "sim": {
+    "status": "pass",
+    "tests": [
+     {
+      "name": "test_reset",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_din_valid_gating",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_basic_and_overlapping",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_count_saturation",
+      "passed": true,
+      "message": ""
+     },
+     {
+      "name": "test_constrained_random",
+      "passed": true,
+      "message": ""
+     }
+    ],
+    "seconds": 1.11,
+    "coverage": null
+   },
+   "coverage": {
+    "hit": 12,
+    "total": 12,
+    "percent": 100.0,
+    "missed": []
+   },
+   "blame": "testbench",
+   "root_cause": "The helper function reset_dut leaves rst=0 inside a ReadOnly phase or right after a RisingEdge without waiting for FallingEdge, causing subsequent signal drives to occur during ReadOnly phase.",
+   "note": "",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 5471,
+    "completion_tokens": 2530,
+    "seconds": 5.1
+   }
+  }
+ ],
+ "snapshots": {
+  "single": "tb_00.py",
+  "feedback": "tb_01.py",
+  "final": "tb_01.py"
+ },
+ "passed": true,
+ "coverage": 100.0,
+ "design_bug": null,
+ "false_alarms": 0,
+ "usage": {
+  "calls": 2,
+  "prompt_tokens": 6634,
+  "completion_tokens": 5004,
+  "seconds": 11.9
+ },
+ "seconds": 29.9
+}

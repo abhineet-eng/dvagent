@@ -1,0 +1,29 @@
+{
+ "case": "crc8_m000",
+ "fixed_self_check": true,
+ "attempts": [
+  {
+   "bug_line": 33,
+   "explanation": "nbytes decrements instead of increments when valid bytes are accepted, which violates behaviour rule 2 (\"nbytes increments by 1\") and the specification description (\"number of bytes accepted since the last reset/init, wraps from 255 to 0\").",
+   "edits": [
+    {
+     "line": 33,
+     "old_text": "            nbytes <= nbytes - 8'd1;",
+     "new_text": "            nbytes <= nbytes + 8'd1;"
+    }
+   ],
+   "applied": true,
+   "self_check": "pass",
+   "patched_file": "results/flash-lite/crc8/debug/crc8_m000_fix1/crc8.v",
+   "usage": {
+    "calls": 1,
+    "prompt_tokens": 4461,
+    "completion_tokens": 131,
+    "seconds": 1.5
+   },
+   "edited_lines": [
+    33
+   ]
+  }
+ ]
+}

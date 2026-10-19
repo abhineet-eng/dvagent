@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+build/
+out/
+llm_io/
+sim_build/
+results.xml
+*.vcd
+*.fst
+results/*/*/variants/
+results/*/*/*/sim/
+results/*/*/*/builds/
+results/*/*/*/runs/

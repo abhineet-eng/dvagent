@@ -1,0 +1,10 @@
+{
+  "name": "rr_arbiter",
+  "top": "rr_arbiter",
+  "sources": ["rtl/rr_arbiter.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "medium",
+  "summary": "4-way round-robin arbiter with bus ownership (owner keeps the grant while requesting)"
+}

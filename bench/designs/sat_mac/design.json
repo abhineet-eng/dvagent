@@ -1,0 +1,10 @@
+{
+  "name": "sat_mac",
+  "top": "sat_mac",
+  "sources": ["rtl/sat_mac.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "medium",
+  "summary": "Signed 8x8 multiply-accumulate with 16-bit saturating accumulator and sticky saturation flag"
+}

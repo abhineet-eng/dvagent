@@ -1,0 +1,10 @@
+{
+  "name": "sync_fifo",
+  "top": "sync_fifo",
+  "sources": ["rtl/sync_fifo.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "medium",
+  "summary": "8x8 synchronous FIFO with first-word fall-through, simultaneous push/pop when full, and sticky error flags"
+}

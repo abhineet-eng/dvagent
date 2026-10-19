@@ -1,0 +1,10 @@
+{
+  "name": "alu8",
+  "top": "alu8",
+  "sources": ["rtl/alu8.v"],
+  "parameters": {},
+  "clock": null,
+  "reset": null,
+  "difficulty": "easy",
+  "summary": "8-bit combinational ALU: add, subtract, logic, shifts, signed compare, four flags"
+}

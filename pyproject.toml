@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dvagent"
+version = "1.0.0"
+description = "An LLM agent that writes, runs and debugs hardware testbenches, with a mutation-testing benchmark"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Abhineet"}]
+dependencies = ["cocotb==1.9.2", "matplotlib"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+dvagent = "dvagent.cli:main"
+
+[tool.setuptools]
+packages = ["dvagent"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

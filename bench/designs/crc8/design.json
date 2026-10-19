@@ -1,0 +1,10 @@
+{
+  "name": "crc8",
+  "top": "crc8",
+  "sources": ["rtl/crc8.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "medium",
+  "summary": "Byte-per-cycle CRC-8 (poly 0x07) engine with restart and byte counter"
+}

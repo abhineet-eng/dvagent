@@ -1,0 +1,10 @@
+{
+  "name": "seq_detector",
+  "top": "seq_detector",
+  "sources": ["rtl/seq_detector.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "easy",
+  "summary": "FSM that detects the overlapping serial pattern 1011 with a valid qualifier and a saturating match counter"
+}

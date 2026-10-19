@@ -1,0 +1,10 @@
+{
+  "name": "uart_tx",
+  "top": "uart_tx",
+  "sources": ["rtl/uart_tx.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "hard",
+  "summary": "UART transmitter: start bit, 8 data bits LSB first, optional even/odd parity, stop bit, busy/done handshake"
+}

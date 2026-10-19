@@ -1,0 +1,10 @@
+{
+  "name": "apb_regs",
+  "top": "apb_regs",
+  "sources": ["rtl/apb_regs.v"],
+  "parameters": {},
+  "clock": "pclk",
+  "reset": "presetn",
+  "difficulty": "hard",
+  "summary": "APB3 slave register block with read-only registers, a wait state on DATA, a write counter and error responses"
+}

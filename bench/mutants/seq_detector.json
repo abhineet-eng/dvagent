@@ -1,0 +1,227 @@
+{
+ "design": "seq_detector",
+ "file": "seq_detector.v",
+ "seed": 2027,
+ "mutants": [
+  {
+   "id": "seq_detector_m000",
+   "file": "seq_detector.v",
+   "line": 39,
+   "operator": "arithmetic",
+   "original": "                count <= count + 8'd1;",
+   "mutated": "                count <= count - 8'd1;",
+   "description": "'+' replaced by '-'",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m001",
+   "file": "seq_detector.v",
+   "line": 30,
+   "operator": "condition",
+   "original": "        if (rst) begin",
+   "mutated": "        if (!(rst)) begin",
+   "description": "condition (rst) inverted",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m002",
+   "file": "seq_detector.v",
+   "line": 38,
+   "operator": "constant",
+   "original": "            if (hit && count != 8'hFF)",
+   "mutated": "            if (hit && count != 8'hFE)",
+   "description": "constant 8'hFF changed to 8'hFE",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m003",
+   "file": "seq_detector.v",
+   "line": 32,
+   "operator": "deleted",
+   "original": "            match <= 1'b0;",
+   "mutated": "            ;",
+   "description": "assignment 'match <= 1'b0;' removed",
+   "status": "survived",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m004",
+   "file": "seq_detector.v",
+   "line": 18,
+   "operator": "logical",
+   "original": "    wire      hit = din_valid && (state == S3) && din;",
+   "mutated": "    wire      hit = din_valid && (state == S3) || din;",
+   "description": "'&&' replaced by '||'",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m005",
+   "file": "seq_detector.v",
+   "line": 38,
+   "operator": "relational",
+   "original": "            if (hit && count != 8'hFF)",
+   "mutated": "            if (hit && count == 8'hFF)",
+   "description": "'!=' replaced by '=='",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m006",
+   "file": "seq_detector.v",
+   "line": 36,
+   "operator": "condition",
+   "original": "            if (din_valid)",
+   "mutated": "            if (!(din_valid))",
+   "description": "condition (din_valid) inverted",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m007",
+   "file": "seq_detector.v",
+   "line": 39,
+   "operator": "constant",
+   "original": "                count <= count + 8'd1;",
+   "mutated": "                count <= count + 8'd2;",
+   "description": "constant 8'd1 changed to 8'd2",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m008",
+   "file": "seq_detector.v",
+   "line": 37,
+   "operator": "deleted",
+   "original": "                state <= next;",
+   "mutated": "                ;",
+   "description": "assignment 'state <= next;' removed",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m009",
+   "file": "seq_detector.v",
+   "line": 18,
+   "operator": "logical",
+   "original": "    wire      hit = din_valid && (state == S3) && din;",
+   "mutated": "    wire      hit = din_valid || (state == S3) && din;",
+   "description": "'&&' replaced by '||'",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m010",
+   "file": "seq_detector.v",
+   "line": 18,
+   "operator": "relational",
+   "original": "    wire      hit = din_valid && (state == S3) && din;",
+   "mutated": "    wire      hit = din_valid && (state != S3) && din;",
+   "description": "'==' replaced by '!='",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m011",
+   "file": "seq_detector.v",
+   "line": 38,
+   "operator": "condition",
+   "original": "            if (hit && count != 8'hFF)",
+   "mutated": "            if (!(hit && count != 8'hFF))",
+   "description": "condition (hit && count != 8'hFF) inverted",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m012",
+   "file": "seq_detector.v",
+   "line": 32,
+   "operator": "constant",
+   "original": "            match <= 1'b0;",
+   "mutated": "            match <= 1'b1;",
+   "description": "constant 1'b0 changed to 1'b1",
+   "status": "killed",
+   "selected": true
+  },
+  {
+   "id": "seq_detector_m013",
+   "file": "seq_detector.v",
+   "line": 35,
+   "operator": "deleted",
+   "original": "            match <= hit;",
+   "mutated": "            ;",
+   "description": "assignment 'match <= hit;' removed",
+   "status": "killed",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m014",
+   "file": "seq_detector.v",
+   "line": 38,
+   "operator": "logical",
+   "original": "            if (hit && count != 8'hFF)",
+   "mutated": "            if (hit || count != 8'hFF)",
+   "description": "'&&' replaced by '||'",
+   "status": "killed",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m015",
+   "file": "seq_detector.v",
+   "line": 33,
+   "operator": "constant",
+   "original": "            count <= 8'd0;",
+   "mutated": "            count <= 8'd1;",
+   "description": "constant 8'd0 changed to 8'd1",
+   "status": "killed",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m016",
+   "file": "seq_detector.v",
+   "line": 31,
+   "operator": "deleted",
+   "original": "            state <= S0;",
+   "mutated": "            ;",
+   "description": "assignment 'state <= S0;' removed",
+   "status": "killed",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m017",
+   "file": "seq_detector.v",
+   "line": 39,
+   "operator": "constant",
+   "original": "                count <= count + 8'd1;",
+   "mutated": "                count <= count + 8'd0;",
+   "description": "constant 8'd1 changed to 8'd0",
+   "status": "killed",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m018",
+   "file": "seq_detector.v",
+   "line": 33,
+   "operator": "deleted",
+   "original": "            count <= 8'd0;",
+   "mutated": "            ;",
+   "description": "assignment 'count <= 8'd0;' removed",
+   "status": "killed",
+   "selected": false
+  },
+  {
+   "id": "seq_detector_m019",
+   "file": "seq_detector.v",
+   "line": 39,
+   "operator": "deleted",
+   "original": "                count <= count + 8'd1;",
+   "mutated": "                ;",
+   "description": "assignment 'count <= count + 8'd1;' removed",
+   "status": "killed",
+   "selected": false
+  }
+ ]
+}

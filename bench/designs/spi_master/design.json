@@ -1,0 +1,10 @@
+{
+  "name": "spi_master",
+  "top": "spi_master",
+  "sources": ["rtl/spi_master.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst",
+  "difficulty": "hard",
+  "summary": "SPI mode-0 master: 8-bit full-duplex transfers, programmable SCLK divider, chip select and done pulse"
+}

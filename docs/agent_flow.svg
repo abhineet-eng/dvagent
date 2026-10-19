@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" font-family="system-ui, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <title>DVAgent flow</title>
+  <desc>Verify loop: from the spec and the module interface the LLM writes a cocotb testbench; it is simulated; failures go to a triage-and-repair step that returns a fixed testbench; passing testbenches get Verilator coverage, and if coverage is below target the LLM adds tests for the unexecuted lines; at target the testbench is final. Debug loop: when a later RTL change makes a test fail, the LLM reads the RTL, names the faulty line and writes a patch, which is re-simulated; if tests still fail it retries with that feedback, up to three times.</desc>
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1 1 L9 5 L1 9" fill="none" stroke="context-stroke" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <style>
+      .bg   { fill: #fcfcfb; }
+      .llm  { fill: #f4f8fd; stroke: #2a78d6; stroke-width: 1.5; }
+      .tool { fill: #ffffff; stroke: #c3c2b7; stroke-width: 1.2; }
+      .ext  { fill: #f0efec; stroke: #c3c2b7; stroke-width: 1.2; }
+      .done { fill: #eef7ee; stroke: #0ca30c; stroke-width: 1.4; }
+      .t    { fill: #0b0b0b; font-size: 14px; font-weight: 600; }
+      .s    { fill: #52514e; font-size: 11.5px; }
+      .m    { fill: #898781; font-size: 11px; }
+      .lane { fill: #0b0b0b; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; }
+      .w    { stroke: #52514e; stroke-width: 1.5; fill: none; }
+      .wb   { stroke: #2a78d6; stroke-width: 1.6; fill: none; }
+    </style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1000" height="560" rx="14"/>
+
+  <!-- ===================== VERIFY LANE ===================== -->
+  <text class="lane" x="24" y="30">VERIFY: write, run, repair, close coverage</text>
+
+  <!-- 5: coverage closure (top row) -->
+  <rect class="llm" x="620" y="48" width="196" height="64" rx="10"/>
+  <text class="t" x="634" y="73">5 · Close coverage gaps</text>
+  <text class="s" x="634" y="93">add tests for unexecuted RTL lines</text>
+
+  <!-- main row -->
+  <rect class="ext" x="20" y="150" width="150" height="70" rx="10"/>
+  <text class="t" x="34" y="176">Spec + interface</text>
+  <text class="s" x="34" y="196">spec.md, module ports</text>
+  <text class="m" x="34" y="211">(not the RTL logic)</text>
+
+  <rect class="llm" x="210" y="150" width="170" height="70" rx="10"/>
+  <text class="t" x="224" y="176">1 · Write testbench</text>
+  <text class="s" x="224" y="196">reference model from</text>
+  <text class="s" x="224" y="211">the spec, random + directed</text>
+
+  <rect class="tool" x="420" y="150" width="170" height="70" rx="10"/>
+  <text class="t" x="434" y="176">2 · Simulate</text>
+  <text class="s" x="434" y="196">cocotb + Icarus Verilog</text>
+  <text class="s" x="434" y="211">sandboxed, with timeout</text>
+
+  <rect class="tool" x="630" y="150" width="176" height="70" rx="10"/>
+  <text class="t" x="644" y="176">4 · Measure coverage</text>
+  <text class="s" x="644" y="196">Verilator line + branch</text>
+  <text class="s" x="644" y="211">points of the RTL</text>
+
+  <rect class="done" x="846" y="150" width="134" height="70" rx="10"/>
+  <text class="t" x="860" y="176">Final</text>
+  <text class="t" x="860" y="194">testbench</text>
+  <text class="s" x="860" y="211">passes, covered</text>
+
+  <!-- 3: triage + repair (below) -->
+  <rect class="llm" x="400" y="272" width="210" height="70" rx="10"/>
+  <text class="t" x="414" y="298">3 · Triage + repair</text>
+  <text class="s" x="414" y="318">testbench bug or design bug?</text>
+  <text class="s" x="414" y="333">fix the testbench, or report</text>
+
+  <!-- arrows: main flow -->
+  <path class="w" d="M170 185 H206" marker-end="url(#ar)"/>
+  <path class="w" d="M380 185 H416" marker-end="url(#ar)"/>
+  <path class="w" d="M590 185 H626" marker-end="url(#ar)"/>
+  <text class="m" x="596" y="178">pass</text>
+  <path class="w" d="M806 185 H842" marker-end="url(#ar)"/>
+  <text class="m" x="808" y="178">done</text>
+
+  <!-- fail loop -->
+  <path class="w" d="M470 220 V268" marker-end="url(#ar)"/>
+  <text class="m" x="440" y="250">fail</text>
+  <path class="wb" d="M540 272 V224" marker-end="url(#ar)"/>
+  <text class="m" x="548" y="250">new testbench</text>
+
+  <!-- coverage loop -->
+  <path class="w" d="M718 150 V116" marker-end="url(#ar)"/>
+  <text class="m" x="726" y="138">below target</text>
+  <path class="wb" d="M620 80 H505 V146" marker-end="url(#ar)"/>
+  <text class="m" x="514" y="72">extended testbench</text>
+
+  <!-- ===================== DEBUG LANE ===================== -->
+  <line x1="20" y1="378" x2="980" y2="378" stroke="#e1e0d9" stroke-width="1"/>
+  <text class="lane" x="24" y="408">DEBUG: find and fix the RTL bug behind a failing test</text>
+
+  <rect class="ext" x="20" y="430" width="170" height="70" rx="10"/>
+  <text class="t" x="34" y="456">Test fails on</text>
+  <text class="t" x="34" y="474">changed RTL</text>
+  <text class="s" x="34" y="491">log + testbench + RTL</text>
+
+  <rect class="llm" x="240" y="430" width="210" height="70" rx="10"/>
+  <text class="t" x="254" y="456">6 · Localize + patch</text>
+  <text class="s" x="254" y="476">names the faulty line,</text>
+  <text class="s" x="254" y="491">writes a minimal fix</text>
+
+  <rect class="tool" x="500" y="430" width="200" height="70" rx="10"/>
+  <text class="t" x="514" y="456">7 · Re-simulate</text>
+  <text class="s" x="514" y="476">patched RTL must compile</text>
+  <text class="s" x="514" y="491">and pass the testbench</text>
+
+  <rect class="done" x="750" y="430" width="230" height="70" rx="10"/>
+  <text class="t" x="764" y="456">Verified fix</text>
+  <text class="s" x="764" y="476">benchmark: also checked by a</text>
+  <text class="s" x="764" y="491">hidden reference testbench</text>
+
+  <path class="w" d="M190 465 H236" marker-end="url(#ar)"/>
+  <path class="w" d="M450 465 H496" marker-end="url(#ar)"/>
+  <path class="w" d="M700 465 H746" marker-end="url(#ar)"/>
+  <text class="m" x="708" y="458">pass</text>
+  <path class="wb" d="M600 500 V524 H345 V504" marker-end="url(#ar)"/>
+  <text class="m" x="380" y="541">still failing: retry with the new log (up to 3 tries)</text>
+
+  <!-- legend -->
+  <rect class="llm" x="804" y="14" width="14" height="12" rx="3"/>
+  <text class="m" x="824" y="24">LLM step</text>
+  <rect class="tool" x="890" y="14" width="14" height="12" rx="3"/>
+  <text class="m" x="910" y="24">tool step</text>
+</svg>

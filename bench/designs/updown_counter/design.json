@@ -1,0 +1,10 @@
+{
+  "name": "updown_counter",
+  "top": "updown_counter",
+  "sources": ["rtl/updown_counter.v"],
+  "parameters": {},
+  "clock": "clk",
+  "reset": "rst_n",
+  "difficulty": "easy",
+  "summary": "8-bit loadable up/down counter with programmable wrap value and terminal-count flag"
+}

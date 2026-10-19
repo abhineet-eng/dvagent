@@ -1,0 +1,102 @@
+name: benchmark
+
+# Run from the Actions tab: "benchmark" -> "Run workflow".
+# Needs the API key as a repository secret (Settings -> Secrets and variables -> Actions),
+# e.g. GEMINI_API_KEY. Results are committed to results/<run_name>/. If the free quota
+# runs out, the run stops cleanly; run it again later and it resumes where it stopped.
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "LLM provider (gemini, groq, openrouter, openai, anthropic)"
+        default: "gemini"
+      model:
+        description: "Model id (leave empty for the provider's default)"
+        default: ""
+      run_name:
+        description: "Folder name under results/"
+        default: "gemini"
+      designs:
+        description: "Comma-separated subset of designs (empty = all 10)"
+        default: ""
+      rpm:
+        description: "Max requests per minute (empty = provider default)"
+        default: ""
+
+permissions:
+  contents: write
+
+concurrency:
+  group: benchmark
+
+jobs:
+  bench:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 340
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Icarus Verilog, Verilator and Python packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y iverilog verilator
+          pip install cocotb==1.9.2 matplotlib
+
+      - name: Run the benchmark
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          IN_PROVIDER: ${{ inputs.provider }}
+          IN_MODEL: ${{ inputs.model }}
+          IN_RUN: ${{ inputs.run_name }}
+          IN_DESIGNS: ${{ inputs.designs }}
+          IN_RPM: ${{ inputs.rpm }}
+        run: |
+          args=(bench --provider "$IN_PROVIDER" --out "results/$IN_RUN")
+          [ -n "$IN_MODEL" ] && args+=(--model "$IN_MODEL")
+          [ -n "$IN_DESIGNS" ] && args+=(--designs "$IN_DESIGNS")
+          [ -n "$IN_RPM" ] && args+=(--rpm "$IN_RPM")
+          set +e
+          python -m dvagent "${args[@]}"
+          code=$?
+          echo "exit code $code"
+          [ $code -eq 0 ] || [ $code -eq 3 ]
+
+      - name: Show the results on the run page and in the README
+        if: always()
+        env:
+          IN_RUN: ${{ inputs.run_name }}
+        run: |
+          if [ -f "results/$IN_RUN/run.json" ]; then python -m dvagent report "results/$IN_RUN" --readme README.md > /dev/null; fi
+          if [ -f "results/$IN_RUN/summary.md" ]; then cat "results/$IN_RUN/summary.md" >> "$GITHUB_STEP_SUMMARY"; fi
+          if grep -q '"stopped": "' "results/$IN_RUN/run.json" 2>/dev/null; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "**Stopped early (LLM quota). Run the workflow again later with the same run_name to resume.**" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Commit the results
+        if: always()
+        env:
+          IN_RUN: ${{ inputs.run_name }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "results/$IN_RUN" README.md || exit 0
+          git diff --cached --quiet && exit 0
+          git commit -m "Benchmark results: $IN_RUN"
+          git pull --rebase
+          git push
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-${{ inputs.run_name }}
+          path: results/${{ inputs.run_name }}
